@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ko"><script>if(localStorage.getItem('theme')==='science')document.documentElement.setAttribute('data-theme','science')</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연구 노트 — 뇌와 마음사이</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { 'brain':'var(--brain)','mind':'var(--mind)','alert':'var(--alert)','bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)','txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)' },
+        fontFamily: { sans: ['Pretendard','system-ui','sans-serif'] }
+      }}
+    }
+  </script>
+  <style>
+    :root{
+      --brain:#4FC3F7;--mind:#FFD54F;--alert:#FF7043;
+      --accent:#FF7043;--accent-secondary:#FF5722;
+      --accent-glow:rgba(255,112,67,.4);--accent-glow-strong:rgba(255,112,67,.65);
+      --bg-deep:#F8F7F4;--bg-mid:#FFFFFF;--bg-card:#FFFFFF;
+      --text:#1A1A2E;--text-dim:#6B6B80;--text-muted:#9E9EB0;
+      --glass-bg:rgba(255,255,255,.78);--glass-border:rgba(255,112,67,.15);--glass-shadow:0 4px 32px rgba(0,0,0,.08);
+      --card-border:rgba(0,0,0,.08);--card-hover-bg:rgba(255,112,67,.04);
+      --badge-brain-bg:rgba(79,195,247,.08);--badge-brain-border:rgba(79,195,247,.2);
+      --badge-mind-bg:rgba(255,112,67,.08);--badge-mind-border:rgba(255,112,67,.2);
+      --noise-opacity:.015;--divider:rgba(0,0,0,.08)
+    }
+    [data-theme="science"]{
+      --bg-deep:#0D1B2A;--bg-mid:#1A1A3E;--bg-card:rgba(26,26,62,.3);
+      --text:#E8EAF6;--text-dim:#C8C4D8;--text-muted:#8884A0;
+      --glass-bg:rgba(13,27,42,.78);--glass-border:rgba(79,195,247,.2);--glass-shadow:0 4px 32px rgba(0,0,0,.55);
+      --card-border:rgba(255,255,255,.07);--card-hover-bg:rgba(26,26,62,.65);
+      --badge-brain-bg:rgba(79,195,247,.1);--badge-brain-border:rgba(79,195,247,.28);
+      --badge-mind-bg:rgba(255,213,79,.08);--badge-mind-border:rgba(255,213,79,.28);
+      --noise-opacity:.028;--divider:rgba(255,255,255,.08);
+      --accent:#4FC3F7;--accent-secondary:#2196F3;
+      --accent-glow:rgba(79,195,247,.4);--accent-glow-strong:rgba(79,195,247,.65)
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Pretendard',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    #nav{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:40;width:max-content;max-width:calc(100vw - 2rem);animation:navSpringIn 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards}
+    @keyframes navSpringIn{0%{opacity:0;transform:translateX(-50%) translateY(-120%)}55%{opacity:1;transform:translateX(-50%) translateY(6px)}75%{transform:translateX(-50%) translateY(-3px)}90%{transform:translateX(-50%) translateY(2px)}100%{transform:translateX(-50%) translateY(0)}}
+    .nav-pill{padding:.6rem .6rem .6rem 1rem;border-radius:100px;background:var(--glass-bg);backdrop-filter:blur(28px) saturate(180%) brightness(1.1);-webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.1);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(79,195,247,.1),var(--glass-shadow)}
+    .nav-link{display:inline-flex;align-items:center;padding:.4rem .85rem;border-radius:100px;color:var(--text-dim);font-size:.95rem;font-weight:500;letter-spacing:-.01em;text-decoration:none;transition:all .22s ease;word-break:keep-all}
+    .nav-link:hover{color:var(--text);background:var(--card-hover-bg)}
+    .nav-link-active{color:var(--accent)!important;background:rgba(255,112,67,.1)}
+    .btn-sub{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:100px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;font-size:.92rem;font-weight:700;text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em}
+    .btn-sub:hover{transform:scale(1.04);box-shadow:0 4px 20px var(--accent-glow)}
+    .noise-layer{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:var(--noise-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .badge-brain{background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);color:var(--brain)}
+    .badge-mind{background:var(--badge-mind-bg);border:1px solid var(--badge-mind-border);color:var(--mind)}
+    .badge-neu{background:rgba(200,196,216,.08);border:1px solid rgba(200,196,216,.18);color:var(--text-dim)}
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+
+    /* Research image card grid */
+    .research-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+    @media(max-width:768px){.research-grid{grid-template-columns:1fr}}
+
+    .research-card{display:block;border-radius:1rem;overflow:hidden;background:var(--bg-card);border:1px solid var(--card-border);text-decoration:none;color:inherit;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease,border-color .3s ease;cursor:pointer}
+    .research-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.12);border-color:rgba(79,195,247,.25)}
+    .research-card-img{aspect-ratio:16/9;overflow:hidden;position:relative}
+    .research-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+    .research-card:hover .research-card-img img{transform:scale(1.03)}
+    .research-card-body{padding:1.25rem 1.5rem}
+    .research-card-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap}
+    .research-card h3{font-size:1.15rem;font-weight:700;line-height:1.35;word-break:keep-all;margin-bottom:.4rem;color:var(--text)}
+    .research-card p{font-size:.88rem;color:var(--text-dim);line-height:1.6;word-break:keep-all}
+    .reading-time{font-size:.75rem;color:var(--text-muted);font-weight:500}
+
+    /* Featured card */
+    .research-card.featured{grid-column:span 2}
+    .research-card.featured .research-card-img{aspect-ratio:2.2/1}
+    .research-card.featured h3{font-size:1.35rem}
+    @media(max-width:768px){.research-card.featured{grid-column:span 1}.research-card.featured .research-card-img{aspect-ratio:16/9}}
+
+    /* Filter pills */
+    .filter-pill{padding:.4rem .95rem;border-radius:100px;border:1px solid var(--divider);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;background:var(--bg-card);color:var(--text-dim);white-space:nowrap}
+    .filter-pill:hover{border-color:rgba(79,195,247,.3);color:var(--text)}
+    .filter-pill.active{background:var(--badge-brain-bg);border-color:var(--accent-glow);color:var(--accent);font-weight:700}
+    /* Search */
+    .search-bar{width:100%;padding:.8rem 1.2rem .8rem 3rem;border-radius:100px;background:var(--bg-card);border:1px solid var(--divider);color:var(--text);font-family:'Pretendard',sans-serif;font-size:.95rem;outline:none;transition:all .2s}
+    .search-bar:focus{border-color:rgba(79,195,247,.35);background:var(--card-hover-bg)}
+    .search-bar::placeholder{color:var(--text-dim)}
+    .nav-logo-img{transition:box-shadow .3s ease;box-shadow:0 0 0 2.5px #FF7043, 0 0 12px rgba(255,112,67,.3)}
+    [data-theme="science"] .nav-logo-img{box-shadow:0 0 0 2.5px #4FC3F7, 0 0 12px rgba(79,195,247,.3)}
+    .nav-search-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:.4rem;border-radius:50%;transition:all .22s ease;display:inline-flex;align-items:center}
+    .nav-search-btn:hover{color:var(--accent);background:var(--card-hover-bg)}
+  </style>
+</head>
+<body>
+
+<!-- Noise layer -->
+<div class="noise-layer" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-pill hidden md:flex items-center gap-1">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src="logo.svg" alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+      <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <div style="width:1px;height:1.2rem;background:rgba(79,195,247,.2);margin:0 .3rem;"></div>
+    <a href="index.html"    class="nav-link">홈</a>
+    <a href="blog.html"     class="nav-link">블로그</a>
+    <a href="research.html" class="nav-link nav-link-active">연구</a>
+    <a href="videos.html"   class="nav-link">영상</a>
+    <a href="dashboard.html" class="nav-link">대시보드</a>
+    <a href="about.html"    class="nav-link">소개</a>
+    <div style="width:1px;height:1.2rem;background:var(--divider);margin:0 .4rem;"></div>
+    <button onclick="toggleSearch()" class="nav-search-btn" aria-label="검색">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.05rem;"></iconify-icon>
+    </button>
+    <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
+      <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
+    </a>
+  </div>
+  <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
+      <img src="logo.svg" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+      <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
+      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.3rem;"></iconify-icon>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden mt-2" style="border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);">
+    <div class="px-4 py-3 flex flex-col gap-1">
+      <a href="index.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">홈</a>
+      <a href="blog.html"     class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">블로그</a>
+      <a href="research.html" class="py-2.5 px-3 text-sm rounded-xl font-semibold" style="color:var(--accent);">연구</a>
+      <a href="videos.html"   class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">영상</a>
+      <a href="dashboard.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">대시보드</a>
+      <a href="about.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">소개</a>
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 1. MINI HERO -->
+<section style="padding:7rem 0 3rem;background:var(--bg-deep);">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="reveal">
+      <span class="badge badge-neu" style="margin-bottom:1.2rem;display:inline-flex;">CORTEX ARCHIVE</span>
+    </div>
+    <h1 class="reveal d1" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:.75rem;word-break:keep-all;">
+      코르의 연구 노트
+    </h1>
+    <p class="reveal d2" style="font-size:1.1rem;color:var(--text-dim);margin-bottom:1.5rem;">
+      피어리뷰 논문 기반. 추측 없이.
+    </p>
+    <div class="reveal d2" style="display:flex;align-items:center;gap:.65rem;margin-bottom:1.6rem;flex-wrap:wrap;">
+      <span style="font-size:2.4rem;font-weight:800;color:var(--accent);line-height:1;">22</span>
+      <span style="font-size:1.05rem;color:var(--text-dim);font-weight:500;">개 연구 노트</span>
+      <span style="width:1px;height:1.2rem;background:var(--divider);"></span>
+      <span style="font-size:.9rem;color:var(--text-dim);">3개 이상 논문 인용</span>
+    </div>
+    <div class="reveal d3" style="border-left:2px solid var(--accent);padding-left:1rem;">
+      <p style="font-size:.92rem;font-style:italic;color:var(--text-dim);">"자, 데이터 보겠습니다."</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. STICKY SEARCH + FILTER ZONE -->
+<div style="position:sticky;top:0;background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--divider);padding:1.2rem 0;z-index:30;">
+  <div class="max-w-4xl mx-auto px-6">
+    <!-- Search bar -->
+    <div style="position:relative;">
+      <iconify-icon icon="solar:magnifer-linear" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--text-dim);pointer-events:none;"></iconify-icon>
+      <input type="text" class="search-bar" placeholder="연구 노트 검색...">
+    </div>
+    <!-- Filter row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-top:.85rem;flex-wrap:wrap;">
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;flex:1;">
+        <button class="filter-pill active" data-filter="전체">전체</button>
+        <button class="filter-pill" data-filter="뇌의 착각">🧠 뇌의 착각</button>
+        <button class="filter-pill" data-filter="뇌의 수면">😴 뇌의 수면</button>
+        <button class="filter-pill" data-filter="뇌의 회로">🔥 뇌의 회로</button>
+        <button class="filter-pill" data-filter="뇌의 훈련">📚 뇌의 훈련</button>
+        <button class="filter-pill" data-filter="뇌 vs AI">🤖 뇌 vs AI</button>
+        <button class="filter-pill" data-filter="마음의 온도">💛 마음의 온도</button>
+        <button class="filter-pill" data-filter="마음의 회복">💊 마음의 회복</button>
+        <button class="filter-pill" data-filter="마음의 그늘">🌑 마음의 그늘</button>
+        <button class="filter-pill" data-filter="문화 속 마음">🌍 문화 속 마음</button>
+        <button class="filter-pill" data-filter="위대한 실험들">🔬 위대한 실험들</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:.3rem;flex-shrink:0;">
+        <button id="sort-recent" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid var(--accent-glow);background:var(--badge-brain-bg);color:var(--accent);transition:all .2s;">최신순</button>
+        <span style="font-size:.8rem;color:var(--text-muted);">|</span>
+        <button id="sort-playlist" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:500;cursor:pointer;border:1px solid var(--divider);background:transparent;color:var(--text-dim);transition:all .2s;">플레이리스트순</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. RESEARCH GRID -->
+<section style="padding:2.5rem 0 5rem;">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="research-grid" id="card-list">
+
+      <!-- Card 01 — FEATURED -->
+      <a href="article_01.html" class="research-card featured reveal d1" data-category="뇌의 착각">
+        <div class="research-card-img">
+          <img src="images/art01/banner.png" alt="뇌세포가 게임을 배운 실험" loading="lazy">
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🧠 뇌의 착각</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>사람의 뇌는 AI보다 뛰어난 걸까?</h3>
+          <p>뇌세포가 게임을 배웠다는 뉴스를 보고 문득 궁금해졌습니다</p>
+        </div>
+      </a>
+
+      <!-- Card 02 -->
+      <a href="article_02.html" class="research-card reveal d2" data-category="뇌의 수면">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">😴</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">😴 뇌의 수면</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 피곤한데도 잠이 안 올까</h3>
+          <p>수면은 의지의 문제가 아니라 조건의 문제다</p>
+        </div>
+      </a>
+
+      <!-- Card 03 -->
+      <a href="article_03.html" class="research-card reveal d3" data-category="마음의 회복">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,112,67,.12), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔋</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💊 마음의 회복</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 쉬어도 회복되지 않을까</h3>
+          <p>몸은 멈췄지만 뇌는 계속 처리 중이다</p>
+        </div>
+      </a>
+
+      <!-- Card 04 -->
+      <a href="article_04.html" class="research-card reveal d1" data-category="뇌의 훈련">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">📚</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">📚 뇌의 훈련</span>
+            <span class="reading-time">6분</span>
+          </div>
+          <h3>왜 복습할수록 기억이 남을까</h3>
+          <p>기억은 저장이 아니라 인출 연습이다</p>
+        </div>
+      </a>
+
+      <!-- Card 05 -->
+      <a href="article_05.html" class="research-card reveal d2" data-category="뇌의 훈련">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">📝</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">📚 뇌의 훈련</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 시험장만 가면 머리가 하얘질까</h3>
+          <p>불안이 작업기억을 잠식한다</p>
+        </div>
+      </a>
+
+      <!-- Card 06 -->
+      <a href="article_06.html" class="research-card reveal d3" data-category="마음의 온도">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.15), rgba(255,152,0,.2));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">💛</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💛 마음의 온도</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>매력은 얼굴보다 신호다</h3>
+          <p>뇌는 외모가 아닌 행동 패턴의 일관성에 반응한다</p>
+        </div>
+      </a>
+
+      <!-- Card 07 -->
+      <a href="article_07.html" class="research-card reveal d1" data-category="마음의 온도">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.15), rgba(255,152,0,.2));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔗</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💛 마음의 온도</span>
+            <span class="reading-time">6분</span>
+          </div>
+          <h3>공통점 없는 사람과 오히려 더 깊어지는 이유</h3>
+          <p>차이가 호기심을 만들고, 호기심이 연결을 만든다</p>
+        </div>
+      </a>
+
+      <!-- Card 08 -->
+      <a href="article_08.html" class="research-card reveal d2" data-category="마음의 그늘">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(200,196,216,.15), rgba(26,26,62,.35));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🌑</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌑 마음의 그늘</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>외로울수록 먼저 연락하기 어려운 이유</h3>
+          <p>거절 민감성이 외로움을 악화시키는 루프</p>
+        </div>
+      </a>
+
+      <!-- Card 09 -->
+      <a href="article_09.html" class="research-card reveal d3" data-category="뇌의 착각">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">📊</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🧠 뇌의 착각</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 비교할수록 내가 뒤처진 것 같을까</h3>
+          <p>소셜 비교는 생존 본능이지만 SNS가 과부하를 만든다</p>
+        </div>
+      </a>
+
+      <!-- Card 10 -->
+      <a href="article_10.html" class="research-card reveal d1" data-category="마음의 그늘">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(200,196,216,.15), rgba(26,26,62,.35));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">💢</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌑 마음의 그늘</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 무시당하면 몸까지 아픈 것 같을까</h3>
+          <p>사회적 고통은 신체 통증과 같은 뇌 회로를 쓴다</p>
+        </div>
+      </a>
+
+      <!-- Card 11 -->
+      <a href="article_11.html" class="research-card reveal d2" data-category="마음의 온도">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.15), rgba(255,152,0,.2));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🕐</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💛 마음의 온도</span>
+            <span class="reading-time">6분</span>
+          </div>
+          <h3>왜 사과를 받아도 마음은 바로 안 풀릴까</h3>
+          <p>인지와 감정의 처리 속도가 다르다</p>
+        </div>
+      </a>
+
+      <!-- Card 12 -->
+      <a href="article_12.html" class="research-card reveal d3" data-category="마음의 회복">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,112,67,.12), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">⏸️</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💊 마음의 회복</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 잘 알면서도 시작을 못 할까</h3>
+          <p>완벽주의가 시작 자체를 위협으로 인식시킨다</p>
+        </div>
+      </a>
+
+      <!-- Card 13 -->
+      <a href="article_13.html" class="research-card reveal d1" data-category="마음의 회복">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,112,67,.12), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🌀</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">💊 마음의 회복</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>왜 생각이 많을수록 오히려 더 멈추게 될까</h3>
+          <p>분석 마비는 선택지의 문제가 아니라 불확실성 내성의 문제다</p>
+        </div>
+      </a>
+
+      <!-- Card 14 -->
+      <a href="article_14.html" class="research-card reveal d2" data-category="마음의 그늘">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(200,196,216,.15), rgba(26,26,62,.35));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔄</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌑 마음의 그늘</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 후회는 끝난 일을 계속 현재형으로 만들까</h3>
+          <p>뇌는 반사실적 사고로 학습하지만 과거에 갇히기도 한다</p>
+        </div>
+      </a>
+
+      <!-- Card 15 -->
+      <a href="article_15.html" class="research-card reveal d3" data-category="뇌의 착각">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔍</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🧠 뇌의 착각</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 배울수록 내가 더 모른다는 게 느껴질까</h3>
+          <p>메타인지의 역설 — 아는 것이 많아질수록 모르는 것이 보인다</p>
+        </div>
+      </a>
+
+      <!-- Card 16 -->
+      <a href="article_16.html" class="research-card reveal d1" data-category="문화 속 마음">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.12), rgba(255,112,67,.18));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">😏</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌍 문화 속 마음</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 남의 실패가 은근히 통쾌하게 느껴질까</h3>
+          <p>샤덴프로이데는 진화적 경쟁 감지 시스템의 부산물이다</p>
+        </div>
+      </a>
+
+      <!-- Card 17 -->
+      <a href="article_17.html" class="research-card reveal d2" data-category="뇌 vs AI">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🤖</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🤖 뇌 vs AI</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>AI가 생각을 대신해줄수록</h3>
+          <p>뇌가 망가진 게 아니라 더 빠른 경로에 최적화된 것이다</p>
+        </div>
+      </a>
+
+      <!-- Card 18 -->
+      <a href="article_18.html" class="research-card reveal d3" data-category="뇌의 착각">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🧩</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🧠 뇌의 착각</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 불확실할수록 단정적인 이야기에 끌릴까</h3>
+          <p>인지적 폐쇄 욕구가 불안을 단순화로 해소하려 한다</p>
+        </div>
+      </a>
+
+      <!-- Card 19 -->
+      <a href="article_19.html" class="research-card reveal d1" data-category="문화 속 마음">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.12), rgba(255,112,67,.18));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔥</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌍 문화 속 마음</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>왜 온라인 세상은 실제보다 더 분노로 가득해 보일까</h3>
+          <p>알고리즘이 분노를 증폭시키는 구조적 이유</p>
+        </div>
+      </a>
+
+      <!-- Card 20 -->
+      <a href="article_20.html" class="research-card reveal d2" data-category="위대한 실험들">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(200,196,216,.15), rgba(255,112,67,.15));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🔬</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-neu">🔬 위대한 실험들</span>
+            <span class="reading-time">8분</span>
+          </div>
+          <h3>왜 평범한 사람도 권위 앞에선 잔인해질까</h3>
+          <p>밀그램의 유산 — 상황이 성격을 이긴다</p>
+        </div>
+      </a>
+
+      <!-- Card 21 -->
+      <a href="article_21.html" class="research-card reveal d3" data-category="뇌 vs AI">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(79,195,247,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">📱</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-brain">🤖 뇌 vs AI</span>
+            <span class="reading-time">7분</span>
+          </div>
+          <h3>왜 긴 글이 점점 읽기 힘들어질까</h3>
+          <p>주의 경제학 — 뇌는 즉각 보상 쪽으로 재배선된다</p>
+        </div>
+      </a>
+
+      <!-- Card 22 -->
+      <a href="research.html" class="research-card reveal d1" data-category="문화 속 마음">
+        <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,213,79,.12), rgba(255,112,67,.18));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:2rem;">🎵</span>
+        </div>
+        <div class="research-card-body">
+          <div class="research-card-meta">
+            <span class="badge badge-mind">🌍 문화 속 마음</span>
+            <span class="reading-time">6분</span>
+          </div>
+          <h3>왜 말도 모르는 노래가 수만 명을 동시에 울릴까</h3>
+          <p>음악은 언어를 우회해 감정 처리 회로에 직접 접근한다</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- 4. FOOTER -->
+<footer style="background:var(--bg-mid);border-top:1px solid var(--divider);padding:3.5rem 0 2rem;">
+  <div class="max-w-4xl mx-auto px-6">
+    <div style="display:flex;flex-wrap:wrap;gap:2.5rem;justify-content:space-between;margin-bottom:2.5rem;">
+      <!-- Brand -->
+      <div style="min-width:200px;max-width:280px;">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.85rem;">
+          <img src="logo.svg" alt="뇌와 마음사이 로고" style="width:2.4rem;height:2.4rem;object-fit:contain;border-radius:12px;box-shadow:0 0 0 1.5px rgba(79,195,247,.3);">
+          <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;">뇌와 마음사이</span>
+        </div>
+        <p style="font-size:.82rem;color:var(--text-dim);line-height:1.7;">뇌과학과 심리학을 한국어로 전합니다. 피어리뷰 논문 기반 — 추측 없이.</p>
+      </div>
+      <!-- Links -->
+      <div style="display:flex;gap:3rem;flex-wrap:wrap;">
+        <div>
+          <p style="font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem;">페이지</p>
+          <div style="display:flex;flex-direction:column;gap:.5rem;">
+            <a href="blog.html"     style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">블로그</a>
+            <a href="research.html" style="font-size:.9rem;color:var(--accent);text-decoration:none;">연구 노트</a>
+            <a href="videos.html"   style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">영상</a>
+            <a href="dashboard.html" style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">대시보드</a>
+            <a href="about.html"    style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">소개</a>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem;">채널</p>
+          <div style="display:flex;flex-direction:column;gap:.5rem;">
+            <a href="https://youtube.com/@뇌와마음사이" target="_blank" style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">YouTube</a>
+            <a href="https://instagram.com" target="_blank" style="font-size:.9rem;color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--divider);padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;">
+      <p style="font-size:.8rem;color:var(--text-muted);">© 2025 뇌와 마음사이. 모든 콘텐츠는 공개 연구를 기반으로 합니다.</p>
+      <p style="font-size:.8rem;color:var(--text-muted);">Made with 🧠</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav
+  const ham=document.getElementById('ham');
+  const mm=document.getElementById('mobile-menu');
+  ham?.addEventListener('click',()=>mm.classList.toggle('hidden'));
+  mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.add('hidden')));
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{nav.style.top=window.scrollY>80?'.75rem':'1.5rem';},{passive:true});
+
+  // Category filter
+  const filterBtns=document.querySelectorAll('.filter-pill');
+  const cards=document.querySelectorAll('.research-card');
+  filterBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      filterBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat=btn.dataset.filter;
+      cards.forEach(card=>{
+        card.style.display=(cat==='전체'||card.dataset.category===cat)?'':'none';
+      });
+    });
+  });
+
+  // Search
+  const searchInput=document.querySelector('.search-bar');
+  searchInput?.addEventListener('input',e=>{
+    const q=e.target.value.toLowerCase();
+    if(!q){cards.forEach(c=>c.style.display='');return;}
+    cards.forEach(card=>{
+      const title=card.querySelector('h3').textContent.toLowerCase();
+      const teaser=card.querySelector('p')?.textContent.toLowerCase()||'';
+      card.style.display=(title.includes(q)||teaser.includes(q))?'':'none';
+    });
+  });
+
+  // Sort toggle
+  const sortRecent=document.getElementById('sort-recent');
+  const sortPlaylist=document.getElementById('sort-playlist');
+  sortRecent?.addEventListener('click',()=>{
+    sortRecent.style.background='var(--badge-brain-bg)';
+    sortRecent.style.borderColor='var(--accent-glow)';
+    sortRecent.style.color='var(--accent)';
+    sortRecent.style.fontWeight='700';
+    sortPlaylist.style.background='transparent';
+    sortPlaylist.style.borderColor='var(--divider)';
+    sortPlaylist.style.color='var(--text-dim)';
+    sortPlaylist.style.fontWeight='500';
+  });
+  sortPlaylist?.addEventListener('click',()=>{
+    sortPlaylist.style.background='var(--badge-brain-bg)';
+    sortPlaylist.style.borderColor='var(--accent-glow)';
+    sortPlaylist.style.color='var(--accent)';
+    sortPlaylist.style.fontWeight='700';
+    sortRecent.style.background='transparent';
+    sortRecent.style.borderColor='var(--divider)';
+    sortRecent.style.color='var(--text-dim)';
+    sortRecent.style.fontWeight='500';
+  });
+</script>
+<!-- Search overlay -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;" onclick="if(event.target===this)closeSearch()">
+  <div style="position:absolute;top:5rem;left:50%;transform:translateX(-50%);width:90%;max-width:560px;">
+    <div style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:.5rem;box-shadow:var(--glass-shadow);display:flex;align-items:center;gap:.5rem;">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.2rem;color:var(--accent);margin-left:.75rem;flex-shrink:0;"></iconify-icon>
+      <input id="search-input" type="text" placeholder="검색어를 입력하세요..." style="flex:1;background:none;border:none;outline:none;font-size:1.05rem;color:var(--text);font-family:inherit;padding:.75rem .5rem;" autocomplete="off">
+      <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text-muted);font-size:1.2rem;">
+        <iconify-icon icon="solar:close-circle-linear"></iconify-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute('data-theme');
+  if(current==='science'){html.removeAttribute('data-theme');localStorage.setItem('theme','mind')}
+  else{html.setAttribute('data-theme','science');localStorage.setItem('theme','science')}
+}
+(function(){const saved=localStorage.getItem('theme');if(saved==='science')document.documentElement.setAttribute('data-theme','science')})();
+
+function toggleSearch(){
+  const overlay=document.getElementById('search-overlay');
+  overlay.style.display='flex';
+  requestAnimationFrame(()=>{overlay.style.opacity='1'});
+  setTimeout(()=>document.getElementById('search-input').focus(),100);
+}
+function closeSearch(){
+  const overlay=document.getElementById('search-overlay');
+  overlay.style.opacity='0';
+  setTimeout(()=>{overlay.style.display='none'},250);
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch()});
+</script>
+</body>
+</html>

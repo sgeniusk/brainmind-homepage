@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코르 소개 — 뇌와 마음사이</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          'brain':'var(--brain)','mind':'var(--mind)','alert':'var(--alert)',
+          'bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)',
+          'txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)'
+        },
+        fontFamily: { sans: ['Pretendard','system-ui','sans-serif'] }
+      }}
+    }
+  </script>
+  <style>
+    :root{
+      --brain:#4FC3F7;--mind:#FFD54F;--alert:#FF7043;
+      --accent:#FF7043;--accent-secondary:#FF5722;
+      --accent-glow:rgba(255,112,67,.4);--accent-glow-strong:rgba(255,112,67,.65);
+      --bg-deep:#F8F7F4;--bg-mid:#FFFFFF;--bg-card:#FFFFFF;
+      --text:#1A1A2E;--text-dim:#6B6B80;--text-muted:#9E9EB0;
+      --glass-bg:rgba(255,255,255,.78);--glass-border:rgba(255,112,67,.15);--glass-shadow:0 4px 32px rgba(0,0,0,.08);
+      --card-border:rgba(0,0,0,.08);--card-hover-bg:rgba(255,112,67,.04);
+      --badge-brain-bg:rgba(79,195,247,.08);--badge-brain-border:rgba(79,195,247,.2);
+      --badge-mind-bg:rgba(255,112,67,.08);--badge-mind-border:rgba(255,112,67,.2);
+      --noise-opacity:.015;--divider:rgba(0,0,0,.08)
+    }
+    [data-theme="science"]{
+      --bg-deep:#0D1B2A;--bg-mid:#1A1A3E;--bg-card:rgba(26,26,62,.3);
+      --text:#E8EAF6;--text-dim:#C8C4D8;--text-muted:#8884A0;
+      --glass-bg:rgba(13,27,42,.78);--glass-border:rgba(79,195,247,.2);--glass-shadow:0 4px 32px rgba(0,0,0,.55);
+      --card-border:rgba(255,255,255,.07);--card-hover-bg:rgba(26,26,62,.65);
+      --badge-brain-bg:rgba(79,195,247,.1);--badge-brain-border:rgba(79,195,247,.28);
+      --badge-mind-bg:rgba(255,213,79,.08);--badge-mind-border:rgba(255,213,79,.28);
+      --noise-opacity:.028;--divider:rgba(255,255,255,.08);
+      --accent:#4FC3F7;--accent-secondary:#2196F3;
+      --accent-glow:rgba(79,195,247,.4);--accent-glow-strong:rgba(79,195,247,.65)
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Pretendard',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s ease,color .35s ease}
+    #nav{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:40;width:max-content;max-width:calc(100vw - 2rem);animation:navSpringIn 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards}
+    @keyframes navSpringIn{0%{opacity:0;transform:translateX(-50%) translateY(-120%)}55%{opacity:1;transform:translateX(-50%) translateY(6px)}75%{transform:translateX(-50%) translateY(-3px)}90%{transform:translateX(-50%) translateY(2px)}100%{transform:translateX(-50%) translateY(0)}}
+    .nav-pill{padding:.6rem .6rem .6rem 1rem;border-radius:100px;background:var(--glass-bg);backdrop-filter:blur(28px) saturate(180%) brightness(1.1);-webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.1);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(79,195,247,.1),var(--glass-shadow);transition:background .35s ease,border-color .35s ease,box-shadow .35s ease}
+    .nav-link{display:inline-flex;align-items:center;padding:.4rem .85rem;border-radius:100px;color:var(--text-dim);font-size:.95rem;font-weight:500;letter-spacing:-.01em;text-decoration:none;transition:all .22s ease;word-break:keep-all}
+    .nav-link:hover{color:var(--text);background:var(--card-hover-bg)}
+    .nav-link-active{color:var(--accent)!important;background:rgba(255,112,67,.1)}
+    .btn-sub{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:100px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;font-size:.92rem;font-weight:700;text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em}
+    .btn-sub:hover{transform:scale(1.04);box-shadow:0 4px 20px var(--accent-glow)}
+    .noise-layer{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:var(--noise-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;transition:opacity .35s ease}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .badge-brain{background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);color:var(--brain)}
+    .badge-mind{background:var(--badge-mind-bg);border:1px solid var(--badge-mind-border);color:var(--mind)}
+    .badge-neu{background:rgba(107,107,128,.08);border:1px solid rgba(107,107,128,.18);color:var(--text-dim)}
+    [data-theme="science"] .badge-neu{background:rgba(200,196,216,.08);border:1px solid rgba(200,196,216,.18)}
+    .kor-quote{padding:1.4rem 1.7rem;border-left:3px solid var(--accent);background:var(--badge-brain-bg);border-radius:0 12px 12px 0}
+    .kor-quote.mind{border-left-color:var(--mind);background:rgba(255,213,79,.04)}
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .float{animation:float 4s ease-in-out infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+    .pdot{animation:pulse-dot 2.2s ease-in-out infinite}
+
+    .nav-logo-img{transition:box-shadow .3s ease;box-shadow:0 0 0 2.5px #FF7043, 0 0 12px rgba(255,112,67,.3)}
+    [data-theme="science"] .nav-logo-img{box-shadow:0 0 0 2.5px #4FC3F7, 0 0 12px rgba(79,195,247,.3)}
+    .nav-search-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:.4rem;border-radius:50%;transition:all .22s ease;display:inline-flex;align-items:center}
+    .nav-search-btn:hover{color:var(--accent);background:var(--card-hover-bg)}
+    /* Timeline */
+    .timeline-item{display:flex;gap:1.5rem;padding-bottom:2.5rem;position:relative}
+    .timeline-item:not(:last-child)::before{content:'';position:absolute;left:19px;top:40px;bottom:0;width:1px;background:linear-gradient(180deg,rgba(79,195,247,.3),rgba(79,195,247,.05))}
+    .timeline-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.15rem;border:2px solid}
+    .timeline-dot.brain{background:var(--badge-brain-bg);border-color:rgba(79,195,247,.4)}
+    .timeline-dot.mind{background:var(--badge-mind-bg);border-color:rgba(255,213,79,.4)}
+    /* Lab cards */
+    .lab-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.25rem;transition:all .25s ease}
+    .lab-card:hover{background:var(--card-hover-bg);transform:translateY(-2px)}
+    /* Trait cards */
+    .trait-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:13px;padding:1.2rem;transition:background .35s ease,border-color .35s ease}
+    /* Philosophy card */
+    .phil-card{border-radius:16px;padding:2rem;flex:1;min-width:0;transition:background .35s ease,border-color .35s ease}
+    .phil-brain{background:rgba(79,195,247,.06);border:1px solid rgba(79,195,247,.18)}
+    .phil-mind{background:rgba(255,213,79,.05);border:1px solid rgba(255,213,79,.18)}
+    .phil-alert{background:rgba(255,112,67,.05);border:1px solid rgba(255,112,67,.18)}
+    /* Hero visual card - light mode */
+    .hero-visual{background:linear-gradient(135deg,rgba(79,195,247,.06) 0%,rgba(230,228,220,.6) 50%,rgba(255,213,79,.05) 100%);border:1px solid rgba(79,195,247,.12);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .hero-visual{background:linear-gradient(135deg,rgba(79,195,247,.08) 0%,rgba(26,26,62,.6) 50%,rgba(255,213,79,.06) 100%);border-color:rgba(79,195,247,.15)}
+    /* Brain side card */
+    .brain-side{background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.12);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .brain-side{background:rgba(79,195,247,.05);border-color:rgba(79,195,247,.15)}
+    /* Mind side card */
+    .mind-side{background:rgba(255,213,79,.03);border:1px solid rgba(255,213,79,.12);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .mind-side{background:rgba(255,213,79,.04);border-color:rgba(255,213,79,.15)}
+    /* Bridge center - light mode dashed lines */
+    .bridge-dash{background:repeating-linear-gradient(180deg,rgba(0,0,0,.12) 0,rgba(0,0,0,.12) 4px,transparent 4px,transparent 8px)}
+    [data-theme="science"] .bridge-dash{background:repeating-linear-gradient(180deg,rgba(255,255,255,.18) 0,rgba(255,255,255,.18) 4px,transparent 4px,transparent 8px)}
+    /* Kor center badge */
+    .kor-bridge-badge{background:rgba(255,255,255,.7);border:2px solid rgba(79,195,247,.3);transition:background .35s ease}
+    [data-theme="science"] .kor-bridge-badge{background:linear-gradient(135deg,rgba(79,195,247,.2),rgba(255,213,79,.15))}
+    /* Between text */
+    .between-text{color:rgba(107,107,128,.3)}
+    [data-theme="science"] .between-text{color:rgba(200,196,216,.35)}
+    /* Kor center badge in hero */
+    .kor-hero-badge{background:rgba(255,255,255,.7);border:1px solid rgba(79,195,247,.2);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .kor-hero-badge{background:rgba(13,27,42,.7);border-color:rgba(79,195,247,.2)}
+    /* Hero glow - subtle in light mode */
+    .hero-title-glow{text-shadow:0 0 20px rgba(79,195,247,.25)}
+    [data-theme="science"] .hero-title-glow{text-shadow:0 0 40px rgba(79,195,247,.6)}
+    /* Signature glow */
+    .sig-glow{text-shadow:0 0 15px rgba(79,195,247,.15)}
+    [data-theme="science"] .sig-glow{text-shadow:0 0 30px rgba(79,195,247,.3)}
+    /* Footer */
+    .site-footer{background:rgba(0,0,0,.03);border-top:1px solid var(--divider);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .site-footer{background:#080f18;border-top-color:rgba(79,195,247,.1)}
+    .footer-link{color:var(--text-muted);text-decoration:none;transition:color .2s}
+    .footer-link:hover{color:var(--text)}
+    .footer-social{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.04);border:1px solid var(--card-border);color:var(--text-dim);text-decoration:none;transition:all .2s}
+    [data-theme="science"] .footer-social{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
+    .footer-social:hover{border-color:var(--accent-glow);color:var(--accent)}
+    .footer-copy{color:var(--text-muted)}
+    .footer-quote{color:var(--text-muted);font-style:italic;opacity:.7}
+    /* Stat pills in hero - light mode */
+    .stat-pill{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:100px;transition:background .35s ease,border-color .35s ease}
+    .stat-pill-brain{background:rgba(79,195,247,.06);border:1px solid rgba(79,195,247,.12)}
+    [data-theme="science"] .stat-pill-brain{background:rgba(79,195,247,.06);border-color:rgba(79,195,247,.15)}
+    .stat-pill-neu{background:rgba(107,107,128,.04);border:1px solid rgba(107,107,128,.1)}
+    [data-theme="science"] .stat-pill-neu{background:rgba(200,196,216,.05);border-color:rgba(200,196,216,.13)}
+    /* Trait icon boxes */
+    .trait-icon-brain{background:rgba(79,195,247,.08);border:1px solid rgba(79,195,247,.15)}
+    [data-theme="science"] .trait-icon-brain{background:rgba(79,195,247,.1);border-color:rgba(79,195,247,.2)}
+    .trait-icon-mind{background:rgba(255,213,79,.06);border:1px solid rgba(255,213,79,.15)}
+    [data-theme="science"] .trait-icon-mind{background:rgba(255,213,79,.08);border-color:rgba(255,213,79,.2)}
+    .trait-icon-neu{background:rgba(107,107,128,.06);border:1px solid rgba(107,107,128,.12)}
+    [data-theme="science"] .trait-icon-neu{background:rgba(200,196,216,.07);border-color:rgba(200,196,216,.15)}
+    /* Logo outline glow - subtle in light */
+    .logo-glow{box-shadow:0 0 15px rgba(79,195,247,.1);border:1px solid rgba(79,195,247,.1)}
+    [data-theme="science"] .logo-glow{box-shadow:0 0 30px rgba(79,195,247,.2);border-color:rgba(79,195,247,.15)}
+    /* Mobile menu */
+    .mobile-menu-panel{border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);border:1px solid var(--glass-border);box-shadow:0 12px 40px rgba(0,0,0,.12);transition:background .35s ease,border-color .35s ease}
+    [data-theme="science"] .mobile-menu-panel{background:rgba(13,27,42,.95);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+    /* Brain/mind tag pills in duality section */
+    .tag-brain{padding:.25rem .7rem;border-radius:100px;font-size:.75rem;font-weight:700;background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);color:var(--brain)}
+    .tag-mind{padding:.25rem .7rem;border-radius:100px;font-size:.75rem;font-weight:700;background:var(--badge-mind-bg);border:1px solid var(--badge-mind-border);color:var(--mind)}
+  </style>
+</head>
+<body>
+
+<div class="noise-layer"></div>
+
+<!-- ══ NAV ══════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-pill hidden md:flex items-center gap-1">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src="logo.svg" alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+      <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <div style="width:1px;height:1.2rem;background:var(--glass-border);margin:0 .3rem;"></div>
+    <a href="index.html"    class="nav-link">홈</a>
+    <a href="blog.html"     class="nav-link">블로그</a>
+    <a href="research.html" class="nav-link">연구</a>
+    <a href="videos.html"   class="nav-link">영상</a>
+    <a href="dashboard.html" class="nav-link">대시보드</a>
+    <a href="about.html"    class="nav-link nav-link-active">소개</a>
+    <div style="width:1px;height:1.2rem;background:var(--divider);margin:0 .4rem;"></div>
+    <button onclick="toggleSearch()" class="nav-search-btn" aria-label="검색">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.05rem;"></iconify-icon>
+    </button>
+    <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
+      <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
+    </a>
+  </div>
+  <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
+      <img src="logo.svg" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+      <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
+      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.3rem;"></iconify-icon>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden mt-2 mobile-menu-panel">
+    <div class="px-4 py-3 flex flex-col gap-1">
+      <a href="index.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">홈</a>
+      <a href="blog.html"     class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">블로그</a>
+      <a href="research.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">연구</a>
+      <a href="videos.html"   class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">영상</a>
+      <a href="dashboard.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">대시보드</a>
+      <a href="about.html"    class="py-2.5 px-3 text-sm rounded-xl font-semibold" style="color:var(--accent);">소개</a>
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ SECTION 1: HERO ══════════════════════════ -->
+<section style="background:var(--bg-deep);padding:7rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-center gap-10 md:gap-14">
+
+      <!-- LEFT: Text -->
+      <div style="flex:0 0 55%;" class="reveal">
+        <div class="mb-5">
+          <span class="badge badge-neu">독립 인지신경과학자</span>
+        </div>
+
+        <h1 class="hero-title-glow" style="font-size:clamp(4rem,10vw,7rem);font-weight:900;letter-spacing:-.05em;color:var(--accent);line-height:1;margin-bottom:.5rem;word-break:keep-all;">
+          코르
+        </h1>
+        <p style="font-size:1.25rem;color:var(--text-dim);letter-spacing:.02em;margin-bottom:1.2rem;font-style:italic;">
+          Kor. Between Brain and Mind.
+        </p>
+        <p style="font-size:1.1rem;line-height:1.75;color:var(--text);margin-bottom:2rem;word-break:keep-all;">
+          42세. 서울 마포구 독립 연구자.<br>뇌와 마음의 경계를 번역합니다.
+        </p>
+
+        <!-- Stats -->
+        <div class="flex flex-wrap gap-4 mb-2.5" style="margin-bottom:2rem;">
+          <div class="stat-pill stat-pill-brain">
+            <span style="font-size:.8rem;color:var(--accent);font-weight:700;letter-spacing:.04em;">10년 연구</span>
+          </div>
+          <div class="stat-pill stat-pill-neu">
+            <iconify-icon icon="solar:map-point-linear" style="font-size:.9rem;color:var(--text-dim);"></iconify-icon>
+            <span style="font-size:.8rem;color:var(--text-dim);font-weight:600;">서울 마포구</span>
+          </div>
+          <div class="stat-pill stat-pill-neu">
+            <iconify-icon icon="solar:diploma-linear" style="font-size:.9rem;color:var(--text-dim);"></iconify-icon>
+            <span style="font-size:.8rem;color:var(--text-dim);font-weight:600;">SNU · KAIST · UCSD</span>
+          </div>
+        </div>
+
+        <!-- Kor Quote -->
+        <div class="kor-quote">
+          <p style="font-size:1rem;line-height:1.8;color:var(--text);word-break:keep-all;">
+            "10년 동안 논문을 썼습니다. 아무도 읽지 않았습니다.<br>
+            뇌과학은 실험실 밖으로 나와야 했습니다."
+          </p>
+          <p style="font-size:.8rem;color:var(--accent);font-weight:700;letter-spacing:.05em;margin-top:.7rem;">— 코르</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Kor visual -->
+      <div style="flex:0 0 45%;" class="reveal d2">
+        <div class="hero-visual" style="position:relative;border-radius:24px;padding:2.5rem;aspect-ratio:4/5;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;">
+
+          <!-- Kor character image -->
+          <img src="kor_master.png" alt="코르" class="float"
+               style="width:75%;max-width:280px;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 8px 24px rgba(0,0,0,.15));margin-bottom:1rem;">
+
+          <!-- Label -->
+          <p style="font-size:.82rem;color:var(--text-dim);letter-spacing:.04em;text-align:center;position:relative;z-index:1;word-break:keep-all;">
+            코르의 연구소 / 서울 마포구
+          </p>
+
+          <!-- Brain ↔ Mind indicator -->
+          <div style="position:absolute;bottom:1.8rem;left:1.5rem;right:1.5rem;display:flex;align-items:center;gap:.75rem;">
+            <!-- Brain dot -->
+            <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0;">
+              <div class="pdot" style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);"></div>
+              <span style="font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.06em;">BRAIN</span>
+            </div>
+            <!-- Line -->
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(79,195,247,.4),rgba(255,213,79,.4));"></div>
+            <!-- Kor center badge -->
+            <div class="kor-hero-badge" style="flex-shrink:0;padding:.25rem .65rem;border-radius:100px;font-size:.72rem;font-weight:800;color:var(--text);letter-spacing:.04em;">코르</div>
+            <!-- Line -->
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(255,213,79,.4),rgba(79,195,247,.4));"></div>
+            <!-- Mind dot -->
+            <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0;">
+              <span style="font-size:.72rem;font-weight:700;color:var(--mind);letter-spacing:.06em;">MIND</span>
+              <div class="pdot" style="width:8px;height:8px;border-radius:50%;background:var(--mind);box-shadow:0 0 8px rgba(255,213,79,.5);animation-delay:.8s;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 2: 두 세계 사이 ══════════════════ -->
+<section style="background:var(--bg-mid);padding:5rem 0;">
+  <div class="max-w-5xl mx-auto px-6">
+
+    <div class="text-center mb-12 reveal">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.85rem;word-break:keep-all;">
+        두 세계 사이에서
+      </h2>
+      <p style="font-size:1.1rem;color:var(--text-dim);word-break:keep-all;">
+        코르는 과학과 감성, 두 세계의 언어를 동시에 씁니다
+      </p>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-6 items-stretch">
+
+      <!-- LEFT: 뇌 -->
+      <div class="reveal d1 brain-side" style="flex:1;border-radius:20px;padding:2rem;display:flex;flex-direction:column;align-items:flex-start;">
+        <div style="font-size:2.8rem;margin-bottom:.8rem;">🧠</div>
+        <h3 style="font-size:3rem;font-weight:900;color:var(--accent);line-height:1;margin-bottom:1.2rem;letter-spacing:-.04em;">뇌</h3>
+        <ul style="display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem;flex:1;">
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>인지신경과학
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>피어리뷰 논문
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>실험 데이터
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>신경 메커니즘
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>계산 시스템으로의 뇌
+          </li>
+        </ul>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag-brain">Science</span>
+          <span class="tag-brain">Data</span>
+          <span class="tag-brain">Evidence</span>
+        </div>
+      </div>
+
+      <!-- CENTER: 코르 bridge -->
+      <div class="reveal d2" style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem 0.5rem;min-width:90px;gap:.5rem;">
+        <!-- Top dashed line -->
+        <div class="bridge-dash" style="width:1px;height:40px;"></div>
+        <!-- Arrow down -->
+        <iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:1.05rem;color:var(--text-dim);"></iconify-icon>
+        <!-- Kor badge -->
+        <div class="kor-bridge-badge" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--accent-glow);overflow:hidden;">
+          <img src="kor_explaining.png" alt="코르" style="width:100%;height:100%;object-fit:cover;object-position:top;">
+        </div>
+        <!-- Arrow up -->
+        <iconify-icon icon="solar:alt-arrow-up-linear" style="font-size:1.05rem;color:var(--text-dim);"></iconify-icon>
+        <!-- BETWEEN text -->
+        <div class="between-text" style="writing-mode:vertical-rl;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:.3rem 0;">BETWEEN</div>
+        <!-- Bottom arrow -->
+        <iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:1.05rem;color:var(--text-dim);"></iconify-icon>
+        <!-- Translator label -->
+        <p style="font-size:.78rem;color:var(--text-dim);font-style:italic;text-align:center;margin-top:.3rem;">번역자</p>
+        <!-- Bottom dashed line -->
+        <div class="bridge-dash" style="width:1px;height:40px;"></div>
+      </div>
+
+      <!-- RIGHT: 마음 -->
+      <div class="reveal d3 mind-side" style="flex:1;border-radius:20px;padding:2rem;display:flex;flex-direction:column;align-items:flex-start;">
+        <div style="font-size:2.8rem;margin-bottom:.8rem;">💛</div>
+        <h3 style="font-size:3rem;font-weight:900;color:var(--mind);line-height:1;margin-bottom:1.2rem;letter-spacing:-.04em;">마음</h3>
+        <ul style="display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem;flex:1;">
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--mind);flex-shrink:0;"></span>심리학
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--mind);flex-shrink:0;"></span>인간의 감정
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--mind);flex-shrink:0;"></span>관계와 연결
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--mind);flex-shrink:0;"></span>경험과 의미
+          </li>
+          <li style="display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--text);word-break:keep-all;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--mind);flex-shrink:0;"></span>해석으로서의 마음
+          </li>
+        </ul>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag-mind">Emotion</span>
+          <span class="tag-mind">Meaning</span>
+          <span class="tag-mind">Human</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 3: 코르의 여정 ══════════════════ -->
+<section style="background:var(--bg-deep);padding:5rem 0;">
+  <div class="max-w-5xl mx-auto px-6">
+
+    <div class="text-center mb-12 reveal">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.85rem;word-break:keep-all;">
+        코르의 여정
+      </h2>
+      <p style="font-size:1.05rem;color:var(--text-dim);word-break:keep-all;">실험실에서 독립 연구소까지</p>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+
+      <!-- Item 1 -->
+      <div class="timeline-item reveal d1">
+        <div class="timeline-dot brain">🎓</div>
+        <div style="flex:1;padding-top:.35rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap;">
+            <span style="font-size:.8rem;font-weight:700;color:var(--text-dim);font-variant-numeric:tabular-nums;">2002–2006</span>
+            <span class="badge badge-brain">서울대학교</span>
+          </div>
+          <h3 style="font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.6rem;word-break:keep-all;">심리학과 학사</h3>
+          <p style="font-size:.95rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+            처음엔 사람의 마음을 이해하고 싶었습니다. 심리학이 그 문을 열어줄 것이라 믿었습니다. 그런데 공부할수록 뇌에 대한 질문이 더 커졌습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="timeline-item reveal d1">
+        <div class="timeline-dot brain">🔬</div>
+        <div style="flex:1;padding-top:.35rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap;">
+            <span style="font-size:.8rem;font-weight:700;color:var(--text-dim);">2006–2008</span>
+            <span class="badge badge-brain">KAIST</span>
+          </div>
+          <h3 style="font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.6rem;word-break:keep-all;">뇌인지과학 석사</h3>
+          <p style="font-size:.95rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+            뇌를 직접 들여다보기 시작했습니다. fMRI 데이터, 뉴런 기록, 인지 실험. 과학은 정밀했지만, 인간은 더 복잡했습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="timeline-item reveal d2">
+        <div class="timeline-dot brain">✈️</div>
+        <div style="flex:1;padding-top:.35rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap;">
+            <span style="font-size:.8rem;font-weight:700;color:var(--text-dim);">2009–2014</span>
+            <span class="badge badge-brain">UC San Diego</span>
+          </div>
+          <h3 style="font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.6rem;word-break:keep-all;">신경과학 박사</h3>
+          <p style="font-size:.95rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+            미국으로 건너가 5년을 보냈습니다. 논문 7편, 학회 발표 12회. 그런데 연구실 밖에서 아무도 이 내용을 알지 못했습니다. 뭔가 잘못됐다는 생각이 들었습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="timeline-item reveal d3">
+        <div class="timeline-dot mind">🏠</div>
+        <div style="flex:1;padding-top:.35rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap;">
+            <span style="font-size:.8rem;font-weight:700;color:var(--text-dim);">2024–현재</span>
+            <span class="badge badge-mind">서울 마포구</span>
+          </div>
+          <h3 style="font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.6rem;word-break:keep-all;">독립 연구자 · 창작자</h3>
+          <p style="font-size:.95rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+            실험실을 나왔습니다. 작은 스튜디오에 화이트보드 두 개와 EEG 장비를 들였습니다. 뇌과학을 아무나 이해할 수 있는 언어로 번역하기 시작했습니다.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 4: 코르의 연구소 ══════════════════ -->
+<section style="background:var(--bg-mid);padding:5rem 0;">
+  <div class="max-w-5xl mx-auto px-6">
+
+    <div class="text-center mb-12 reveal">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.85rem;word-break:keep-all;">
+        코르의 연구소
+      </h2>
+      <p style="font-size:1.05rem;color:var(--text-dim);word-break:keep-all;">
+        서울 마포구 3층 건물 꼭대기. 창문 너머로 서울 스카이라인이 보입니다.
+      </p>
+    </div>
+
+    <!-- Cards: 2+2+1 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 reveal d1">
+
+      <div class="lab-card">
+        <div style="font-size:2rem;margin-bottom:.75rem;">🖥️</div>
+        <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.5rem;word-break:keep-all;">메인 데스크</h3>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          L자형 책상 위에 논문과 책이 쌓여 있습니다. 모니터 3개가 동시에 켜져 있습니다. 기본 연구와 설명 영상의 베이스.
+        </p>
+      </div>
+
+      <div class="lab-card">
+        <div style="font-size:2rem;margin-bottom:.75rem;">📋</div>
+        <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.5rem;word-break:keep-all;">화이트보드 벽</h3>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          두 벽이 전부 화이트보드입니다. 항상 뭔가 적혀 있습니다. 개념 다이어그램과 구조 설명의 기반.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 reveal d2">
+
+      <div class="lab-card">
+        <div style="font-size:2rem;margin-bottom:.75rem;">🛋️</div>
+        <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.5rem;word-break:keep-all;">소파 코너</h3>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          따뜻한 조명. 책들이 옆 테이블에 어지럽게 쌓여 있습니다. 감정·관계·공감 주제의 영상이 여기서 나옵니다.
+        </p>
+      </div>
+
+      <div class="lab-card">
+        <div style="font-size:2rem;margin-bottom:.75rem;">🧪</div>
+        <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.5rem;word-break:keep-all;">장비 코너</h3>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          실제 EEG 장비와 뇌 모형. 해부 포스터. 신경과학 실험과 측정 주제의 영상에 등장합니다.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="reveal d3">
+      <div class="lab-card" style="max-width:100%;">
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div style="font-size:2rem;flex-shrink:0;">🌃</div>
+          <div>
+            <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.5rem;word-break:keep-all;">창가 자리</h3>
+            <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+              서울 스카이라인과 커피 한 잔. 늦은 밤 연구 감성. 수면·번아웃·야간 뇌 주제의 오프닝 씬이 여기서 촬영됩니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 5: 코르의 5가지 면 ══════════════ -->
+<section style="background:var(--bg-deep);padding:5rem 0;">
+  <div class="max-w-5xl mx-auto px-6">
+
+    <div class="text-center mb-12 reveal">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.85rem;word-break:keep-all;">
+        코르를 코르답게 만드는 것들
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+      <!-- Trait 1 -->
+      <div class="trait-card reveal d1">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+          <div class="trait-icon-brain" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <iconify-icon icon="solar:atom-linear" style="font-size:1.2rem;color:var(--accent);"></iconify-icon>
+          </div>
+          <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);word-break:keep-all;">지적 집착</h3>
+        </div>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          관심이 생기면 식사 중에도 일어납니다. 논문 하나가 논문 열 개로 이어집니다. 멈추는 법을 모릅니다.
+        </p>
+      </div>
+
+      <!-- Trait 2 -->
+      <div class="trait-card reveal d2">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+          <div class="trait-icon-neu" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <iconify-icon icon="solar:eye-linear" style="font-size:1.2rem;color:var(--text-dim);"></iconify-icon>
+          </div>
+          <h3 style="font-size:1.05rem;font-weight:800;color:var(--text);word-break:keep-all;">솔직한 불편함</h3>
+        </div>
+        <p style="font-size:.9rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          '저도 처음 이 연구 결과를 봤을 때 불편했습니다.' 포장하지 않습니다. 불편한 진실도 그대로 전합니다.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- Trait 3 -->
+      <div class="trait-card reveal d1">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+          <div class="trait-icon-mind" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <iconify-icon icon="solar:user-speak-linear" style="font-size:1.2rem;color:var(--mind);"></iconify-icon>
+          </div>
+          <h3 style="font-size:1rem;font-weight:800;color:var(--text);word-break:keep-all;">자기 노출</h3>
+        </div>
+        <p style="font-size:.87rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          가끔 자신의 경험을 씁니다. '저도 번아웃을 세 번 겪었는데, 그때 뇌가 실제로 이랬습니다.' 연구자이기 전에 사람입니다.
+        </p>
+      </div>
+
+      <!-- Trait 4 -->
+      <div class="trait-card reveal d2">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+          <div class="trait-icon-brain" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <iconify-icon icon="solar:cpu-linear" style="font-size:1.2rem;color:var(--accent);"></iconify-icon>
+          </div>
+          <h3 style="font-size:1rem;font-weight:800;color:var(--text);word-break:keep-all;">AI에 대한 복잡한 감정</h3>
+        </div>
+        <p style="font-size:.87rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          인지과학자로서 AI의 작동 방식에 매료됩니다. 동시에 비판적입니다. 둘 다 진심입니다.
+        </p>
+      </div>
+
+      <!-- Trait 5 -->
+      <div class="trait-card reveal d3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+          <div class="trait-icon-neu" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <iconify-icon icon="solar:smile-square-linear" style="font-size:1.2rem;color:var(--text-dim);"></iconify-icon>
+          </div>
+          <h3 style="font-size:1rem;font-weight:800;color:var(--text);word-break:keep-all;">농담 같지 않은 유머</h3>
+        </div>
+        <p style="font-size:.87rem;line-height:1.75;color:var(--text-dim);word-break:keep-all;">
+          충격적인 통계를 무표정하게 전달합니다. '65%가 복종했습니다. 예, 그냥 그렇습니다.' 웃음을 유도하지 않습니다. 그냥 사실입니다.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 6: 채널 철학 Trinity ══════════════ -->
+<section style="background:var(--bg-mid);padding:5rem 0;">
+  <div class="max-w-5xl mx-auto px-6">
+
+    <div class="text-center mb-12 reveal">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.85rem;word-break:keep-all;">
+        이 채널이 지키는 것
+      </h2>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-5">
+
+      <!-- 01 증거 -->
+      <div class="phil-card phil-brain reveal d1">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;">
+          <span style="font-size:.75rem;font-weight:800;color:rgba(79,195,247,.45);letter-spacing:.1em;">01</span>
+          <span style="font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;">EVIDENCE</span>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <iconify-icon icon="solar:document-text-linear" style="font-size:2rem;color:var(--accent);"></iconify-icon>
+        </div>
+        <h3 style="font-size:1.4rem;font-weight:900;color:var(--text);margin-bottom:.85rem;letter-spacing:-.03em;">증거</h3>
+        <p style="font-size:.92rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+          감상이 아닌 논문, 실험, 데이터만 말합니다. 출처 없는 주장은 하지 않습니다. '연구에 따르면'이라고 쓸 때는 실제 논문이 있습니다.
+        </p>
+      </div>
+
+      <!-- 02 실용 -->
+      <div class="phil-card phil-mind reveal d2">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;">
+          <span style="font-size:.75rem;font-weight:800;color:rgba(255,213,79,.45);letter-spacing:.1em;">02</span>
+          <span style="font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--mind);text-transform:uppercase;">UTILITY</span>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <iconify-icon icon="solar:target-linear" style="font-size:2rem;color:var(--mind);"></iconify-icon>
+        </div>
+        <h3 style="font-size:1.4rem;font-weight:900;color:var(--text);margin-bottom:.85rem;letter-spacing:-.03em;">실용</h3>
+        <p style="font-size:.92rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+          '그래서 내 삶에서 어떻게 쓰나?'까지 갑니다. 지식으로 끝나지 않습니다. 구조를 알면 덜 휘둘립니다.
+        </p>
+      </div>
+
+      <!-- 03 경이 -->
+      <div class="phil-card phil-alert reveal d3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;">
+          <span style="font-size:.75rem;font-weight:800;color:rgba(255,112,67,.45);letter-spacing:.1em;">03</span>
+          <span style="font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--alert);text-transform:uppercase;">WONDER</span>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <iconify-icon icon="solar:stars-linear" style="font-size:2rem;color:var(--alert);"></iconify-icon>
+        </div>
+        <h3 style="font-size:1.4rem;font-weight:900;color:var(--text);margin-bottom:.85rem;letter-spacing:-.03em;">경이</h3>
+        <p style="font-size:.92rem;line-height:1.8;color:var(--text-dim);word-break:keep-all;">
+          뇌과학은 공포가 아닌 경이의 대상입니다. '뇌가 이상하다'가 아니라 '뇌가 이렇게 작동한다'를 말합니다. 구조를 이해하면 덜 두렵습니다.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 7: Outro / Signature ══════════════ -->
+<section style="background:var(--bg-deep);padding:6rem 0;text-align:center;position:relative;overflow:hidden;">
+
+  <!-- Background watermark -->
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;user-select:none;">
+    <span style="font-size:clamp(4rem,16vw,9rem);font-weight:900;letter-spacing:-.04em;color:var(--text);opacity:.04;white-space:nowrap;word-break:keep-all;">뇌와 마음사이</span>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-6" style="position:relative;z-index:1;">
+
+    <!-- Kor wave -->
+    <div class="flex justify-center mb-4 reveal">
+      <img src="kor_wave.png" alt="인사하는 코르" class="float" style="width:140px;object-fit:contain;filter:drop-shadow(0 6px 20px rgba(0,0,0,.12));">
+    </div>
+
+    <!-- Signature quote -->
+    <div class="reveal d1" style="margin-bottom:1.5rem;">
+      <p class="sig-glow" style="font-size:1.55rem;font-weight:800;line-height:1.7;color:var(--text);word-break:keep-all;">
+        "뇌와 마음 사이에서,<br>코르."
+      </p>
+    </div>
+
+    <!-- Subtext -->
+    <p class="reveal d2" style="font-size:1rem;color:var(--text-dim);margin-bottom:2.5rem;word-break:keep-all;">
+      오늘도 코르의 연구소에 와주셔서 감사합니다.
+    </p>
+
+    <!-- CTA -->
+    <div class="reveal d3">
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub" style="font-size:1rem;padding:.75rem 1.8rem;">
+        <iconify-icon icon="solar:youtube-linear" style="font-size:1.15rem;"></iconify-icon>
+        유튜브 채널 보기
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════ -->
+<footer class="site-footer" style="padding:3rem 0 2rem;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+
+      <div>
+        <a href="index.html" class="flex items-center gap-2.5 mb-4">
+          <img src="logo.svg" alt="로고" class="w-8 h-8 rounded-xl object-contain">
+          <span style="font-size:.97rem; font-weight:800; letter-spacing:-.02em; color:var(--text);">뇌와 마음사이</span>
+        </a>
+        <p style="font-size:.85rem; color:var(--text-dim); line-height:1.7; max-width:210px; word-break:keep-all;">
+          인지신경과학 기반 — 뇌과학과 심리학을 하나의 언어로 묶는 채널
+        </p>
+      </div>
+
+      <div>
+        <p style="font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+                  color:var(--text-dim); margin-bottom:.85rem;">콘텐츠</p>
+        <div class="flex flex-col gap-2.5">
+          <a href="blog.html"     class="footer-link" style="font-size:.87rem;">블로그</a>
+          <a href="research.html" class="footer-link" style="font-size:.87rem;">연구</a>
+          <a href="videos.html"   class="footer-link" style="font-size:.87rem;">영상</a>
+          <a href="dashboard.html" class="footer-link" style="font-size:.87rem;">대시보드</a>
+          <a href="about.html"    class="footer-link" style="font-size:.87rem;">소개</a>
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="footer-link" style="font-size:.87rem;">YouTube</a>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+                  color:var(--text-dim); margin-bottom:.85rem;">연결</p>
+        <div class="flex gap-2.5 mb-4">
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="footer-social">
+            <iconify-icon icon="solar:youtube-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+          <a href="#" class="footer-social">
+            <iconify-icon icon="solar:instagram-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+          <a href="#" class="footer-social">
+            <iconify-icon icon="solar:letter-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+        </div>
+        <p style="font-size:.76rem; color:var(--text-muted); line-height:1.65; word-break:keep-all; opacity:.7;">
+          모든 콘텐츠는 피어리뷰 논문 기반.<br>참고 문헌은 각 영상 설명란에서.
+        </p>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--divider); padding-top:1.4rem;
+                display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between;">
+      <p class="footer-copy" style="font-size:.78rem;">© 2026 뇌와 마음사이 · Between Brain and Mind</p>
+      <p class="footer-quote" style="font-size:.75rem; word-break:keep-all;">
+        "뇌를 알면 조금은 덜 휘둘리게 됩니다."
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Search overlay -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;" onclick="if(event.target===this)closeSearch()">
+  <div style="position:absolute;top:5rem;left:50%;transform:translateX(-50%);width:90%;max-width:560px;">
+    <div style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:.5rem;box-shadow:var(--glass-shadow);display:flex;align-items:center;gap:.5rem;">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.2rem;color:var(--accent);margin-left:.75rem;flex-shrink:0;"></iconify-icon>
+      <input id="search-input" type="text" placeholder="검색어를 입력하세요..." style="flex:1;background:none;border:none;outline:none;font-size:1.05rem;color:var(--text);font-family:inherit;padding:.75rem .5rem;" autocomplete="off">
+      <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text-muted);font-size:1.2rem;">
+        <iconify-icon icon="solar:close-circle-linear"></iconify-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute('data-theme');
+    if(current==='science'){html.removeAttribute('data-theme');localStorage.setItem('theme','mind')}
+    else{html.setAttribute('data-theme','science');localStorage.setItem('theme','science')}
+  }
+  (function(){const saved=localStorage.getItem('theme');if(saved==='science')document.documentElement.setAttribute('data-theme','science')})();
+
+  function toggleSearch(){
+    const overlay=document.getElementById('search-overlay');
+    overlay.style.display='flex';
+    requestAnimationFrame(()=>{overlay.style.opacity='1'});
+    setTimeout(()=>document.getElementById('search-input').focus(),100);
+  }
+  function closeSearch(){
+    const overlay=document.getElementById('search-overlay');
+    overlay.style.opacity='0';
+    setTimeout(()=>{overlay.style.display='none'},250);
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch()});
+</script>
+<script>
+  const ham=document.getElementById('ham');
+  const mm=document.getElementById('mobile-menu');
+  ham?.addEventListener('click',()=>mm.classList.toggle('hidden'));
+  mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.add('hidden')));
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{nav.style.top=window.scrollY>80?'.75rem':'1.5rem';},{passive:true});
+</script>
+</body>
+</html>

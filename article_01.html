@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사람의 뇌는 AI보다 뛰어난 걸까? — 뇌와 마음사이</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {'brain':'var(--brain)','mind':'var(--mind)','alert':'var(--alert)','bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)','txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)'},
+        fontFamily: { sans: ['Pretendard','system-ui','sans-serif'] }
+      }}
+    }
+  </script>
+  <style>
+    :root{
+      --brain:#4FC3F7;--mind:#FFD54F;--alert:#FF7043;
+      --accent:#FF7043;--accent-secondary:#FF5722;
+      --accent-glow:rgba(255,112,67,.4);--accent-glow-strong:rgba(255,112,67,.65);
+      --bg-deep:#F8F7F4;--bg-mid:#FFFFFF;--bg-card:#FFFFFF;
+      --text:#1A1A2E;--text-dim:#6B6B80;--text-muted:#9E9EB0;
+      --glass-bg:rgba(255,255,255,.78);--glass-border:rgba(255,112,67,.15);--glass-shadow:0 4px 32px rgba(0,0,0,.08);
+      --card-border:rgba(0,0,0,.08);--card-hover-bg:rgba(255,112,67,.04);
+      --badge-brain-bg:rgba(79,195,247,.08);--badge-brain-border:rgba(79,195,247,.2);
+      --badge-mind-bg:rgba(255,112,67,.08);--badge-mind-border:rgba(255,112,67,.2);
+      --noise-opacity:.015;--divider:rgba(0,0,0,.08);
+      --quote-bg:rgba(255,112,67,.03);--quote-border:var(--accent);
+      --paper-bg:rgba(0,0,0,.02);--paper-border:rgba(255,112,67,.12);
+      --progress-track:rgba(0,0,0,.08);--progress-dot:rgba(0,0,0,.2);--progress-dot-border:rgba(0,0,0,.3)
+    }
+    [data-theme="science"]{
+      --bg-deep:#0D1B2A;--bg-mid:#1A1A3E;--bg-card:rgba(26,26,62,.3);
+      --text:#E8EAF6;--text-dim:#C8C4D8;--text-muted:#8884A0;
+      --glass-bg:rgba(13,27,42,.78);--glass-border:rgba(79,195,247,.2);--glass-shadow:0 4px 32px rgba(0,0,0,.55);
+      --card-border:rgba(255,255,255,.07);--card-hover-bg:rgba(26,26,62,.65);
+      --badge-brain-bg:rgba(79,195,247,.1);--badge-brain-border:rgba(79,195,247,.28);
+      --badge-mind-bg:rgba(255,213,79,.08);--badge-mind-border:rgba(255,213,79,.28);
+      --noise-opacity:.028;--divider:rgba(255,255,255,.08);
+      --accent:#4FC3F7;--accent-secondary:#2196F3;
+      --accent-glow:rgba(79,195,247,.4);--accent-glow-strong:rgba(79,195,247,.65);
+      --quote-bg:rgba(79,195,247,.05);--quote-border:var(--accent);
+      --paper-bg:rgba(26,26,62,.5);--paper-border:rgba(79,195,247,.12);
+      --progress-track:rgba(255,255,255,.15);--progress-dot:rgba(255,255,255,.3);--progress-dot-border:rgba(255,255,255,.5)
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Pretendard',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    #nav{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:40;width:max-content;max-width:calc(100vw - 2rem);animation:navSpringIn 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards}
+    @keyframes navSpringIn{0%{opacity:0;transform:translateX(-50%) translateY(-120%)}55%{opacity:1;transform:translateX(-50%) translateY(6px)}75%{transform:translateX(-50%) translateY(-3px)}90%{transform:translateX(-50%) translateY(2px)}100%{transform:translateX(-50%) translateY(0)}}
+    .nav-pill{padding:.6rem .6rem .6rem 1rem;border-radius:100px;background:var(--glass-bg);backdrop-filter:blur(28px) saturate(180%) brightness(1.1);-webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.1);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(79,195,247,.1),var(--glass-shadow)}
+    .nav-link{display:inline-flex;align-items:center;padding:.4rem .85rem;border-radius:100px;color:var(--text-dim);font-size:.95rem;font-weight:500;letter-spacing:-.01em;text-decoration:none;transition:all .22s ease;word-break:keep-all}
+    .nav-link:hover{color:var(--text);background:var(--card-hover-bg)}
+    .nav-link-active{color:var(--accent)!important;background:rgba(255,112,67,.1)}
+    .btn-sub{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:100px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;font-size:.92rem;font-weight:700;text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em}
+    .btn-sub:hover{transform:scale(1.04);box-shadow:0 4px 20px var(--accent-glow)}
+    .noise-layer{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:var(--noise-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .badge-brain{background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);color:var(--brain)}
+    .badge-mind{background:var(--badge-mind-bg);border:1px solid var(--badge-mind-border);color:var(--mind)}
+    .badge-neu{background:var(--bg-card);border:1px solid var(--card-border);color:var(--text-dim)}
+    .kor-quote{padding:1.4rem 1.7rem;border-left:3px solid var(--quote-border);background:var(--quote-bg);border-radius:0 12px 12px 0;margin:2rem 0}
+    .article-body p{font-size:1.12rem;line-height:2.05;color:var(--text);word-break:keep-all;margin-bottom:1.7rem}
+    .article-body h2{font-size:1.9rem;font-weight:900;letter-spacing:-.03em;color:var(--text);margin:5.5rem 0 .6rem;word-break:keep-all;line-height:1.35}
+    .article-body h2 .ch-num{display:block;font-size:1.1rem;font-weight:800;color:var(--text-dim);letter-spacing:.04em;margin-bottom:.35rem}
+    .article-body h3{font-size:1.2rem;font-weight:700;color:var(--accent);margin:2.5rem 0 .85rem;word-break:keep-all;line-height:1.5}
+    #reading-progress{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:.4rem}
+    .progress-track{width:8px;height:55vh;max-height:640px;min-height:400px;background:var(--progress-track);border-radius:100px;position:relative;overflow:visible}
+    .progress-fill{width:8px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent-glow) 100%);border-radius:100px;position:absolute;top:0;left:0;transition:height .15s ease;height:0}
+    .section-dot{position:absolute;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--progress-dot);border:2.5px solid var(--progress-dot-border);cursor:pointer;transition:all .2s}
+    .section-dot.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+    .section-dot::after{content:attr(title);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--bg-card);border:1px solid var(--card-border);border-radius:8px;padding:.3rem .65rem;font-size:.72rem;font-weight:600;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .section-dot:hover::after{opacity:1}
+    .progress-meta{font-size:.72rem;font-weight:600;color:var(--text-muted);text-align:right;white-space:nowrap}
+    .paper-cite{background:var(--paper-bg);border:1px solid var(--paper-border);border-radius:12px;padding:1.1rem 1.25rem;margin:1.2rem 0;cursor:pointer;transition:all .3s ease}
+    .paper-cite:hover{border-color:var(--accent);background:var(--quote-bg)}
+    .paper-detail{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+    .paper-cite.expanded .paper-detail{max-height:200px;opacity:1;margin-top:.75rem}
+    .paper-toggle{font-size:.75rem;color:var(--accent);font-weight:600;margin-top:.5rem;display:inline-flex;align-items:center;gap:.3rem;transition:transform .2s}
+    .paper-cite.expanded .paper-toggle iconify-icon{transform:rotate(180deg)}
+    .section-divider{border:none;border-top:1px solid var(--divider);margin:2.5rem 0}
+    .related-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;transition:all .25s ease;display:block}
+    .related-card:hover{background:var(--card-hover-bg);border-color:var(--accent);transform:translateY(-2px)}
+    .nav-logo-img{transition:box-shadow .3s ease;box-shadow:0 0 0 2.5px #FF7043, 0 0 12px rgba(255,112,67,.3)}
+    [data-theme="science"] .nav-logo-img{box-shadow:0 0 0 2.5px #4FC3F7, 0 0 12px rgba(79,195,247,.3)}
+    .nav-search-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:.4rem;border-radius:50%;transition:all .22s ease;display:inline-flex;align-items:center}
+    .nav-search-btn:hover{color:var(--accent);background:var(--card-hover-bg)}
+    @media(max-width:1200px){#reading-progress{display:none}}
+
+    /* ── Scroll Reveal ── */
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .reveal-left.visible{opacity:1;transform:translateX(0)}
+    .reveal-scale{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+    .reveal-scale.visible{opacity:1;transform:scale(1)}
+
+    /* ── Countup Numbers ── */
+    .countup-row{display:flex;gap:2rem;flex-wrap:wrap;margin:1.8rem 0 2.2rem;justify-content:center}
+    .countup-item{text-align:center;min-width:100px}
+    .countup-num{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+    .countup-label{font-size:.78rem;color:var(--text-dim);margin-top:.35rem;word-break:keep-all}
+
+    /* ── Animated Bar Chart ── */
+    .bar-chart{display:flex;align-items:flex-end;gap:3rem;justify-content:center;padding:2rem 0;margin:1.5rem 0 2rem}
+    .bar-col{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+    .bar-track{width:64px;height:200px;background:var(--progress-track);border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+    .bar-fill{width:100%;border-radius:12px;transition:height 1.2s cubic-bezier(.16,1,.3,1);height:0}
+    .bar-fill.animated{height:var(--target-h)}
+    .bar-value{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+    .bar-label{font-size:.82rem;color:var(--text-dim);word-break:keep-all;text-align:center;max-width:90px}
+
+    /* ── Timeline ── */
+    .timeline{position:relative;padding:2rem 0;margin:2rem 0}
+    .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent-glow),transparent);transform:translateX(-50%)}
+    .tl-item{position:relative;display:flex;align-items:center;margin-bottom:2rem;opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+    .tl-item.visible{opacity:1;transform:translateY(0)}
+    .tl-item:nth-child(odd){justify-content:flex-start;padding-right:55%}
+    .tl-item:nth-child(even){justify-content:flex-end;padding-left:55%}
+    .tl-dot{position:absolute;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg-deep);z-index:2;box-shadow:0 0 12px var(--accent-glow)}
+    .tl-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:12px;padding:1rem 1.2rem;max-width:260px}
+    .tl-year{font-size:1.1rem;font-weight:800;color:var(--accent);margin-bottom:.25rem}
+    .tl-desc{font-size:.88rem;color:var(--text-dim);line-height:1.55;word-break:keep-all}
+    @media(max-width:640px){
+      .timeline::before{left:20px}
+      .tl-item,.tl-item:nth-child(odd),.tl-item:nth-child(even){justify-content:flex-start;padding-right:0;padding-left:48px}
+      .tl-dot{left:20px}
+    }
+
+    /* ── Image Slot ── */
+    .img-slot{width:100%;border-radius:16px;overflow:hidden;margin:2.5rem 0;position:relative;background:linear-gradient(135deg,rgba(79,195,247,.08),rgba(255,112,67,.06));border:1px dashed var(--card-border);min-height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+    .img-slot-label{font-size:.75rem;color:var(--text-muted);font-weight:600;letter-spacing:.05em}
+    .img-slot-prompt{font-size:.7rem;color:var(--text-muted);opacity:.6;max-width:400px;text-align:center;line-height:1.5;font-style:italic;padding:0 1rem}
+
+    /* ── Data Viz Table ── */
+    .compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0 2rem;border-radius:12px;overflow:hidden;border:1px solid var(--card-border)}
+    .compare-table th{background:var(--paper-bg);font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--text-dim);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--divider)}
+    .compare-table td{padding:.65rem 1rem;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--divider);line-height:1.5}
+    .compare-table tr:last-child td{border-bottom:none}
+    .compare-table .brain-col{color:var(--brain);font-weight:600}
+    .compare-table .ai-col{color:var(--alert);font-weight:600}
+
+    /* ── Keyword Highlight ── */
+    .kw{color:var(--accent);font-weight:700;border-bottom:2px solid rgba(255,112,67,.2)}
+  </style>
+</head>
+<body>
+
+<div class="noise-layer" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-pill hidden md:flex items-center gap-1">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src="logo.svg" alt="뇌와 마음사이 로고"
+           class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+      <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <div style="width:1px;height:1.2rem;background:var(--glass-border);margin:0 .3rem;"></div>
+    <a href="index.html"    class="nav-link">홈</a>
+    <a href="blog.html"     class="nav-link">블로그</a>
+    <a href="research.html" class="nav-link nav-link-active">연구</a>
+    <a href="videos.html"   class="nav-link">영상</a>
+    <a href="dashboard.html" class="nav-link">대시보드</a>
+    <a href="about.html"    class="nav-link">소개</a>
+    <div style="width:1px;height:1.2rem;background:var(--divider);margin:0 .4rem;"></div>
+    <button onclick="toggleSearch()" class="nav-search-btn" aria-label="검색">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.05rem;"></iconify-icon>
+    </button>
+    <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
+      <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
+    </a>
+  </div>
+
+  <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
+      <img src="logo.svg" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+      <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
+      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.3rem;"></iconify-icon>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden md:hidden mt-2"
+       style="border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);
+              border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);">
+    <div class="px-4 py-3 flex flex-col gap-1">
+      <a href="index.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">홈</a>
+      <a href="blog.html"     class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">블로그</a>
+      <a href="research.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--accent);font-weight:700;">연구</a>
+      <a href="videos.html"   class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">영상</a>
+      <a href="dashboard.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">대시보드</a>
+      <a href="about.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">소개</a>
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank"
+         class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl"
+         style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
+    </div>
+  </div>
+</nav>
+
+<!-- READING PROGRESS BAR -->
+<div id="reading-progress">
+  <span class="progress-meta" style="color:var(--accent);font-weight:700;">읽는 중</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+    <div class="section-dot" id="dot-0" style="top:0;" title="Ch.1 접시 위 뉴런"></div>
+    <div class="section-dot" id="dot-1" style="top:18%;" title="Ch.2 둠"></div>
+    <div class="section-dot" id="dot-2" style="top:36%;" title="Ch.3 AI"></div>
+    <div class="section-dot" id="dot-3" style="top:54%;" title="Ch.4 뇌"></div>
+    <div class="section-dot" id="dot-4" style="top:72%;" title="Ch.5 비교"></div>
+    <div class="section-dot" id="dot-5" style="top:90%;" title="Ch.6 함의"></div>
+  </div>
+  <span id="current-section-label" class="progress-meta" style="color:var(--accent);">Ch.1 접시 위 뉴런</span>
+  <span id="time-remaining" class="progress-meta">약 12분</span>
+</div>
+
+<!-- BANNER IMAGE -->
+<div style="width:100%;max-height:420px;overflow:hidden;margin-top:4.5rem;">
+  <img src="images/art01/banner.png" alt="접시 위 뇌세포" style="width:100%;height:auto;object-fit:cover;display:block;">
+</div>
+
+<!-- ARTICLE HERO -->
+<section style="padding-top:3rem;padding-bottom:3rem;">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <!-- Breadcrumb -->
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
+      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;"
+         onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
+      <span style="margin:0 .4rem;opacity:.5;">›</span>
+      <span>🤖 뇌, AI랑 다를까요?</span>
+    </p>
+
+    <!-- Badge -->
+    <div style="margin-bottom:1.25rem;">
+      <span class="badge badge-brain">🤖 뇌, AI랑 다를까요?</span>
+    </div>
+
+    <!-- H1 -->
+    <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.18;word-break:keep-all;margin-bottom:1rem;">
+      사람의 뇌는 AI보다 뛰어난 걸까?
+    </h1>
+
+    <!-- Subtitle -->
+    <p style="font-size:1.15rem;color:var(--text-dim);line-height:1.6;word-break:keep-all;margin-bottom:0;">
+      접시 위 뉴런 20만 개가 둠을 플레이한 날, 떠오른 질문
+    </p>
+
+    <!-- Meta row -->
+    <div style="display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--divider);">
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:user-circle-linear" style="font-size:1rem;color:var(--accent);"></iconify-icon>코르
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:calendar-linear" style="font-size:1rem;"></iconify-icon>2026.03.21
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:clock-circle-linear" style="font-size:1rem;"></iconify-icon>읽기 약 12분
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:document-text-linear" style="font-size:1rem;color:var(--mind);"></iconify-icon>논문 3편
+      </span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ARTICLE BODY -->
+<article id="article-body" class="article-body max-w-3xl mx-auto px-6" style="padding:3rem 0 5rem;">
+
+  <!-- Hero Image Slot -->
+  <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+    <img src="images/art01/hero.png" alt="접시 위 뉴런 삽화" style="width:100%;height:auto;display:block;">
+  </div>
+
+  <!-- ═══════════ Chapter 1 ═══════════ -->
+  <section id="s-ch1">
+    <h2 class="reveal"><span class="ch-num">Chapter 1.</span>접시 위 뉴런이 게임을 시작했다</h2>
+    <p class="reveal">이야기는 2022년으로 거슬러 올라갑니다.</p>
+    <p class="reveal">호주의 <span class="kw">코티컬랩스(Cortical Labs)</span>라는 회사가 인간 줄기세포에서 뉴런을 키워냈습니다. 그리고 <span class="kw">다전극 배열(MEA)</span>, 뉴런이 쏘는 전기 신호를 동시에 읽고 쓸 수 있는 칩 위에 올렸습니다. 이 칩을 통해 퐁(Pong) 게임 환경을 전기 신호로 뉴런에게 전달한 거죠.</p>
+    <p class="reveal">뉴런은 <strong style="color:var(--accent);font-size:1.2em;">5분</strong> 만에 배우기 시작했습니다.</p>
+    <p class="reveal">비밀은 피드백 방식에 있었습니다. 공을 맞추면 예측 가능한 전기 자극을 보냈고 공을 놓치면 무작위 전기 자극을 흘렸거든요. 뉴런은 무작위 자극을 피하는 쪽으로 행동을 바꿨습니다.</p>
+    <p class="reveal">보상도 없고, 처벌도 없습니다. <span class="kw">예측 가능한 세계</span>와 <span class="kw">예측 불가능한 세계</span>. 그 차이만으로 뉴런은 움직이기 시작했습니다.</p>
+    <p class="reveal">생각해 보면 우리도 비슷하지 않나요? 낯선 도시에 던져지면, 아무도 가르쳐주지 않아도 패턴을 찾으려 합니다. 어느 골목이 안전한지, 어떤 표정이 환영의 신호인지. 접시 위 뉴런도 그랬습니다. 누가 규칙을 알려주지 않았는데도요.</p>
+
+    <div class="paper-cite reveal-left" onclick="this.classList.toggle('expanded')">
+      <p style="font-size:.87rem;color:var(--text-dim);margin-bottom:.5rem;font-weight:700;">Neuron, 2022 | Cortical Labs</p>
+      <p>Kagan, B.J. et al. (2022). "In vitro neurons learn and exhibit sentience when embodied in a simulated game-world." <em>Neuron</em>, 110(23).</p>
+      <div class="paper-detail">
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">인간 iPSC 유래 뉴런을 MEA 위에 배양, 퐁 환경을 전기 신호로 제공. 예측 가능 자극(공 맞춤) vs 무작위 자극(공 놓침) 피드백 설계. 5분 내 학습 징후 관찰. 자유 에너지 원리 기반 해석.</p>
+      </div>
+      <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 요약 보기</span>
+    </div>
+
+    <p class="reveal">퐁은 단순한 게임입니다. 패들을 좌우로 움직여 공을 받아치면 되죠. 그런데 접시 위 뉴런이 이걸 해냈다는 것 자체가 질문을 바꿔버렸습니다. 대뇌피질도, 감각기관도 없는 세포 덩어리가 환경에 적응했으니까요. 생물학적으로 학습이 어떻게 일어나는지, 처음부터 다시 생각해야 했습니다.</p>
+    <p class="reveal">이건 시작에 불과했습니다.</p>
+
+    <!-- Countup Numbers -->
+    <div class="countup-row reveal-scale">
+      <div class="countup-item">
+        <div class="countup-num" data-target="200000" data-suffix="">0</div>
+        <div class="countup-label">뉴런 수</div>
+      </div>
+      <div class="countup-item">
+        <div class="countup-num" data-target="20" data-suffix="W">0</div>
+        <div class="countup-label">뇌 소비 전력</div>
+      </div>
+      <div class="countup-item">
+        <div class="countup-num" data-target="700" data-suffix="W">0</div>
+        <div class="countup-label">GPU 소비 전력</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Chapter 2 ═══════════ -->
+  <section id="s-ch2">
+    <hr class="section-divider">
+    <h2 class="reveal"><span class="ch-num">Chapter 2.</span>4년 뒤, 둠을 플레이하다</h2>
+    <p class="reveal">2026년 3월, 같은 팀이 <span class="kw">CL1 칩</span>을 공개했습니다.</p>
+    <p class="reveal">이번에는 80만 개 뉴런 중 약 20만 개를 깨워서 둠을 플레이했습니다. 퐁의 단순한 좌우 이동과는 비교가 안 됩니다. 3D 공간에서 적을 구별하고 사격 타이밍까지 잡아야 하니까요.</p>
+    <p class="reveal">소비 전력은 핸드폰 계산기보다 적었습니다. 지금 이 글을 읽고 있는 당신의 뇌도 비슷한 전력으로 돌아가고 있고요.</p>
+    <p class="reveal">여기서 한 발 더 나갔습니다. 같은 뉴런 배양체를 <span class="kw">대형 언어 모델(LLM)</span>, ChatGPT 같은 AI에 연결했습니다. 뉴런이 쏘는 <span class="kw">스파이크</span>(전기 펄스, 뉴런이 '발사!'하고 보내는 짧은 신호)가 다음에 올 단어를 고르는 신호가 되어 텍스트를 만들어낸 겁니다. 살아 있는 뉴런과 실리콘 칩이 함께 계산한 첫 번째 사례였습니다.</p>
+    <p class="reveal">솔직해야 할 지점이 있습니다.</p>
+    <p class="reveal">아직 피어리뷰(동료 과학자 검증) 논문은 나오지 않았습니다. 학습이 뉴런 자체에서 일어난 건지 보조 소프트웨어가 도운 건지도 논쟁 중이고요. 플레이 수준도 "처음 컴퓨터를 본 초보자" 정도였습니다.</p>
+
+    <div class="kor-quote reveal-left">
+      <p style="font-style:italic;font-size:1.05rem;line-height:1.7;word-break:keep-all;">"이 실험은 아직 미완입니다. 하지만 '미완이니까 무시하자'와 '미완이지만 방향은 보인다'는 전혀 다른 태도입니다."</p>
+      <p style="font-size:.85rem;color:var(--accent);font-weight:700;margin-top:.75rem;">— 코르</p>
+    </div>
+
+    <p class="reveal">중요한 것은 결과의 수준이 아닙니다. 20만 개 뉴런이 3D 환경에 반응하며 행동을 조정했다는 구조 자체입니다.</p>
+    <p class="reveal">그렇다면 이 뉴런들의 반대편에 있는 AI는 대체 어떻게 생각하는 걸까요.</p>
+
+    <!-- Image Slot: timeline illustration -->
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art01/timeline.png" alt="2022 퐁 → 2026 둠 타임라인" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <!-- Timeline: 2022 → 2026 -->
+    <div class="timeline reveal-scale">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-year">2022</div>
+          <div class="tl-desc">DishBrain — 뉴런이 퐁(Pong)을 5분 만에 학습. Neuron지 게재</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-year">2026. 03</div>
+          <div class="tl-desc">CL1 칩 — 20만 뉴런이 둠(DOOM) 플레이. 소비 전력 &lt; 계산기</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-year">2026. 03</div>
+          <div class="tl-desc">뉴런 × LLM 하이브리드 — 생물학적 뉴런이 텍스트를 생성한 첫 사례</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Chapter 3 ═══════════ -->
+  <section id="s-ch3">
+    <hr class="section-divider">
+    <h2 class="reveal"><span class="ch-num">Chapter 3.</span>AI는 어떻게 생각할까</h2>
+    <p class="reveal">ChatGPT에게 질문을 던지면 그럴듯한 답이 돌아옵니다. 마치 이해한 것처럼 보이죠. 다만 그 안에서 벌어지는 일은 우리가 "생각"이라고 부르는 것과 꽤 다릅니다.</p>
+    <p class="reveal">대형 언어 모델의 핵심은 <span class="kw">트랜스포머(Transformer)</span>라는 구조입니다. 교실에서 발표를 듣는 학생을 떠올려 보세요. 선생님이 말할 때, 잘 듣는 학생은 어떤 단어에 집중해야 할지 스스로 고릅니다. 트랜스포머도 똑같이 합니다. 문장이 들어오면 모든 단어가 다른 모든 단어와 얼마나 관련 있는지를 동시에 계산합니다. 이 과정을 <span class="kw">어텐션(Attention)</span>, 주의 집중이라고 부르거든요.</p>
+    <p class="reveal">구체적으로 보겠습니다. "고양이가 매트 위에 앉았다"라는 문장이 들어오면, 모델은 "앉았다"와 "고양이" 사이의 연결 강도를 수치로 매깁니다. "매트"와도 연결되지만 가중치가 다르죠. 이렇게 단어 간 관계를 수천억 개의 파라미터(조절 손잡이)에 저장합니다. GPT-4급 모델은 수조 개의 토큰(단어 조각)으로 훈련되었으니, 인터넷에 있는 글을 거의 다 읽은 셈입니다.</p>
+    <p class="reveal">ChatGPT에 질문을 던져본 적 있다면, 그 답이 나오기까지 뒤에서 이런 계산이 돌아간 겁니다.</p>
+    <p class="reveal">AI가 잘하는 영역은 확실합니다. 수만 건의 법률 문서에서 특정 조항을 찾아내거나, 수백 편의 논문을 같은 품질로 요약하는 일. 이런 영역에서 AI는 인간이 따라잡을 수 없는 속도를 보여줍니다.</p>
+    <p class="reveal">반면 못하는 영역도 선명하죠. 한 번도 겪지 않은 상황에 실시간으로 적응하는 일, 시각과 청각과 촉각 신호를 동시에 엮어서 판단하는 일. 그리고 에너지 효율.</p>
+    <p class="reveal">엔비디아 H100 GPU 한 장이 최대 <span class="kw">700와트</span>를 먹습니다. GPT-4를 훈련시키려면 이런 GPU가 수천 대 필요했고, 학습에만 수개월이 걸렸습니다.</p>
+    <p class="reveal">이 모든 과정 뒤에 하나의 질문이 남습니다. AI는 "이해"를 하는 걸까요, 아니면 패턴을 정교하게 반복하는 걸까요?</p>
+    <p class="reveal">여기서부터 조금 다른 이야기가 시작됩니다. 이 질문에 답하려면, 먼저 뇌가 어떻게 생각하는지를 봐야 하거든요.</p>
+  </section>
+
+  <!-- ═══════════ Chapter 4 ═══════════ -->
+  <section id="s-ch4">
+    <hr class="section-divider">
+    <h2 class="reveal"><span class="ch-num">Chapter 4.</span>뇌는 뭐가 다를까</h2>
+    <p class="reveal">뇌의 작동 방식은 AI와 근본부터 다릅니다.</p>
+    <p class="reveal">약 <span class="kw">860억 개의 뉴런</span>이 <span class="kw">100조 개의 시냅스</span>로 이어져 있어요. 시냅스는 뉴런끼리 신호를 주고받는 연결 지점인데, GPT-4의 파라미터 수가 수천억이라 해도 뇌의 연결 밀도에는 못 미칩니다.</p>
+    <p class="reveal">더 중요한 차이는 신호 처리 방식이에요. AI는 숫자를 곱하고 더하는 연산을 반복하지만 뇌는 전기 펄스를 씁니다. 뉴런이 '탁!' 하고 쏘는 짧은 신호, 이걸 <span class="kw">스파이크</span>라고 부르거든요. 읽음 표시 대신 짧은 점 하나만 찍어 보내는 문자 같은 거예요. 쏠지 말지, 언제 쏠지. 이 타이밍 자체가 뇌의 연산입니다.</p>
+    <p class="reveal">그리고 연결도 고정되어 있지 않아요. 뉴런끼리 자주 같이 발화하면 그 사이 연결이 강해집니다. 신경과학에서는 이걸 <span class="kw">시냅스 가소성</span>이라고 부르거든요. 쉽게 말하면, 자주 쓰는 길이 넓어지는 거예요. CL1 칩 위의 뉴런도 이 가소성을 보였습니다. 실리콘 위에서도 뇌식 학습이 작동한다는 뜻이죠.</p>
+    <p class="reveal">그런데 여기서 한 가지 궁금한 게 있어요. 뉴런은 대체 뭘 기준으로 행동을 바꾸는 걸까요?</p>
+
+    <div class="paper-cite reveal-left" onclick="this.classList.toggle('expanded')">
+      <p style="font-size:.87rem;color:var(--text-dim);margin-bottom:.5rem;font-weight:700;">Nature Reviews Neuroscience, 2010</p>
+      <p>Friston, K. (2010). "The free-energy principle: a unified brain theory?" <em>Nature Reviews Neuroscience</em>, 11, 127–138.</p>
+      <div class="paper-detail">
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">뇌는 "다음에 무슨 일이 벌어질지" 끊임없이 예측하고 있다. 예측이 틀리면 불편해지고, 그 불편함을 줄이려고 행동을 바꾸거나 머릿속 모델을 고친다.</p>
+      </div>
+      <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 요약 보기</span>
+    </div>
+
+    <p class="reveal">신경과학자 칼 프리스턴은 이렇게 설명합니다. <strong style="color:var(--accent);">뇌는 끊임없이 "다음에 무슨 일이 벌어질지" 예측하고 있다</strong>고요.</p>
+    <p class="reveal">예를 들어볼게요. 매일 같은 길로 출근하는 사람이 있습니다. 어느 날 그 길이 공사 중이에요. 뇌는 당황합니다. 예상과 다르니까요. 이때 두 가지 중 하나를 합니다. "아, 공사하는구나" 하고 머릿속 지도를 고치거나. 아니면 다른 길로 돌아가거나.</p>
+    <p class="reveal">예측이 맞으면 편안하고, 틀리면 불편합니다. 뇌는 그 불편함을 줄이려고 계속 움직이는 거예요. 프리스턴은 이걸 <span class="kw">자유 에너지 원리</span>라고 불렀습니다.</p>
+    <p class="reveal">DishBrain 실험으로 돌아가 볼게요. 뉴런에게 무작위 자극을 줬을 때 무슨 일이 벌어졌죠? 뉴런이 행동을 바꿨습니다. 왜? 무작위는 예측이 안 되니까요. 예측이 안 되면 불편하고, 뉴런은 그 불편함에서 벗어나려고 스스로 움직인 거예요.</p>
+    <p class="reveal">대뇌피질도 아니고, 온전한 뇌도 아닌 배양 접시 위 뉴런이 이렇게 반응했다는 게 놀라운 겁니다. 누가 프로그래밍한 게 아니거든요.</p>
+    <p class="reveal">뇌가 잘하는 영역을 정리하면 이렇습니다. 아이에게 고양이 사진을 서너 장 보여주면, 처음 보는 고양이도 단번에 알아봅니다. 아이에게 뭔가를 가르쳐본 적 있다면 이 감각을 알 거예요. 사진 서너 장이면 충분하죠. 예시 몇 개만으로 규칙을 뽑아내는 능력, <span class="kw">few-shot learning</span>(소수 예시 학습)인 셈입니다. AI가 같은 일을 하려면 수만 장의 이미지가 필요하고요.</p>
+    <p class="reveal">얼굴 인식도 마찬가지입니다. 뇌는 약 <span class="kw">150밀리초</span>, 눈 한 번 깜빡이기도 전에 얼굴을 알아봅니다. 그 짧은 순간에 시각과 맥락, 감정까지 동시에 처리하거든요. AI는 각각을 따로따로 계산해야 하고요.</p>
+    <p class="reveal">뇌의 가장 놀라운 능력은 <span class="kw">맥락 전환</span>입니다. 논문을 읽다가 커피 향을 맡고 창밖의 비 소리를 듣고 오늘 저녁 약속을 떠올리는 일. 이 모든 전환이 끊김 없이 흘러가거든요. AI에게 이런 자유로운 맥락 전환은 아직 먼 이야기입니다.</p>
+
+    <div class="kor-quote reveal-left">
+      <p style="font-style:italic;font-size:1.05rem;line-height:1.7;word-break:keep-all;">"뇌는 답을 아는 게 아니라, 질문을 바꿀 줄 아는 시스템입니다. 같은 상황에서도 맥락에 따라 완전히 다른 반응을 만들어냅니다."</p>
+      <p style="font-size:.85rem;color:var(--accent);font-weight:700;margin-top:.75rem;">— 코르</p>
+    </div>
+
+    <p class="reveal">그렇다면 이 두 시스템을 나란히 놓으면 어떤 그림이 될까요.</p>
+
+    <!-- Image Slot: brain illustration -->
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art01/brain.png" alt="뇌의 스파이크 신호 처리" style="width:100%;height:auto;display:block;">
+    </div>
+  </section>
+
+  <!-- ═══════════ Chapter 5 ═══════════ -->
+  <section id="s-ch5">
+    <hr class="section-divider">
+    <h2 class="reveal"><span class="ch-num">Chapter 5.</span>20와트 vs 700와트: 같은 경기장이 아니었다</h2>
+    <p class="reveal">숫자부터 놓겠습니다.</p>
+    <p class="reveal">인간 뇌의 소비 전력은 약 <span class="kw">20와트</span>. 전구 하나 수준입니다. 엔비디아 H100 GPU는 최대 <span class="kw">700와트</span>이고, GPT-4를 훈련시키려면 이런 GPU 수천 대가 수개월 동안 돌아야 합니다. 데이터센터 전체로 보면 메가와트급이죠.</p>
+    <p class="reveal">에너지 효율만 놓고 보면, 비교 자체가 성립하지 않습니다.</p>
+
+    <!-- Animated Bar Chart: Brain vs GPU -->
+    <div class="bar-chart reveal-scale" id="energy-chart">
+      <div class="bar-col">
+        <div class="bar-value">20W</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target-h:14%;background:linear-gradient(180deg,var(--brain),rgba(79,195,247,.4));border-radius:12px;"></div>
+        </div>
+        <div class="bar-label">🧠 인간 뇌</div>
+      </div>
+      <div class="bar-col">
+        <div class="bar-value">700W</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target-h:100%;background:linear-gradient(180deg,var(--alert),rgba(255,112,67,.4));border-radius:12px;"></div>
+        </div>
+        <div class="bar-label">⚡ NVIDIA H100</div>
+      </div>
+      <div class="bar-col">
+        <div class="bar-value">&lt;1W</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target-h:4%;background:linear-gradient(180deg,#66BB6A,rgba(102,187,106,.4));border-radius:12px;"></div>
+        </div>
+        <div class="bar-label">🧫 DishBrain</div>
+      </div>
+    </div>
+
+    <p class="reveal">학습 방식도 다릅니다. DishBrain의 뉴런 20만 개는 5분 만에 퐁을 배웠습니다. GPT-4는 수조 개의 토큰을 수개월간 훈련했고요. 물론 배운 내용의 범위는 다릅니다. 그래도 "새로운 환경에 적응하는 속도"라는 기준으로 보면, 뇌의 효율은 현재 AI 구조가 따라오지 못하는 영역입니다.</p>
+    <p class="reveal">유연함도 다릅니다. 지금 이 글을 읽다가 옆에서 알림 소리가 났다면, 당신의 뇌는 이미 전환을 마쳤습니다. 20와트로. AI는 훈련 데이터의 범위 안에서만 작동하죠. 훈련에 없던 상황이 오면 그럴듯하지만 틀린 답을 만들어냅니다. 반면 뇌는 "모른다"는 느낌 자체를 감지하거든요.</p>
+    <p class="reveal">반대로 AI가 압도하는 영역도 있죠. 수만 건의 문서를 동시에 처리하는 규모와 24시간 지치지 않는 일관성. 이건 뇌가 해낼 수 없는 일이니까요.</p>
+    <p class="reveal">여기서 피할 수 없는 질문이 하나 있습니다. 뇌는 "이해"를 하는 걸까요? AI는?</p>
+
+    <div class="paper-cite reveal-left" onclick="this.classList.toggle('expanded')">
+      <p style="font-size:.87rem;color:var(--text-dim);margin-bottom:.5rem;font-weight:700;">BMC Neuroscience, 2004</p>
+      <p>Tononi, G. (2004). "An information integration theory of consciousness." <em>BMC Neuroscience</em>, 5, 42.</p>
+      <div class="paper-detail">
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">의식의 양은 시스템이 통합하는 정보량(Φ, 파이)으로 측정 가능. 정보가 분리되면 의식이 아니고, 통합되어야 의식이 된다는 수학적 프레임워크.</p>
+      </div>
+      <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 요약 보기</span>
+    </div>
+
+    <p class="reveal"><span class="kw">통합정보이론(IIT)</span>, 의식을 정보가 하나로 묶이는 정도로 측정하는 이론의 관점에서 보면, 뇌는 860억 뉴런의 활동을 하나의 경험으로 통합합니다. AI는 수천억 파라미터가 있지만 각 연산이 따로 돌아가고, "통합된 경험"이라 부를 만한 것은 없습니다.</p>
+    <p class="reveal">20만 개 뉴런이 의식을 갖고 있는지는 아무도 모릅니다. 그렇다고 0이라고 단정하기도 어렵죠. AI의 의식이 0인지도, 아직 합의된 답은 없습니다.</p>
+
+    <div class="kor-quote reveal-left">
+      <p style="font-style:italic;font-size:1.05rem;line-height:1.7;word-break:keep-all;">"GPU는 더 빠르고 더 크게 계산합니다. 그런데 우리는 아직도 뇌를 닮은 계산을 만들지 못하고 있습니다. 그게 저에게는 공포보다 경이에 가깝습니다."</p>
+      <p style="font-size:.85rem;color:var(--accent);font-weight:700;margin-top:.75rem;">— 코르</p>
+    </div>
+
+    <p class="reveal">"뛰어나다"는 틀린 질문이었을 수 있습니다. 이 둘은 같은 경기장에 있지 않았습니다.</p>
+
+    <!-- Data Viz: 뇌 vs AI 비교 테이블 -->
+    <h3 class="reveal">뇌 vs AI 비교</h3>
+    <table class="compare-table reveal-scale">
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>🧠 인간 뇌</th>
+          <th>⚡ AI (GPT-4급)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>소비 전력</td><td class="brain-col">~20W</td><td class="ai-col">700W × 수천 대</td></tr>
+        <tr><td>학습 속도 (새 환경)</td><td class="brain-col">5분 (DishBrain)</td><td class="ai-col">수개월</td></tr>
+        <tr><td>학습 데이터</td><td class="brain-col">예시 몇 개</td><td class="ai-col">수조 토큰</td></tr>
+        <tr><td>맥락 전환</td><td class="brain-col">즉시, 끊김 없이</td><td class="ai-col">학습 분포 안에서만</td></tr>
+        <tr><td>대규모 처리</td><td>✗</td><td class="ai-col">✓ 압도적</td></tr>
+        <tr><td>일관된 반복</td><td>✗</td><td class="ai-col">✓ 24시간</td></tr>
+        <tr><td>감각 통합</td><td class="brain-col">✓ 동시 처리</td><td>✗ 각각 따로</td></tr>
+        <tr><td>의식</td><td>? (통합정보이론)</td><td>? (합의 없음)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════ Chapter 6 ═══════════ -->
+  <section id="s-ch6">
+    <hr class="section-divider">
+    <h2 class="reveal"><span class="ch-num">Chapter 6.</span>이 실험이 우리에게 남기는 것</h2>
+    <p class="reveal">이 연구들이 일상과 먼 이야기처럼 느껴질 수 있습니다. 다만 몇 가지 방향은 이미 보이기 시작했습니다.</p>
+
+    <h3 class="reveal">에너지 문제의 생물학적 대안</h3>
+    <p class="reveal">AI 데이터센터의 전력 소모는 심각한 문제입니다. 2024년 기준, 전 세계 데이터센터 전력 소비는 원자력 발전소 수십 기 분량에 달합니다. 매일 쓰는 AI 서비스 뒤에 그만한 에너지가 돌아가고 있다는 걸 떠올려 보면, 살아 있는 뉴런으로 계산하는 기술이 왜 주목받는지 감이 옵니다.</p>
+
+    <h3 class="reveal">뇌 질환 연구의 새로운 플랫폼</h3>
+    <p class="reveal">칩 위에서 살아 있는 뉴런을 관찰할 수 있다면 약물을 시험하고 뇌 질환을 연구하는 속도가 달라집니다. 알츠하이머나 파킨슨병 환자의 세포로 뉴런을 키워 약물 반응을 실시간으로 볼 수 있다는 뜻이거든요.</p>
+
+    <h3 class="reveal">AI와 뇌, 서로를 비추는 거울</h3>
+    <p class="reveal">AI가 인간처럼 보이기 시작할수록 우리는 인간 뇌가 왜 아직도 이렇게 효율적이고 유연한지 다시 궁금해집니다. 동시에 AI가 뇌보다 잘하는 것을 보면 뇌의 한계도 더 선명해지죠. 이 둘은 경쟁이 아니라 서로를 이해하는 도구입니다.</p>
+    <p class="reveal">접시 위 뉴런이 배우는 과정을 이해하는 일은 결국 인간 뇌가 왜 적은 에너지로도 적응하고 예측하는지 이해하는 일과 맞닿아 있습니다.</p>
+    <p class="reveal">그리고 그 이해는 처음 질문으로 돌아오게 합니다.</p>
+
+    <!-- Image Slot: closing mood -->
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art01/closing.png" alt="뉴런 하나가 품은 가능성" style="width:100%;height:auto;display:block;">
+    </div>
+  </section>
+
+  <!-- ═══════════ 코르의 노트 ═══════════ -->
+  <hr class="section-divider">
+  <section id="s-kor-note" style="padding:2rem 0;">
+    <h2 class="reveal" style="text-align:center;margin-bottom:1.5rem;">코르의 노트</h2>
+
+    <div style="display:flex;gap:2rem;justify-content:center;margin-bottom:1.5rem;" class="reveal">
+      <div style="text-align:center;">
+        <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">이해도</p>
+        <p style="font-size:1.3rem;letter-spacing:.15em;">★★★☆☆</p>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">흥미도</p>
+        <p style="font-size:1.3rem;letter-spacing:.15em;">★★★★★</p>
+      </div>
+    </div>
+
+    <h3 class="reveal">오늘의 질문: 사람의 뇌는 AI보다 뛰어난 걸까?</h3>
+    <p class="reveal">"뛰어나다"와 "뒤처진다"로 나눌 수 있는 문제가 아니었습니다. 뇌와 AI는 서로 다른 종류의 계산을 합니다.</p>
+    <p class="reveal">AI는 대규모 패턴 처리와 속도에서 뇌를 압도합니다. 수만 건의 문서를 읽고 수백 가지 언어를 밀리초 단위로 번역하는 일. 이건 뇌가 할 수 없는 영역이죠.</p>
+    <p class="reveal">반면 에너지 효율에서 뇌는 AI와 비교가 되지 않습니다. 20와트로 세상을 인식하고 감정을 느끼고 경험 몇 번만으로 새로운 것을 배우거든요. 맥락이 바뀌면 즉시 전환하고 한 번도 만나지 않은 상황에서도 판단을 내리죠. AI가 아직 따라오지 못하는 영역입니다.</p>
+    <p class="reveal">결국 이 질문이 남습니다. 뇌가 AI보다 나은 게 아니라, 뇌가 하는 방식의 계산을 우리가 아직 만들지 못하고 있다는 것.</p>
+
+    <h3 class="reveal">우리에게 주는 함의</h3>
+    <p class="reveal">AI를 두려워하기보다, 20와트짜리 우리 뇌가 왜 아직도 독특한 시스템인지 다시 보게 됩니다. 뇌를 이해하는 일은 결국 우리 자신을 이해하는 일이고, AI를 이해하는 일은 그 거울의 반대쪽을 보는 일입니다.</p>
+
+    <h3 class="reveal">다음 이야기에서는</h3>
+    <p class="reveal">뇌와 AI가 서로 다른 종류의 뛰어남을 갖고 있다면, AI가 우리 생각을 대신해줄수록 뇌에는 어떤 일이 벌어질까요? 다음 글에서는 그 질문을 파고 들어갑니다.</p>
+  </section>
+
+  <!-- Outro -->
+  <hr class="section-divider">
+  <div style="text-align:center;padding:2rem 0 1rem;">
+    <p style="font-size:1.05rem;color:var(--accent);font-weight:700;font-style:italic;">— 뇌와 마음 사이에서.</p>
+  </div>
+
+  <!-- References -->
+  <div style="border-top:1px solid var(--divider);padding-top:2rem;margin-top:2rem;">
+    <p style="font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;">참고 논문</p>
+    <div style="display:flex;flex-direction:column;gap:.65rem;">
+      <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Kagan, B.J. et al. (2022). In vitro neurons learn and exhibit sentience when embodied in a simulated game-world. <em>Neuron</em>, 110(23).</p>
+      <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Friston, K. (2010). The free-energy principle: a unified brain theory? <em>Nature Reviews Neuroscience</em>, 11, 127–138.</p>
+      <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Tononi, G. (2004). An information integration theory of consciousness. <em>BMC Neuroscience</em>, 5, 42.</p>
+    </div>
+  </div>
+
+</article>
+
+<!-- PREV / NEXT NAV -->
+<div style="border-top:1px solid var(--divider);padding:2.5rem 0;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;" class="max-w-3xl mx-auto px-6">
+  <a href="research.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+     onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+    <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>연구 노트 목록으로
+  </a>
+  <a href="article_02.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+     onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+    다음 노트<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+  </a>
+</div>
+
+<!-- RELATED NOTES -->
+<section style="margin-bottom:5rem;" class="max-w-3xl mx-auto px-6">
+  <p style="font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.25rem;margin-top:3rem;">관련 연구 노트</p>
+  <div style="display:flex;flex-direction:column;gap:.85rem;">
+    <a href="article_02.html" class="related-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">ART_02</p>
+          <p style="font-size:1.02rem;font-weight:700;color:var(--text);line-height:1.4;word-break:keep-all;">피곤한데 잠이 안 오는 밤, 뇌는 아직 낮이라고 믿고 있습니다</p>
+        </div>
+        <span class="badge badge-brain" style="flex-shrink:0;margin-top:.15rem;">🤖 뇌 vs AI</span>
+      </div>
+    </a>
+    <a href="research.html" class="related-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">연구</p>
+          <p style="font-size:1.02rem;font-weight:700;color:var(--text);line-height:1.4;word-break:keep-all;">모든 연구 노트 보기</p>
+        </div>
+        <span class="badge badge-neu" style="flex-shrink:0;margin-top:.15rem;">목록</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:3rem 0 2rem;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="index.html" class="flex items-center gap-2.5 mb-4">
+          <img src="logo.svg" alt="로고" class="w-8 h-8 rounded-xl object-contain">
+          <span style="font-size:.98rem;font-weight:800;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+        </a>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;max-width:210px;word-break:keep-all;">
+          인지신경과학 기반 — 뇌과학과 심리학을 하나의 언어로 묶는 채널
+        </p>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                  color:var(--text-dim);margin-bottom:.85rem;">콘텐츠</p>
+        <div class="flex flex-col gap-2.5">
+          <a href="blog.html"     style="font-size:.88rem;color:var(--text-muted);text-decoration:none;transition:color .2s;"
+             onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">블로그</a>
+          <a href="research.html" style="font-size:.88rem;color:var(--text-muted);text-decoration:none;transition:color .2s;"
+             onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">연구</a>
+          <a href="videos.html"   style="font-size:.88rem;color:var(--text-muted);text-decoration:none;transition:color .2s;"
+             onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">영상</a>
+          <a href="about.html"    style="font-size:.88rem;color:var(--text-muted);text-decoration:none;transition:color .2s;"
+             onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">소개</a>
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank"
+             style="font-size:.88rem;color:var(--text-muted);text-decoration:none;transition:color .2s;"
+             onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">YouTube</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                  color:var(--text-dim);margin-bottom:.85rem;">연결</p>
+        <div class="flex gap-2.5 mb-4">
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank"
+             style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+                    background:var(--bg-card);border:1px solid var(--card-border);
+                    color:var(--text-dim);text-decoration:none;transition:all .2s;"
+             onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+             onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--text-dim)'">
+            <iconify-icon icon="solar:youtube-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+          <a href="#"
+             style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+                    background:var(--bg-card);border:1px solid var(--card-border);
+                    color:var(--text-dim);text-decoration:none;transition:all .2s;"
+             onmouseover="this.style.borderColor='rgba(255,213,79,.4)';this.style.color='var(--mind)'"
+             onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--text-dim)'">
+            <iconify-icon icon="solar:instagram-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+          <a href="#"
+             style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+                    background:var(--bg-card);border:1px solid var(--card-border);
+                    color:var(--text-dim);text-decoration:none;transition:all .2s;"
+             onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+             onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--text-dim)'">
+            <iconify-icon icon="solar:letter-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+        </div>
+        <p style="font-size:.82rem;color:var(--text-muted);line-height:1.65;word-break:keep-all;">
+          모든 콘텐츠는 피어리뷰 논문 기반.<br>참고 문헌은 각 영상 설명란에서.
+        </p>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--divider);padding-top:1.4rem;
+                display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+      <p style="font-size:.78rem;color:var(--text-muted);">&copy; 2026 뇌와 마음사이 &middot; Between Brain and Mind</p>
+      <p style="font-size:.75rem;color:var(--text-muted);word-break:keep-all;font-style:italic;">
+        "뇌를 알면 조금은 덜 휘둘리게 됩니다."
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav
+  const ham=document.getElementById('ham');
+  const mm=document.getElementById('mobile-menu');
+  ham?.addEventListener('click',()=>mm.classList.toggle('hidden'));
+  mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.add('hidden')));
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{nav.style.top=window.scrollY>80?'.75rem':'1.5rem';},{passive:true});
+
+  // Reading progress bar
+  const progressFill=document.getElementById('progress-fill');
+  const currentSectionLabel=document.getElementById('current-section-label');
+  const timeRemaining=document.getElementById('time-remaining');
+  const dots=document.querySelectorAll('.section-dot');
+
+  const sections=[
+    {id:'s-ch1',name:'Ch.1 접시 위 뉴런',dot:0},
+    {id:'s-ch2',name:'Ch.2 둠',dot:1},
+    {id:'s-ch3',name:'Ch.3 AI',dot:2},
+    {id:'s-ch4',name:'Ch.4 뇌',dot:3},
+    {id:'s-ch5',name:'Ch.5 비교',dot:4},
+    {id:'s-ch6',name:'Ch.6 함의',dot:5}
+  ];
+
+  function updateProgress(){
+    const articleBody=document.getElementById('article-body');
+    if(!articleBody)return;
+    const articleTop=articleBody.offsetTop;
+    const articleHeight=articleBody.offsetHeight;
+    const scrolled=window.scrollY+window.innerHeight/2-articleTop;
+    const progress=Math.max(0,Math.min(100,(scrolled/articleHeight)*100));
+    if(progressFill)progressFill.style.height=progress+'%';
+
+    const remaining=Math.max(0,Math.round(12*(1-progress/100)));
+    if(timeRemaining)timeRemaining.textContent=remaining>0?`약 ${remaining}분`:'완료';
+
+    dots.forEach(d=>d.classList.remove('active'));
+    let currentIdx=0;
+    sections.forEach((s,i)=>{
+      const el=document.getElementById(s.id);
+      if(el&&window.scrollY>=el.offsetTop-160){
+        currentIdx=i;
+      }
+    });
+    if(dots[currentIdx])dots[currentIdx].classList.add('active');
+    if(currentSectionLabel)currentSectionLabel.textContent=sections[currentIdx].name;
+  }
+
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  updateProgress();
+
+  dots.forEach((dot,i)=>{
+    dot.addEventListener('click',()=>{
+      const el=document.getElementById(sections[i]?.id);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+
+  // ── Scroll Reveal (IntersectionObserver) ──
+  const revealObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>{
+    revealObserver.observe(el);
+  });
+
+  // ── Timeline items reveal with stagger ──
+  const tlObserver=new IntersectionObserver((entries)=>{
+    entries.forEach((entry,i)=>{
+      if(entry.isIntersecting){
+        setTimeout(()=>entry.target.classList.add('visible'),i*200);
+        tlObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.tl-item').forEach(el=>tlObserver.observe(el));
+
+  // ── Countup Animation ──
+  function animateCountup(el){
+    const target=parseInt(el.dataset.target);
+    const suffix=el.dataset.suffix||'';
+    const duration=1800;
+    const start=performance.now();
+    function step(now){
+      const elapsed=now-start;
+      const progress=Math.min(elapsed/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const current=Math.round(eased*target);
+      if(target>=10000){
+        el.textContent=current.toLocaleString()+suffix;
+      }else{
+        el.textContent=current+suffix;
+      }
+      if(progress<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const countupObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('.countup-num').forEach(animateCountup);
+        countupObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.5});
+  document.querySelectorAll('.countup-row').forEach(el=>countupObserver.observe(el));
+
+  // ── Bar Chart Animation ──
+  const chartObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('.bar-fill').forEach(bar=>{
+          bar.classList.add('animated');
+        });
+        chartObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.bar-chart').forEach(el=>chartObserver.observe(el));
+</script>
+
+<!-- Search overlay -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;" onclick="if(event.target===this)closeSearch()">
+  <div style="position:absolute;top:5rem;left:50%;transform:translateX(-50%);width:90%;max-width:560px;">
+    <div style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:.5rem;box-shadow:var(--glass-shadow);display:flex;align-items:center;gap:.5rem;">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.2rem;color:var(--accent);margin-left:.75rem;flex-shrink:0;"></iconify-icon>
+      <input id="search-input" type="text" placeholder="검색어를 입력하세요..." style="flex:1;background:none;border:none;outline:none;font-size:1.05rem;color:var(--text);font-family:inherit;padding:.75rem .5rem;" autocomplete="off">
+      <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text-muted);font-size:1.2rem;">
+        <iconify-icon icon="solar:close-circle-linear"></iconify-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute('data-theme');
+  if(current==='science'){html.removeAttribute('data-theme');localStorage.setItem('theme','mind')}
+  else{html.setAttribute('data-theme','science');localStorage.setItem('theme','science')}
+}
+(function(){const saved=localStorage.getItem('theme');if(saved==='science')document.documentElement.setAttribute('data-theme','science')})();
+
+function toggleSearch(){
+  const overlay=document.getElementById('search-overlay');
+  overlay.style.display='flex';
+  requestAnimationFrame(()=>{overlay.style.opacity='1'});
+  setTimeout(()=>document.getElementById('search-input').focus(),100);
+}
+function closeSearch(){
+  const overlay=document.getElementById('search-overlay');
+  overlay.style.opacity='0';
+  setTimeout(()=>{overlay.style.display='none'},250);
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch()});
+</script>
+</body>
+</html>
