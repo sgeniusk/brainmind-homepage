@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <BaseLayout title="연구 아티클 — 뇌와 마음사이" activePage="research">
@@ -39,7 +40,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
     <!-- Filter row -->
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-top:.85rem;flex-wrap:wrap;">
-      <div style="display:flex;flex-wrap:wrap;gap:.5rem;flex:1;">
+      <div style="display:flex;flex-wrap:nowrap;gap:.5rem;flex:1;overflow-x:auto;padding-bottom:.25rem;scrollbar-width:thin;scrollbar-color:var(--divider) transparent;" class="filter-scroll">
         <button class="filter-pill active" data-filter="전체">전체</button>
         <button class="filter-pill" data-filter="뇌의 착각">🧠 뇌의 착각</button>
         <button class="filter-pill" data-filter="뇌의 수면">😴 뇌의 수면</button>
@@ -67,7 +68,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div class="research-grid" id="card-list">
 
       <!-- Card 02 — FEATURED (최신) -->
-      <a href="article_02.html" class="research-card featured reveal d1" data-category="뇌가 속는 방법">
+      <a href={`${base}articles/article-02/`} class="research-card featured reveal d1" data-category="뇌가 속는 방법">
         <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,112,67,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
           <span style="font-size:3rem;">🧠</span>
         </div>
@@ -82,7 +83,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </a>
 
       <!-- Card 01 -->
-      <a href="article_01.html" class="research-card reveal d2" data-category="뇌의 착각">
+      <a href={`${base}articles/article-01/`} class="research-card reveal d2" data-category="뇌의 착각">
         <div class="research-card-img">
           <img src="images/art01/banner.png" alt="뇌세포가 게임을 배운 실험" loading="lazy">
         </div>
