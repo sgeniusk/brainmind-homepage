@@ -1,290 +1,258 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+type BlogFrontmatter = {
+  blog_id: string;
+  series: string;
+  series_part: number;
+  series_chapter: number;
+  title: string;
+  subtitle?: string;
+  category?: string;
+  reading_time?: string;
+  teaser?: string;
+  status?: string;
+  created?: string;
+  published?: string;
+};
+
+type BlogModule = {
+  frontmatter: BlogFrontmatter;
+};
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const postModules = Object.values(import.meta.glob('./post-*.md', { eager: true })) as BlogModule[];
+
+const posts = postModules
+  .map(({ frontmatter }) => ({
+    ...frontmatter,
+    href: `${base}blog/post-${String(frontmatter.series_chapter).padStart(2, '0')}/`,
+  }))
+  .sort((a, b) => a.series_chapter - b.series_chapter);
+
+const seriesTitle = posts[0]?.series ?? '생각이 사라지기 전에';
+const prologue = posts.find((post) => post.series_chapter === 0);
+const part1 = posts.filter((post) => post.series_chapter >= 1 && post.series_chapter <= 4);
+const part2 = posts.filter((post) => post.series_chapter >= 5 && post.series_chapter <= 8);
+const part3 = posts.filter((post) => post.series_chapter >= 9 && post.series_chapter <= 12);
+const epilogue = posts.find((post) => post.series_chapter === 13);
+
+const sections = [
+  { id: 'part-1', label: 'Part 1', title: '사라지고 있는 것들', accent: 'var(--accent)', posts: part1 },
+  { id: 'part-2', label: 'Part 2', title: '보이지 않는 설계', accent: 'var(--alert)', posts: part2 },
+  { id: 'part-3', label: 'Part 3', title: '지키기로 한 것들', accent: 'var(--brain)', posts: part3 },
+];
+
+const getStatusLabel = (status?: string) => (status === 'published' ? '공개' : '준비 중');
+const getStatusClass = (status?: string) => (status === 'published' ? 'status-published' : 'status-draft');
 ---
 
 <BaseLayout title="블로그 — 뇌와 마음사이" activePage="blog">
   <Fragment slot="head">
     <style>
-    .series-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:.5rem 0 .4rem;margin-top:1rem;}
-    .series-item{
-    .series-item:hover{background:var(--card-hover-bg);color:var(--text)}
-    .series-item.active{background:rgba(255,112,67,.08);color:var(--accent)}
-    .series-item .series-icon{font-size:1.1rem;flex-shrink:0;transition:transform .3s ease}
-    .series-item.active .series-icon{transform:scale(1.15)}
-    .series-item .series-count{
-    .series-item.active .series-count{background:rgba(255,112,67,.12);color:var(--accent)}
-    .chapter-tree{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.16,1,.3,1);padding-left:.5rem;}
-    .chapter-tree.open{max-height:2000px;}
-    .chapter-link{
-    .chapter-link::before{
-    .chapter-link:hover{background:var(--card-hover-bg);color:var(--text)}
-    .chapter-link:hover::before{background:var(--accent)}
-    .chapter-link.current{color:var(--accent);font-weight:700}
-    .chapter-link.current::before{background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
-    .chapter-num{font-size:.72rem;font-weight:700;min-width:1.6rem;color:inherit;opacity:.6}
-    .part-divider{
-    .part-divider::after{content:'';flex:1;height:1px;background:var(--divider)}
-    .blog-main{flex:1;min-width:0;padding:2rem 3rem 4rem;}
-    .series-hero{
-    .series-hero::before{
-    .series-hero .series-title{font-size:clamp(2rem,4vw,2.8rem);font-weight:800;letter-spacing:-.04em;line-height:1.15;word-break:keep-all;margin-bottom:.6rem}
-    .series-hero .series-desc{font-size:1.05rem;color:var(--text-dim);line-height:1.75;word-break:keep-all;max-width:540px}
-    .essay-card:hover{
-    .essay-num{font-size:.8rem;font-weight:800;color:var(--accent);min-width:2.2rem}
-    .essay-title{font-size:1.05rem;font-weight:700;color:var(--text);word-break:keep-all}
-    .essay-desc{font-size:.85rem;color:var(--text-dim);margin-top:.25rem;word-break:keep-all;line-height:1.6}
-    .part-header{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1rem;}
-    .part-header .part-line{flex:1;height:1px;background:var(--divider)}
-    .part-header .part-label{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-    .d1{transition-delay:.05s}.d2{transition-delay:.1s}.d3{transition-delay:.15s}.d4{transition-delay:.2s}.d5{transition-delay:.25s}
+      .blog-shell{max-width:1180px;margin:0 auto;padding:7.25rem 1.5rem 4.5rem}
+      .blog-grid{display:grid;grid-template-columns:minmax(260px,300px) minmax(0,1fr);gap:2rem;align-items:start}
+      .toc-card,.hero-card,.section-card,.prologue-card,.epilogue-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:28px;box-shadow:var(--glass-shadow)}
+      .toc-card{position:sticky;top:6.25rem;padding:1.35rem}
+      .toc-head{padding-bottom:1rem;border-bottom:1px solid var(--divider);margin-bottom:1rem}
+      .toc-title{font-size:1.08rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+      .toc-subtitle{font-size:.8rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
+      .toc-group-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:1.1rem 0 .55rem}
+      .toc-link{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem .8rem;border-radius:16px;text-decoration:none;transition:all .22s ease;color:var(--text-dim)}
+      .toc-link:hover{background:var(--card-hover-bg);color:var(--text)}
+      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;color:var(--accent);line-height:1.65}
+      .toc-copy{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+      .toc-copy strong{font-size:.9rem;color:var(--text);font-weight:700;word-break:keep-all}
+      .toc-copy span{font-size:.78rem;color:var(--text-muted);line-height:1.55;word-break:keep-all}
+      .blog-content{display:flex;flex-direction:column;gap:1.35rem}
+      .hero-card{padding:2rem 2rem 1.85rem;position:relative;overflow:hidden}
+      .hero-card::before{content:'';position:absolute;inset:auto auto -100px -60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,112,67,.15) 0%,transparent 70%);pointer-events:none}
+      .hero-badges{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem}
+      .hero-kicker{display:inline-flex;align-items:center;gap:.45rem;padding:.38rem .8rem;border-radius:999px;font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.22);color:var(--accent)}
+      .hero-meta{font-size:.88rem;color:var(--text-muted)}
+      .hero-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:.7rem;word-break:keep-all}
+      .hero-desc{font-size:1.03rem;color:var(--text-dim);line-height:1.8;word-break:keep-all;max-width:58ch}
+      .hero-quote{margin-top:1.35rem;padding:1.1rem 1.25rem;border-left:3px solid var(--accent);background:rgba(255,112,67,.04);border-radius:0 16px 16px 0;font-size:.95rem;color:var(--text-dim);line-height:1.75;word-break:keep-all}
+      .prologue-card,.epilogue-card{padding:1.15rem 1.2rem}
+      .post-card{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.05rem;border-radius:22px;text-decoration:none;background:var(--bg-card);border:1px solid var(--card-border);transition:all .24s cubic-bezier(.16,1,.3,1)}
+      .post-card:hover{transform:translateY(-2px);border-color:rgba(255,112,67,.24);background:var(--card-hover-bg)}
+      .post-card-copy{flex:1;min-width:0}
+      .post-card-top{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.3rem}
+      .post-card-title{font-size:1.05rem;font-weight:700;color:var(--text);word-break:keep-all}
+      .post-card-desc{font-size:.88rem;color:var(--text-dim);line-height:1.65;word-break:keep-all}
+      .post-card-meta{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-top:.5rem;font-size:.76rem;color:var(--text-muted)}
+      .post-card-num{font-size:.8rem;font-weight:800;color:var(--accent);min-width:2rem;line-height:1.7}
+      .status-pill{display:inline-flex;align-items:center;padding:.22rem .52rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.05em}
+      .status-published{background:rgba(76,175,80,.1);color:#43A047}
+      .status-draft{background:rgba(255,112,67,.1);color:var(--accent)}
+      .section-card{padding:1.25rem 1.25rem 1.35rem}
+      .section-head{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+      .section-line{flex:1;height:1px;background:var(--divider)}
+      .section-label{font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+      .section-title{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
+      .section-desc{font-size:.85rem;color:var(--text-muted);line-height:1.6}
+      .section-list{display:flex;flex-direction:column;gap:.7rem}
+      @media (max-width: 960px){
+        .blog-shell{padding-top:6.75rem}
+        .blog-grid{grid-template-columns:1fr}
+        .toc-card{position:static}
+      }
+      @media (max-width: 640px){
+        .blog-shell{padding-left:1rem;padding-right:1rem}
+        .hero-card,.section-card,.prologue-card,.epilogue-card,.toc-card{border-radius:22px}
+        .hero-card{padding:1.45rem}
+        .section-card{padding:1rem}
+        .post-card{gap:.8rem;padding:.9rem}
+      }
     </style>
   </Fragment>
 
-
-<!-- Sidebar overlay for mobile -->
-<div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- Mobile sidebar toggle -->
-<button class="mobile-sidebar-toggle" onclick="toggleSidebar()" style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:43;width:48px;height:48px;border-radius:14px;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px);box-shadow:0 4px 20px rgba(0,0,0,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;">
-  <iconify-icon icon="solar:book-2-bold" style="font-size:1.3rem;"></iconify-icon>
-</button>
-
-<!-- ===== BLOG LAYOUT ===== -->
-<div class="blog-layout">
-
-  <!-- ===== LEFT SIDEBAR — 책장 ===== -->
-  <aside id="blog-sidebar" class="blog-sidebar" style="position:relative;">
-    <div style="position:relative;z-index:1;">
-
-      <!-- Sidebar header -->
-      <div style="padding:0 .3rem .8rem;border-bottom:1px solid var(--divider);margin-bottom:.5rem;">
-        <p style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;color:var(--text);">
-          <iconify-icon icon="solar:library-bold-duotone" style="font-size:1.15rem;color:var(--accent);vertical-align:-.15em;margin-right:.3rem;"></iconify-icon>
-          서재
-        </p>
-        <p style="font-size:.78rem;color:var(--text-muted);margin-top:.2rem;">시리즈를 선택하면 목차가 펼쳐집니다</p>
-      </div>
-
-      <div class="series-label">에세이</div>
-
-      <!-- Series 1: 생각이 사라지기 전에 -->
-      <div class="series-item active" data-series="thinking" onclick="toggleSeries(this,'thinking')">
-        <iconify-icon icon="solar:pen-new-round-bold-duotone" class="series-icon" style="color:var(--accent);"></iconify-icon>
-        <span>생각이 사라지기 전에</span>
-        <span class="series-count">14</span>
-      </div>
-      <div class="chapter-tree open" id="tree-thinking">
-        <a href="blog_00.html" class="chapter-link current">
-          <span class="chapter-num">00</span>
-          <span>프롤로그: AI에게 글을 맡긴 날</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <div class="part-divider"><span style="color:var(--accent);">Part 1</span></div>
-        <a href="blog_01.html" class="chapter-link">
-          <span class="chapter-num">01</span><span>기억</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_02.html" class="chapter-link">
-          <span class="chapter-num">02</span><span>선택</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_03.html" class="chapter-link">
-          <span class="chapter-num">03</span><span>기다림</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_04.html" class="chapter-link">
-          <span class="chapter-num">04</span><span>대화</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <div class="part-divider"><span style="color:var(--alert);">Part 2</span></div>
-        <a href="blog_05.html" class="chapter-link">
-          <span class="chapter-num">05</span><span>영수증</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_06.html" class="chapter-link">
-          <span class="chapter-num">06</span><span>소유</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_07.html" class="chapter-link">
-          <span class="chapter-num">07</span><span>동의</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_08.html" class="chapter-link">
-          <span class="chapter-num">08</span><span>중독</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <div class="part-divider"><span style="color:var(--brain);">Part 3</span></div>
-        <a href="blog_09.html" class="chapter-link">
-          <span class="chapter-num">09</span><span>선긋기</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_10.html" class="chapter-link">
-          <span class="chapter-num">10</span><span>느리게</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_11.html" class="chapter-link">
-          <span class="chapter-num">11</span><span>직접</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_12.html" class="chapter-link">
-          <span class="chapter-num">12</span><span>함께</span>
-          <span class="chapter-badge badge-new">NEW</span>
-        </a>
-        <a href="blog_13.html" class="chapter-link">
-          <span class="chapter-num">13</span><span>에필로그: 생각이 남긴 것</span>
-          <span class="chapter-badge badge-soon">SOON</span>
-        </a>
-      </div>
-
-      <div class="series-label" style="margin-top:1.5rem;">연재 예정</div>
-
-      <!-- Series 2: Placeholder -->
-      <div class="series-item" data-series="next1" onclick="toggleSeries(this,'next1')">
-        <iconify-icon icon="solar:brain-bold-duotone" class="series-icon" style="color:var(--brain);"></iconify-icon>
-        <span style="opacity:.5;">시리즈 준비 중</span>
-        <span class="series-count" style="opacity:.4;">—</span>
-      </div>
-      <div class="chapter-tree" id="tree-next1">
-        <p style="padding:1rem 1.2rem;font-size:.82rem;color:var(--text-muted);line-height:1.65;word-break:keep-all;">
-          다음 시리즈를 준비하고 있습니다. 구독하시면 새 시리즈가 시작될 때 알림을 받으실 수 있어요.
-        </p>
-      </div>
-
-    </div>
-  </aside>
-
-  <!-- ===== MAIN CONTENT ===== -->
-  <main class="blog-main">
-
-    <!-- Series 1 hero -->
-    <div id="content-thinking" class="series-content active">
-      <div class="series-hero reveal">
-        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem;">
-          <span style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .7rem;border-radius:100px;background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.25);color:var(--accent);">에세이 시리즈</span>
-          <span style="font-size:.82rem;color:var(--text-muted);">14편 · 3파트 · 2026</span>
-        </div>
-        <h1 class="series-title">생각이 사라지기 전에</h1>
-        <p class="series-desc">AI 시대를 건너는 에세이. 사라지고 있는 것들을 관찰하고, 그 뒤의 구조를 해부하고, 지키기로 결정한 것들을 기록합니다.</p>
-        <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;border-left:3px solid var(--accent);background:rgba(255,112,67,.03);border-radius:0 12px 12px 0;">
-          <p style="font-style:italic;color:var(--text-dim);font-size:.95rem;line-height:1.75;word-break:keep-all;">
-            "AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."
+  <div class="blog-shell">
+    <div class="blog-grid">
+      <aside class="toc-card reveal">
+        <div class="toc-head">
+          <p class="toc-title">
+            <iconify-icon icon="solar:library-bold-duotone" style="font-size:1.15rem;color:var(--accent);vertical-align:-.15em;margin-right:.3rem;"></iconify-icon>
+            서재
           </p>
+          <p class="toc-subtitle">연재 흐름을 따라가거나, 관심 있는 장부터 바로 읽을 수 있습니다.</p>
         </div>
-      </div>
 
-      <!-- Prologue -->
-      <a href="blog_00.html" class="essay-card reveal d1" style="margin-bottom:.6rem;border-color:rgba(255,112,67,.15);">
-        <span class="essay-num">00</span>
-        <div style="flex:1;">
-          <p class="essay-title">프롤로그: AI에게 글을 맡긴 날</p>
-          <p class="essay-desc">인류는 항상 생각을 외주화해왔다. 이번에 넘긴 것은 생각 그 자체다.</p>
+        <div class="toc-group-label">시리즈</div>
+        <a class="toc-link" href="#series-overview">
+          <span class="toc-num">ALL</span>
+          <span class="toc-copy">
+            <strong>{seriesTitle}</strong>
+            <span>{posts.length}편 · 3파트 · AI 시대를 건너는 에세이</span>
+          </span>
+        </a>
+
+        {prologue && (
+          <Fragment>
+            <div class="toc-group-label">프롤로그</div>
+            <a class="toc-link" href={prologue.href}>
+              <span class="toc-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
+              <span class="toc-copy">
+                <strong>{prologue.title}</strong>
+                <span>{prologue.subtitle ?? prologue.teaser}</span>
+              </span>
+            </a>
+          </Fragment>
+        )}
+
+        {sections.map((section) => (
+          <Fragment>
+            <div class="toc-group-label">{section.label}</div>
+            {section.posts.map((post) => (
+              <a class="toc-link" href={post.href}>
+                <span class="toc-num">{String(post.series_chapter).padStart(2, '0')}</span>
+                <span class="toc-copy">
+                  <strong>{post.title}</strong>
+                  <span>{post.subtitle ?? post.teaser}</span>
+                </span>
+              </a>
+            ))}
+          </Fragment>
+        ))}
+
+        {epilogue && (
+          <Fragment>
+            <div class="toc-group-label">에필로그</div>
+            <a class="toc-link" href={epilogue.href}>
+              <span class="toc-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
+              <span class="toc-copy">
+                <strong>{epilogue.title}</strong>
+                <span>{epilogue.subtitle ?? epilogue.teaser}</span>
+              </span>
+            </a>
+          </Fragment>
+        )}
+      </aside>
+
+      <section class="blog-content">
+        <div class="hero-card reveal" id="series-overview">
+          <div class="hero-badges">
+            <span class="hero-kicker">
+              <iconify-icon icon="solar:pen-new-round-bold-duotone" style="font-size:.9rem;"></iconify-icon>
+              Essay Series
+            </span>
+            <span class="hero-meta">{posts.length}편 · 3파트 · 2026</span>
+          </div>
+          <h1 class="hero-title">{seriesTitle}</h1>
+          <p class="hero-desc">
+            AI 시대를 건너는 에세이입니다. 사라지고 있는 것들을 관찰하고, 그 뒤의 구조를 해부하고,
+            결국 무엇을 지키기로 할지 천천히 묻습니다.
+          </p>
+          <div class="hero-quote">
+            "AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."
+          </div>
         </div>
-        <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-      </a>
 
-      <!-- Part 1 -->
-      <div class="part-header reveal">
-        <div class="part-line"></div>
-        <span class="part-label" style="color:var(--accent);">Part 1 — 사라지고 있는 것들</span>
-        <div class="part-line"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem;">
-        <a href="blog_01.html" class="essay-card reveal d1">
-          <span class="essay-num">01</span>
-          <div style="flex:1;"><p class="essay-title">기억</p><p class="essay-desc">검색하면 나오는데 왜 외워야 하나. 기억 없는 사람은 누구인가.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_02.html" class="essay-card reveal d2">
-          <span class="essay-num">02</span>
-          <div style="flex:1;"><p class="essay-title">선택</p><p class="essay-desc">알고리즘이 골라준다. 편하다. 근데 이게 내 취향인가.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_03.html" class="essay-card reveal d3">
-          <span class="essay-num">03</span>
-          <div style="flex:1;"><p class="essay-title">기다림</p><p class="essay-desc">3초 안에 답이 온다. 느리게 생각할 틈이 사라졌다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_04.html" class="essay-card reveal d4">
-          <span class="essay-num">04</span>
-          <div style="flex:1;"><p class="essay-title">대화</p><p class="essay-desc">사람 대신 AI에게 고민을 말한다. 관계의 문법이 달라진다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-      </div>
+        {prologue && (
+          <div class="prologue-card reveal d1">
+            <a class="post-card" href={prologue.href}>
+              <span class="post-card-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
+              <div class="post-card-copy">
+                <div class="post-card-top">
+                  <span class={`status-pill ${getStatusClass(prologue.status)}`}>{getStatusLabel(prologue.status)}</span>
+                  <span class="post-card-meta">{prologue.reading_time ?? '읽기 시간 미정'}</span>
+                </div>
+                <p class="post-card-title">{prologue.title}</p>
+                <p class="post-card-desc">{prologue.teaser ?? prologue.subtitle}</p>
+              </div>
+            </a>
+          </div>
+        )}
 
-      <!-- Part 2 -->
-      <div class="part-header reveal">
-        <div class="part-line"></div>
-        <span class="part-label" style="color:var(--alert);">Part 2 — 보이지 않는 설계</span>
-        <div class="part-line"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem;">
-        <a href="blog_05.html" class="essay-card reveal d1">
-          <span class="essay-num">05</span>
-          <div style="flex:1;"><p class="essay-title">영수증</p><p class="essay-desc">모든 편의에는 보이지 않는 비용이 있다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_06.html" class="essay-card reveal d2">
-          <span class="essay-num">06</span>
-          <div style="flex:1;"><p class="essay-title">소유</p><p class="essay-desc">누가 AI를 만들고, 누가 이익을 가져가는가.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_07.html" class="essay-card reveal d3">
-          <span class="essay-num">07</span>
-          <div style="flex:1;"><p class="essay-title">동의</p><p class="essay-desc">읽지 않은 동의서에 서명했다. 우리 모두.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_08.html" class="essay-card reveal d4">
-          <span class="essay-num">08</span>
-          <div style="flex:1;"><p class="essay-title">중독</p><p class="essay-desc">스크롤을 멈추지 못하는 건 의지 문제가 아니다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-      </div>
+        {sections.map((section, index) => (
+          <div class="section-card reveal" id={section.id}>
+            <div class="section-head">
+              <div class="section-line"></div>
+              <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
+              <div class="section-line"></div>
+            </div>
+            <div style="margin-bottom:1rem;">
+              <p class="section-title">{section.title}</p>
+              <p class="section-desc">
+                {index === 0 && '불편하지만 분명히 사라지고 있는 감각과 습관을 먼저 관찰합니다.'}
+                {index === 1 && '편의 뒤에 숨은 설계, 소유, 동의, 중독의 구조를 따라갑니다.'}
+                {index === 2 && '결국 무엇을 직접 붙들고 살아갈지에 대한 선택으로 돌아옵니다.'}
+              </p>
+            </div>
+            <div class="section-list">
+              {section.posts.map((post) => (
+                <a class="post-card" href={post.href}>
+                  <span class="post-card-num">{String(post.series_chapter).padStart(2, '0')}</span>
+                  <div class="post-card-copy">
+                    <div class="post-card-top">
+                      <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
+                      <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                    </div>
+                    <p class="post-card-title">{post.title}</p>
+                    <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
 
-      <!-- Part 3 -->
-      <div class="part-header reveal">
-        <div class="part-line"></div>
-        <span class="part-label" style="color:var(--brain);">Part 3 — 지키기로 한 것들</span>
-        <div class="part-line"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem;">
-        <a href="blog_09.html" class="essay-card reveal d1">
-          <span class="essay-num">09</span>
-          <div style="flex:1;"><p class="essay-title">선긋기</p><p class="essay-desc">AI에게 맡길 것과 직접 할 것 사이의 경계를 정한다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_10.html" class="essay-card reveal d2">
-          <span class="essay-num">10</span>
-          <div style="flex:1;"><p class="essay-title">느리게</p><p class="essay-desc">빠른 세상에서 천천히 생각하는 기술.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_11.html" class="essay-card reveal d3">
-          <span class="essay-num">11</span>
-          <div style="flex:1;"><p class="essay-title">직접</p><p class="essay-desc">손으로 쓰고, 걸어서 가고, 눈을 마주치는 일.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_12.html" class="essay-card reveal d4">
-          <span class="essay-num">12</span>
-          <div style="flex:1;"><p class="essay-title">함께</p><p class="essay-desc">혼자 생각하면 확신이 되고, 함께 생각하면 질문이 된다.</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:rgba(255,112,67,.1);color:var(--accent);">NEW</span>
-        </a>
-        <a href="blog_13.html" class="essay-card reveal d5" style="opacity:.5;pointer-events:none;">
-          <span class="essay-num">13</span>
-          <div style="flex:1;"><p class="essay-title">에필로그: 생각이 남긴 것</p><p class="essay-desc">Coming Soon</p></div>
-          <span style="font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;background:var(--card-hover-bg);color:var(--text-muted);">SOON</span>
-        </a>
-      </div>
+        {epilogue && (
+          <div class="epilogue-card reveal d2">
+            <a class="post-card" href={epilogue.href}>
+              <span class="post-card-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
+              <div class="post-card-copy">
+                <div class="post-card-top">
+                  <span class={`status-pill ${getStatusClass(epilogue.status)}`}>{getStatusLabel(epilogue.status)}</span>
+                  <span class="post-card-meta">{epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                </div>
+                <p class="post-card-title">{epilogue.title}</p>
+                <p class="post-card-desc">{epilogue.teaser ?? epilogue.subtitle}</p>
+              </div>
+            </a>
+          </div>
+        )}
+      </section>
     </div>
-
-    <!-- Placeholder for future series -->
-    <div id="content-next1" class="series-content" style="display:none;">
-      <div class="series-hero reveal">
-        <h1 class="series-title" style="opacity:.4;">다음 시리즈 준비 중</h1>
-        <p class="series-desc" style="opacity:.4;">새로운 시리즈가 준비되면 이곳에 공개됩니다. 구독하시면 가장 먼저 알림을 받으실 수 있어요.</p>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-
+  </div>
 </BaseLayout>

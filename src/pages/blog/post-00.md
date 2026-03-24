@@ -13,7 +13,6 @@ status: published
 created: 2026-03-23
 published: 2026-03-24
 ---
-layout: ../../layouts/BlogPost.astro
 
 # AI에게 글을 맡긴 날
 

@@ -13,7 +13,6 @@ status: draft
 created: 2026-03-24
 published:
 ---
-layout: ../../layouts/BlogPost.astro
 
 # 멈추기
 

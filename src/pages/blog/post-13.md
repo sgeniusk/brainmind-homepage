@@ -13,7 +13,6 @@ status: draft
 created: 2026-03-24
 published:
 ---
-layout: ../../layouts/BlogPost.astro
 
 # 소박한 제안 하나
 
