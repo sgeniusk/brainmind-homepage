@@ -35,7 +35,7 @@ const sections = [
 
 <BaseLayout title={`${frontmatter.title} — ${frontmatter.series}`} activePage="blog">
   <Fragment slot="head">
-    <style>
+    <style is:global>
       /* === LAYOUT === */
       .post-shell{max-width:1180px;margin:0 auto;padding:7.25rem 1.5rem 4.5rem;display:grid;grid-template-columns:minmax(240px,280px) minmax(0,1fr);gap:2.5rem;align-items:start;}
 
