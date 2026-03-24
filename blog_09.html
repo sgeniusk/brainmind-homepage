@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기억하기 — 생각이 사라지기 전에 · 뇌와 마음사이</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {'brain':'var(--brain)','mind':'var(--mind)','alert':'var(--alert)','bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)','txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)'},
+        fontFamily: { sans: ['Pretendard','system-ui','sans-serif'] }
+      }}
+    }
+  </script>
+  <style>
+    :root{
+      --brain:#4FC3F7;--mind:#FFD54F;--alert:#FF7043;
+      --accent:#FF7043;--accent-secondary:#FF5722;
+      --accent-glow:rgba(255,112,67,.4);--accent-glow-strong:rgba(255,112,67,.65);
+      --bg-deep:#F8F7F4;--bg-mid:#FFFFFF;--bg-card:#FFFFFF;
+      --text:#1A1A2E;--text-dim:#6B6B80;--text-muted:#9E9EB0;
+      --glass-bg:rgba(255,255,255,.78);--glass-border:rgba(255,112,67,.15);--glass-shadow:0 4px 32px rgba(0,0,0,.08);
+      --card-border:rgba(0,0,0,.08);--card-hover-bg:rgba(255,112,67,.04);
+      --badge-brain-bg:rgba(79,195,247,.08);--badge-brain-border:rgba(79,195,247,.2);
+      --badge-mind-bg:rgba(255,112,67,.08);--badge-mind-border:rgba(255,112,67,.2);
+      --noise-opacity:.015;--divider:rgba(0,0,0,.08);
+      --quote-bg:rgba(255,112,67,.03);--quote-border:var(--accent)
+    }
+    [data-theme="science"]{
+      --bg-deep:#0D1B2A;--bg-mid:#1A1A3E;--bg-card:rgba(26,26,62,.3);
+      --text:#E8EAF6;--text-dim:#C8C4D8;--text-muted:#8884A0;
+      --glass-bg:rgba(13,27,42,.78);--glass-border:rgba(79,195,247,.2);--glass-shadow:0 4px 32px rgba(0,0,0,.55);
+      --card-border:rgba(255,255,255,.07);--card-hover-bg:rgba(26,26,62,.65);
+      --badge-brain-bg:rgba(79,195,247,.1);--badge-brain-border:rgba(79,195,247,.28);
+      --badge-mind-bg:rgba(255,213,79,.08);--badge-mind-border:rgba(255,213,79,.28);
+      --noise-opacity:.028;--divider:rgba(255,255,255,.08);
+      --accent:#4FC3F7;--accent-secondary:#2196F3;
+      --accent-glow:rgba(79,195,247,.4);--accent-glow-strong:rgba(79,195,247,.65);
+      --quote-bg:rgba(79,195,247,.05);--quote-border:var(--accent)
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Pretendard',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s ease,color .35s ease}
+    #nav{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:40;width:max-content;max-width:calc(100vw - 2rem);animation:navSpringIn 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards}
+    @keyframes navSpringIn{0%{opacity:0;transform:translateX(-50%) translateY(-120%)}55%{opacity:1;transform:translateX(-50%) translateY(6px)}75%{transform:translateX(-50%) translateY(-3px)}90%{transform:translateX(-50%) translateY(2px)}100%{transform:translateX(-50%) translateY(0)}}
+    .nav-pill{padding:.6rem .6rem .6rem 1rem;border-radius:100px;background:var(--glass-bg);backdrop-filter:blur(28px) saturate(180%) brightness(1.1);-webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.1);border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(79,195,247,.1),var(--glass-shadow);transition:background .35s ease,border-color .35s ease,box-shadow .35s ease}
+    .nav-link{display:inline-flex;align-items:center;padding:.4rem .85rem;border-radius:100px;color:var(--text-dim);font-size:.95rem;font-weight:500;letter-spacing:-.01em;text-decoration:none;transition:all .22s ease;word-break:keep-all}
+    .nav-link:hover{color:var(--text);background:var(--card-hover-bg)}
+    .nav-link-active{color:var(--accent)!important;background:rgba(255,112,67,.1)}
+    .btn-sub{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:100px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;font-size:.92rem;font-weight:700;text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em}
+    .btn-sub:hover{transform:scale(1.04);box-shadow:0 4px 20px var(--accent-glow)}
+    .noise-layer{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:var(--noise-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;transition:opacity .35s ease}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .badge-neu{background:var(--bg-card);border:1px solid var(--card-border);color:var(--text-dim)}
+    .kor-quote{padding:1.4rem 1.7rem;border-left:3px solid var(--quote-border);background:var(--quote-bg);border-radius:0 12px 12px 0;margin:2.5rem 0}
+    .article-body p{font-size:1.12rem;line-height:2.05;color:var(--text);word-break:keep-all;margin-bottom:1.7rem}
+    .article-body h2{font-size:1.65rem;font-weight:900;letter-spacing:-.03em;color:var(--text);margin:4.5rem 0 1.2rem;word-break:keep-all;line-height:1.35}
+    .section-divider{border:none;border-top:1px solid var(--divider);margin:2.5rem 0}
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .reveal-left.visible{opacity:1;transform:translateX(0)}
+    .nav-logo-img{transition:box-shadow .3s ease;box-shadow:0 0 0 2.5px #FF7043, 0 0 12px rgba(255,112,67,.3)}
+    [data-theme="science"] .nav-logo-img{box-shadow:0 0 0 2.5px #4FC3F7, 0 0 12px rgba(79,195,247,.3)}
+    .nav-search-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:.4rem;border-radius:50%;transition:all .22s ease;display:inline-flex;align-items:center}
+    .nav-search-btn:hover{color:var(--accent);background:var(--card-hover-bg)}
+    #reading-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-secondary));z-index:50;width:0;transition:width .1s linear}
+  </style>
+</head>
+<body>
+
+<div class="noise-layer"></div>
+<div id="reading-bar"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-pill hidden md:flex items-center gap-1">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src="logo.png" alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+      <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <div style="width:1px;height:1.2rem;background:rgba(79,195,247,.2);margin:0 .3rem;"></div>
+    <a href="index.html"    class="nav-link">홈</a>
+    <a href="blog.html"     class="nav-link nav-link-active">블로그</a>
+    <a href="research.html" class="nav-link">연구</a>
+    <a href="videos.html"   class="nav-link">영상</a>
+    <a href="dashboard.html" class="nav-link">대시보드</a>
+    <a href="about.html"    class="nav-link">소개</a>
+    <div style="width:1px;height:1.2rem;background:var(--divider);margin:0 .4rem;"></div>
+    <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
+      <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
+    </a>
+  </div>
+  <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
+    <a href="index.html" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
+      <img src="logo.png" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+      <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
+    </a>
+    <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
+      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.35rem;"></iconify-icon>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden mt-2" style="border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);border:1px solid var(--glass-border);box-shadow:0 12px 40px rgba(0,0,0,.15);">
+    <div class="px-4 py-3 flex flex-col gap-1">
+      <a href="index.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">홈</a>
+      <a href="blog.html"     class="py-2.5 px-3 text-sm rounded-xl font-semibold" style="color:var(--accent);">블로그</a>
+      <a href="research.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">연구</a>
+      <a href="videos.html"   class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">영상</a>
+      <a href="dashboard.html" class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">대시보드</a>
+      <a href="about.html"    class="py-2.5 px-3 text-sm rounded-xl" style="color:var(--text-dim);">소개</a>
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section style="padding:9rem 0 4rem;">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="reveal" style="margin-bottom:1.2rem;">
+      <a href="blog.html" style="text-decoration:none;">
+        <span class="badge badge-neu">Part 3. 지키기로 한 것들 · Ch.9</span>
+      </a>
+    </div>
+
+    <h1 class="reveal" style="font-size:clamp(2.2rem,5vw,3.2rem);font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all;margin-bottom:1.2rem;">
+      기억하기
+    </h1>
+
+    <div class="reveal flex items-center gap-3 flex-wrap" style="font-size:.88rem;color:var(--text-dim);margin-bottom:3rem;">
+      <span>코르</span>
+      <span style="opacity:.3;">·</span>
+      <span>2026. 3. 24.</span>
+      <span style="opacity:.3;">·</span>
+      <span>7분</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ARTICLE BODY ===== -->
+<section style="padding:0 0 5rem;">
+  <div class="max-w-2xl mx-auto px-6 article-body">
+
+    <p class="reveal">이 시리즈의 첫 번째 챕터에서 나는 기억이 사라지고 있다고 썼다. 검색하면 나오는데 왜 외워야 하느냐는 질문 앞에서, 기억이 자아를 구성하는 재료라는 사실이 조용히 잊히고 있다고. 관찰이었다. 정확한 관찰이었다고 지금도 생각한다.</p>
+
+    <p class="reveal">그런데 관찰만으로는 아무것도 바뀌지 않는다.</p>
+
+    <p class="reveal">Part 2에서 그 사라짐의 구조를 들여다보았다. 편리함 뒤에 숨은 비용, 설계된 의존, 이익의 편중. 구조를 알면 분노하거나 체념하게 된다. 나는 둘 다 하지 않기로 했다. 대신 하나를 시작했다. 기억하기로 한 것이다. 의도적으로, 비효율적으로, 고집스럽게.</p>
+
+    <hr class="section-divider reveal">
+
+    <h2 class="reveal">전화번호 일곱 개</h2>
+
+    <p class="reveal">시작은 사소했다. 자주 연락하는 사람 일곱 명의 전화번호를 외우기로 했다.</p>
+
+    <p class="reveal">스마트폰 연락처에 저장되어 있으니 외울 이유가 없다. 합리적으로 따지면 그렇다. 하지만 나는 합리적 판단이 아니라 다른 종류의 결정을 내렸다. 이 사람들의 번호를 내 머릿속에 담아두겠다는 결정. 기계가 대신 기억해주는 것과 내가 직접 기억하는 것 사이에는 설명하기 어려운 차이가 있었다.</p>
+
+    <p class="reveal">일주일이 걸렸다. 숫자를 반복하고, 잊어버리고, 다시 외우고. 열한 자리 숫자가 이렇게 어려운 일인지 몰랐다. 예전에는 스무 개쯤 외우고 있었다. 십 년 사이에 그 능력이 어디로 갔는지 잠깐 서글펐지만, 서글픔보다 흥미로운 변화가 먼저 찾아왔다.</p>
+
+    <p class="reveal">번호를 외우고 나자 그 사람이 달라 보였다. 정확히는, 그 사람에 대한 내 감각이 달라졌다. 이름 옆에 숫자가 붙으니 존재가 좀 더 구체적이 되었다. 연락처 목록에서 검색해서 찾는 사람과, 번호를 떠올리며 전화를 거는 사람 사이에는 무게의 차이가 있었다. 후자가 더 무거웠다. 좋은 의미에서.</p>
+
+    <div class="kor-quote reveal-left">
+      <p style="font-size:1.05rem;line-height:1.85;color:var(--text);word-break:keep-all;margin:0;">기억한다는 것은 "이것이 나에게 중요하다"는 선언이다. 우리가 기억하기로 선택한 것들이 우리를 정의한다.</p>
+    </div>
+
+    <hr class="section-divider reveal">
+
+    <h2 class="reveal">길을 잃는 연습</h2>
+
+    <p class="reveal">그 다음에는 길을 기억하기로 했다.</p>
+
+    <p class="reveal">지도 앱을 끄고 자주 가는 곳까지 걸었다. 처음에는 헤맸다. 매일 다니던 카페까지 가는 길을 모르고 있었다. 정확히는, 알고 있었는데 꺼내는 법을 잊은 것이었다. 기억이 사라진 게 아니라 기억을 꺼내는 회로가 녹슬어 있었다.</p>
+
+    <p class="reveal">길을 잃을 때마다 재미있는 일이 벌어졌다. 주변을 보게 되었다. GPS를 따라갈 때는 화면만 보았다. 파란 점이 움직이는 방향으로 걸으면 되니까 고개를 들 이유가 없었다. 길을 직접 찾으려니 건물을 보고, 간판을 읽고, 골목의 모양을 기억해야 했다. 걷는 행위의 밀도가 달라졌다.</p>
+
+    <p class="reveal">한 달쯤 지나자 동네의 지도가 머릿속에 생기기 시작했다. 불완전하고 주관적인 지도. 구글 맵보다 부정확하지만 나만의 것인 지도. 그 빵집 옆 골목을 돌면 작은 공원이 나온다는 것, 그 공원 벤치에서 고양이를 봤다는 것, 비 오는 날 그 골목이 유난히 조용했다는 것. 위성 지도에는 담기지 않는 층위가 쌓였다.</p>
+
+    <p class="reveal">인지과학에서는 이것을 '인지 지도cognitive map'라고 부른다. 해마가 공간 정보를 처리하면서 만들어내는 내면의 지형도. 연구에 따르면 GPS에 의존하는 사람들은 이 인지 지도가 약화된다. 공간을 탐색하는 능력뿐 아니라, 공간과 자기 자신의 관계를 구성하는 능력이 함께 줄어든다. 길을 모르는 것이 아니라, 자기가 어디에 있는지를 모르게 되는 것이다.</p>
+
+    <hr class="section-divider reveal">
+
+    <h2 class="reveal">기억이라는 선택</h2>
+
+    <p class="reveal">사람의 이름을 기억하기로 한 것은 가장 나중이었고, 가장 어려웠다.</p>
+
+    <p class="reveal">모임에서 만난 사람의 이름을 연락처에 저장하는 대신 머릿속에 넣으려 했다. 얼굴과 이름을 연결하고, 그 사람이 한 말 중 하나를 함께 기억하려 했다. "김 선생님, 제주도에서 오셨고, 고양이 두 마리." 이런 식으로. 효율적이지 않다. 메모장에 적는 것이 훨씬 정확하고 빠르다.</p>
+
+    <p class="reveal">하지만 다음에 그 사람을 만났을 때 "고양이는 잘 있어요?"라고 물을 수 있었다. 메모를 뒤적여서 꺼낸 질문이 아니라, 기억에서 꺼낸 질문. 그 차이를 상대방은 느꼈다. 나도 느꼈다.</p>
+
+    <p class="reveal">기억은 저장이 아니다. 저장은 하드디스크가 더 잘한다. 기억은 선택이다. 무한한 정보 중에서 이것을 남기겠다고 결정하는 행위. 그 결정에는 가치 판단이 들어간다. 이 사람이 중요하다, 이 경험이 의미 있다, 이 순간을 놓치고 싶지 않다. 기억하는 행위 자체가 세상에 대한 태도의 표현이다.</p>
+
+    <div class="kor-quote reveal-left">
+      <p style="font-size:1.05rem;line-height:1.85;color:var(--text);word-break:keep-all;margin:0;">검색은 정보를 찾는 행위고, 기억은 의미를 붙이는 행위다. 둘은 같은 목적지에 도달하지만, 다른 사람을 만들어낸다.</p>
+    </div>
+
+    <p class="reveal">기계에 기억을 맡기면 정보는 보존된다. 하지만 "이것이 나에게 중요하다"는 선언은 사라진다. 클라우드에 저장된 천 장의 사진과 머릿속에 남은 한 장의 장면 사이에는 건널 수 없는 간극이 있다. 전자는 데이터고, 후자는 나다.</p>
+
+    <p class="reveal">나는 모든 것을 기억할 수 없다. 그럴 필요도 없다. 다만 무엇을 기억할지를 내가 정하겠다는 것이다. 검색 엔진이 아니라 내가. 알고리즘이 아니라 내가. 그 결정권만큼은 넘기지 않기로 했다.</p>
+
+    <hr class="section-divider reveal">
+
+    <p class="reveal">기억하기로 한 것들의 목록은 아직 짧다. 전화번호 일곱 개, 동네 지도, 몇 사람의 이름과 그들이 한 말. 비효율의 총량으로 따지면 보잘것없다.</p>
+
+    <p class="reveal">그런데 이 작은 비효율들이 모이자 예상하지 못한 것이 생겼다. 내가 누구인지에 대한 감각. 내가 무엇을 중요하게 여기는 사람인지, 어떤 것에 주의를 기울이는 사람인지에 대한 윤곽. 기억을 전부 외주화했을 때는 보이지 않던 윤곽이었다.</p>
+
+    <p class="reveal">내가 기억하는 것이 나를 만든다. 이것은 낭만적인 구호가 아니라 인지과학적 사실에 가깝다. 그리고 나는 이 사실을 지키기로 했다.</p>
+
+    <p class="reveal">기억을 되찾았다. 다음은 선택이다. 누군가 대신 골라주는 삶에서, 직접 고르는 삶으로 돌아가는 일. 그것은 기억하기보다 더 불편하고, 더 자주 실패한다.</p>
+
+  </div>
+</section>
+
+<!-- ===== NEXT CHAPTER ===== -->
+<section style="background:var(--bg-mid);border-top:1px solid var(--divider);padding:4rem 0;">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <a href="blog_08.html" style="text-decoration:none;color:var(--text-dim);font-size:.92rem;display:flex;align-items:center;gap:.5rem;transition:color .2s;">
+        <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>
+        08. 설계된 여론
+      </a>
+      <a href="blog_10.html" style="text-decoration:none;text-align:right;">
+        <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.3rem;">다음 에세이</p>
+        <p style="font-size:1rem;font-weight:700;color:var(--text);">10. 고르기</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="background:var(--bg-mid);border-top:1px solid var(--divider);padding:3rem 0 2rem;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="index.html" class="flex items-center gap-2.5 mb-4">
+          <img src="logo.png" alt="로고" class="w-8 h-8 object-contain rounded-xl">
+          <span style="font-size:.98rem;font-weight:800;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+        </a>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;max-width:210px;word-break:keep-all;">인지신경과학 기반 — 뇌과학과 심리학을 하나의 언어로 묶는 채널</p>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.85rem;">콘텐츠</p>
+        <div class="flex flex-col gap-2.5">
+          <a href="blog.html" style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">블로그</a>
+          <a href="research.html" style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">연구</a>
+          <a href="videos.html" style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">영상</a>
+          <a href="about.html" style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">소개</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.85rem;">연결</p>
+        <div class="flex gap-2.5 mb-4">
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--card-hover-bg);border:1px solid var(--card-border);color:var(--text-dim);text-decoration:none;">
+            <iconify-icon icon="solar:youtube-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--divider);padding-top:1.4rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+      <p style="font-size:.78rem;color:var(--text-muted);">© 2026 뇌와 마음사이 · Between Brain and Mind</p>
+      <p style="font-size:.75rem;color:var(--text-muted);word-break:keep-all;font-style:italic;">"뇌와 마음 사이에서."</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    if(html.getAttribute('data-theme')==='science'){html.removeAttribute('data-theme');localStorage.setItem('theme','mind')}
+    else{html.setAttribute('data-theme','science');localStorage.setItem('theme','science')}
+  }
+  (function(){if(localStorage.getItem('theme')==='science')document.documentElement.setAttribute('data-theme','science')})();
+
+  const ham=document.getElementById('ham');
+  const mm=document.getElementById('mobile-menu');
+  ham?.addEventListener('click',()=>mm.classList.toggle('hidden'));
+  mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.add('hidden')));
+
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>obs.observe(el));
+
+  window.addEventListener('scroll',()=>{
+    const bar=document.getElementById('reading-bar');
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(window.scrollY/h*100)+'%';
+    const nav=document.getElementById('nav');
+    nav.style.top=window.scrollY>80?'.75rem':'1.5rem';
+  },{passive:true});
+</script>
+
+</body>
+</html>
