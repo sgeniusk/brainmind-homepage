@@ -1,50 +1,61 @@
 ---
-import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import NoiseLayer from '../components/NoiseLayer.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
-  activePage: string;
-  footerVariant?: 'full' | 'standard';
+  activePage?: string;
 }
 
-const { title, description, activePage, footerVariant = 'standard' } = Astro.props;
+const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌는 당신을 속인다. 하지만 이해하면 다룰 수 있다.', activePage = '' } = Astro.props;
 ---
 
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  {description && <meta name="description" content={description} />}
+  <meta name="description" content={description}>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
   <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
   <script is:inline>
-    if(localStorage.getItem('theme')==='science')
-      document.documentElement.setAttribute('data-theme','science');
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brain':'var(--brain)','mind':'var(--mind)','alert':'var(--alert)',
+            'bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)',
+            'txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)',
+          },
+          fontFamily: { sans: ['Paperlogy','Pretendard','system-ui','sans-serif'] },
+        },
+      },
+    }
   </script>
+  <script is:inline>
+    // Restore theme before paint
+    (function(){const s=localStorage.getItem('theme');if(s==='science')document.documentElement.setAttribute('data-theme','science')})();
+  </script>
+  <slot name="head" />
 </head>
 <body>
-  <NoiseLayer />
+  <div class="noise-layer" aria-hidden="true"></div>
   <Nav activePage={activePage} />
 
-  <slot />
+  <main>
+    <slot />
+  </main>
 
-  <Footer variant={footerVariant} />
+  <Footer />
+  <SearchOverlay />
 
   <script is:inline>
-    // Theme toggle
-    function toggleTheme(){
-      const html=document.documentElement;
-      if(html.getAttribute('data-theme')==='science'){
-        html.removeAttribute('data-theme');localStorage.setItem('theme','mind');
-      } else {
-        html.setAttribute('data-theme','science');localStorage.setItem('theme','science');
-      }
-    }
-
     // Mobile menu
     const ham=document.getElementById('ham');
     const mm=document.getElementById('mobile-menu');
@@ -53,15 +64,36 @@ const { title, description, activePage, footerVariant = 'standard' } = Astro.pro
 
     // Scroll reveal
     const obs=new IntersectionObserver(entries=>{
-      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
     },{threshold:0.1});
-    document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>obs.observe(el));
+    document.querySelectorAll('.reveal,.reveal-scale').forEach(el=>obs.observe(el));
 
-    // Nav scroll compact
+    // Nav compact on scroll
     const nav=document.getElementById('nav');
-    window.addEventListener('scroll',()=>{
-      nav.style.top=window.scrollY>80?'.75rem':'1.5rem';
-    },{passive:true});
+    window.addEventListener('scroll',()=>{nav.style.top=window.scrollY>80?'.75rem':'1.5rem'},{passive:true});
+
+    // Theme toggle
+    function toggleTheme(){
+      const html=document.documentElement;
+      const current=html.getAttribute('data-theme');
+      if(current==='science'){html.removeAttribute('data-theme');localStorage.setItem('theme','mind')}
+      else{html.setAttribute('data-theme','science');localStorage.setItem('theme','science')}
+    }
+
+    // Search
+    function toggleSearch(){
+      const o=document.getElementById('search-overlay');
+      o.style.display='flex';
+      requestAnimationFrame(()=>{o.style.opacity='1'});
+      setTimeout(()=>document.getElementById('search-input').focus(),100);
+    }
+    function closeSearch(){
+      const o=document.getElementById('search-overlay');
+      o.style.opacity='0';
+      setTimeout(()=>{o.style.display='none'},250);
+    }
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch()});
   </script>
+  <slot name="scripts" />
 </body>
 </html>

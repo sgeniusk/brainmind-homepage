@@ -1,28 +1,18 @@
 {
-  "name": "homepage",
-  "version": "1.0.0",
-  "description": "",
+  "name": "homepage-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sgeniusk/brainmind-homepage.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/sgeniusk/brainmind-homepage/issues"
-  },
-  "homepage": "https://github.com/sgeniusk/brainmind-homepage#readme",
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.1",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.0.8",
-    "tailwindcss": "^4.2.2"
+    "@astrojs/mdx": "^5.0.2",
+    "astro": "^6.0.8"
   }
 }

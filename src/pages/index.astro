@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="뇌와 마음 사이 — 인지신경과학 채널" activePage="home">
+  <Fragment slot="head">
+    <style>
+      .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2}
+      .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 55% 75% at 18% 55%,rgba(79,195,247,.16) 0%,transparent 68%),radial-gradient(ellipse 55% 75% at 82% 55%,rgba(255,213,79,.13) 0%,transparent 68%),linear-gradient(180deg,transparent 0%,var(--bg-deep) 100%)}
+      .brain-glow{color:var(--text-dim);text-shadow:none;transition:color .4s,text-shadow .4s}
+      [data-theme="science"] .brain-glow{color:var(--accent);text-shadow:0 0 40px rgba(79,195,247,.65),0 0 80px rgba(79,195,247,.3)}
+      .mind-glow{color:var(--accent);text-shadow:0 0 40px var(--accent-glow-strong),0 0 80px var(--accent-glow);transition:color .4s,text-shadow .4s}
+      [data-theme="science"] .mind-glow{color:var(--text-dim);text-shadow:none}
+    </style>
+  </Fragment>
+
+  <!-- HERO -->
+  <section style="position:relative;min-height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg-deep);">
+    <video class="hero-video" autoplay muted loop playsinline><source src="/hero.mp4" type="video/mp4"></video>
+    <div class="hero-overlay"></div>
+    <div class="hidden lg:block" style="position:absolute;top:15%;bottom:15%;left:50%;width:1px;transform:translateX(-50%);background:linear-gradient(180deg,transparent 0%,rgba(79,195,247,.35) 30%,rgba(255,213,79,.35) 70%,transparent 100%);"></div>
+    <div class="relative z-10 w-full max-w-5xl mx-auto px-6 lg:px-8 text-center">
+      <div class="flex items-center justify-center gap-3 mb-8 reveal">
+        <span class="badge badge-brain"><iconify-icon icon="solar:brain-linear" style="font-size:.9rem;"></iconify-icon>뇌과학</span>
+        <span style="color:var(--text-muted);font-size:1.05rem;">×</span>
+        <span class="badge badge-mind"><iconify-icon icon="solar:heart-linear" style="font-size:.9rem;"></iconify-icon>심리학</span>
+      </div>
+      <h1 class="reveal d1" style="font-weight:800;font-size:clamp(3.2rem,10vw,7.5rem);line-height:1.05;letter-spacing:-.04em;word-break:keep-all;margin-bottom:1rem;">
+        <span class="brain-glow">뇌</span><span style="color:var(--text-dim);">와 </span><span class="mind-glow">마음</span><br class="hidden sm:block"><span style="color:var(--text-muted);">사이</span>
+      </h1>
+      <p class="reveal d2" style="font-size:clamp(1rem,2.5vw,1.28rem);color:var(--text-dim);max-width:540px;margin:0 auto .6rem;word-break:keep-all;line-height:1.65;">인지신경과학 기반 — 뇌과학과 심리학을 <strong style="color:var(--text);">하나의 언어</strong>로 묶는 채널</p>
+      <p class="reveal d2" style="font-size:clamp(.82rem,1.8vw,.98rem);color:var(--text-muted);margin-bottom:2.5rem;word-break:keep-all;">"뇌는 당신을 속인다. 하지만 이해하면 다룰 수 있다."</p>
+      <div class="reveal d3 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub" style="padding:.85rem 2rem;font-size:1.05rem;"><iconify-icon icon="solar:play-bold" style="font-size:1.05rem;"></iconify-icon>유튜브 채널 보기</a>
+        <a href="/about/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:1.05rem;text-decoration:none;background:var(--card-hover-bg);color:var(--text);border:1px solid var(--card-border);transition:all .3s ease;">코르의 연구소 <iconify-icon icon="solar:arrow-right-linear" style="font-size:1rem;"></iconify-icon></a>
+      </div>
+      <div class="reveal d4 mt-16 flex flex-col items-center gap-2" style="color:var(--text-muted);">
+        <span style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Scroll</span>
+        <div style="width:1px;height:34px;background:linear-gradient(180deg,rgba(79,195,247,.5),transparent);"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section style="background:var(--bg-mid);border-top:1px solid rgba(79,195,247,.1);border-bottom:1px solid rgba(79,195,247,.08);padding:3.5rem 0;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-center gap-4 mb-9 reveal">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full pdot" style="background:var(--accent);"></div>
+          <span style="font-size:.8rem;font-weight:700;letter-spacing:.07em;color:var(--accent);text-transform:uppercase;">Brain</span>
+          <span style="font-size:.78rem;color:var(--text-muted);">뇌과학 · 데이터 · 메커니즘</span>
+        </div>
+        <div style="flex:1;height:1px;max-width:70px;background:linear-gradient(90deg,rgba(79,195,247,.5),rgba(255,213,79,.5));"></div>
+        <img src="/logo.png" alt="로고" class="w-8 h-8 rounded-xl object-contain float" style="box-shadow:0 0 18px rgba(79,195,247,.45);">
+        <div style="flex:1;height:1px;max-width:70px;background:linear-gradient(90deg,rgba(255,213,79,.5),rgba(79,195,247,.5));"></div>
+        <div class="flex items-center gap-2">
+          <span style="font-size:.78rem;color:var(--text-muted);">감성 · 심리 · 해석</span>
+          <span style="font-size:.8rem;font-weight:700;letter-spacing:.07em;color:var(--mind);text-transform:uppercase;">Mind</span>
+          <div class="w-2 h-2 rounded-full pdot" style="background:var(--mind);animation-delay:1.1s;"></div>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row gap-4 reveal d1">
+        <div class="val-item">
+          <div class="flex items-center gap-3 mb-3"><div style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(79,195,247,.1);border:1px solid rgba(79,195,247,.22);"><iconify-icon icon="solar:document-text-linear" style="font-size:1.15rem;color:var(--accent);"></iconify-icon></div><span style="font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--accent);text-transform:uppercase;">Evidence</span></div>
+          <p style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.35rem;">증거</p>
+          <p style="font-size:.9rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">감상이 아닌 논문·실험·데이터만 말한다</p>
+        </div>
+        <div class="val-item">
+          <div class="flex items-center gap-3 mb-3"><div style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,213,79,.08);border:1px solid rgba(255,213,79,.22);"><iconify-icon icon="solar:target-linear" style="font-size:1.15rem;color:var(--mind);"></iconify-icon></div><span style="font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--mind);text-transform:uppercase;">Utility</span></div>
+          <p style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.35rem;">실용</p>
+          <p style="font-size:.9rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">"그래서 내 삶에서 어떻게 쓰나?"까지 간다</p>
+        </div>
+        <div class="val-item">
+          <div class="flex items-center gap-3 mb-3"><div style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.22);"><iconify-icon icon="solar:stars-linear" style="font-size:1.15rem;color:var(--alert);"></iconify-icon></div><span style="font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--alert);text-transform:uppercase;">Wonder</span></div>
+          <p style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.35rem;">경이</p>
+          <p style="font-size:.9rem;color:var(--text-dim);line-height:1.65;word-break:keep-all;">뇌과학은 공포가 아닌 경이의 대상이다</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER CTA -->
+  <section style="background:var(--bg-deep);padding:5.5rem 0;border-top:1px solid rgba(79,195,247,.08);position:relative;overflow:hidden;">
+    <div class="cta-glow" style="top:-200px;left:50%;transform:translateX(-50%);"></div>
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center" style="position:relative;z-index:1;">
+      <div class="reveal">
+        <img src="/logo.png" alt="로고" class="w-14 h-14 rounded-full object-cover mx-auto mb-6 float" style="box-shadow:0 0 26px rgba(79,195,247,.45);">
+        <h2 style="font-size:clamp(1.9rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;word-break:keep-all;line-height:1.15;margin-bottom:.9rem;">뇌를 알면<br><span class="brain-glow">조금은 덜 휘둘리게</span> 됩니다</h2>
+        <p style="font-size:.97rem;color:var(--text-dim);line-height:1.75;max-width:440px;margin:0 auto 2rem;word-break:keep-all;">새 영상과 리서치 노트를 가장 먼저 받아보세요.<br>코르가 직접 씁니다.</p>
+      </div>
+      <form class="reveal d1" onsubmit="return false;">
+        <div style="display:flex;gap:.7rem;max-width:420px;margin:0 auto .9rem;flex-wrap:wrap;justify-content:center;">
+          <input type="email" placeholder="이메일 주소" style="flex:1;min-width:190px;padding:.82rem 1.15rem;border-radius:100px;background:var(--card-hover-bg);border:1px solid var(--glass-border);color:var(--text);font-family:'Pretendard',sans-serif;font-size:.92rem;outline:none;">
+          <button type="submit" class="btn-sub" style="padding:.82rem 1.5rem;">구독하기</button>
+        </div>
+        <p class="reveal d2" style="font-size:.78rem;color:var(--text-muted);">스팸 없음 · 언제든지 구독 해지 가능</p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from './BaseLayout.astro';
+const { frontmatter } = Astro.props;
+const chapterLabel = frontmatter.series_chapter === 0
+  ? (frontmatter.blog_id === 'BLOG_00' ? '프롤로그' : '에필로그')
+  : `Chapter ${frontmatter.series_chapter}`;
+---
+
+<BaseLayout title={`${frontmatter.title} — ${frontmatter.series}`} activePage="blog">
+  <Fragment slot="head">
+    <style>
+      .blog-article{max-width:720px;margin:0 auto;padding:7rem 1.5rem 5rem;}
+      .blog-article h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.15;word-break:keep-all;margin-bottom:.6rem;}
+      .blog-article h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin:2.5rem 0 1rem;color:var(--text);word-break:keep-all;}
+      .blog-article h3{font-size:1.15rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+      .blog-article p{font-size:1.02rem;color:var(--text-dim);line-height:1.85;word-break:keep-all;margin-bottom:1.2rem;}
+      .blog-article strong{color:var(--text);font-weight:700;}
+      .blog-article blockquote{border-left:3px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:var(--badge-brain-bg);border-radius:0 10px 10px 0;}
+      .blog-article blockquote p{color:var(--text);font-style:italic;margin-bottom:0;}
+      .blog-article ul,.blog-article ol{padding-left:1.5rem;margin-bottom:1.2rem;}
+      .blog-article li{font-size:1rem;color:var(--text-dim);line-height:1.8;margin-bottom:.4rem;}
+      .blog-article hr{border:none;height:1px;background:var(--divider);margin:2.5rem 0;}
+      .blog-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:2rem;font-size:.85rem;color:var(--text-muted);}
+      .blog-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--divider);}
+      .blog-nav a{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;}
+    </style>
+  </Fragment>
+
+  <article class="blog-article">
+    <!-- Series badge -->
+    <div class="reveal" style="margin-bottom:1.5rem;">
+      <a href="/blog/" style="text-decoration:none;">
+        <span class="badge badge-mind" style="display:inline-flex;">
+          <iconify-icon icon="solar:book-2-linear" style="font-size:.85rem;"></iconify-icon>
+          {frontmatter.series}
+        </span>
+      </a>
+    </div>
+
+    <!-- Chapter label -->
+    <p class="reveal d1" style="font-size:.82rem;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:.6rem;">
+      {chapterLabel}
+    </p>
+
+    <!-- Title -->
+    <h1 class="reveal d1">{frontmatter.title}</h1>
+
+    <!-- Subtitle -->
+    {frontmatter.subtitle && (
+      <p class="reveal d2" style="font-size:1.15rem;color:var(--text-muted);margin-bottom:1.5rem;word-break:keep-all;">
+        {frontmatter.subtitle}
+      </p>
+    )}
+
+    <!-- Meta -->
+    <div class="blog-meta reveal d2">
+      <span>{frontmatter.reading_time}</span>
+      <span style="opacity:.4;">·</span>
+      <span>{frontmatter.created}</span>
+      {frontmatter.status === 'published' && (
+        <>
+          <span style="opacity:.4;">·</span>
+          <span style="color:#66BB6A;font-weight:600;">공개</span>
+        </>
+      )}
+    </div>
+
+    <hr class="reveal d3" />
+
+    <!-- Content -->
+    <div class="reveal d3">
+      <slot />
+    </div>
+
+    <!-- Navigation -->
+    <div class="blog-nav">
+      {frontmatter.series_chapter > 0 ? (
+        <a href={`/blog/post-${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
+          <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
+        </a>
+      ) : <span></span>}
+      {frontmatter.series_chapter < 13 ? (
+        <a href={`/blog/post-${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
+          다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+        </a>
+      ) : <span></span>}
+    </div>
+  </article>
+</BaseLayout>

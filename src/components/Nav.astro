@@ -1,33 +1,33 @@
 ---
 interface Props {
-  activePage: string;
+  activePage?: string;
 }
-const { activePage } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const { activePage = '' } = Astro.props;
 const links = [
   { href: '/', label: '홈', key: 'home' },
-  { href: '/blog', label: '블로그', key: 'blog' },
-  { href: '/research', label: '연구', key: 'research' },
-  { href: '/videos', label: '영상', key: 'videos' },
-  { href: '/dashboard', label: '대시보드', key: 'dashboard' },
-  { href: '/about', label: '소개', key: 'about' },
+  { href: '/blog/', label: '블로그', key: 'blog' },
+  { href: '/research/', label: '연구', key: 'research' },
+  { href: '/videos/', label: '영상', key: 'videos' },
+  { href: '/dashboard/', label: '대시보드', key: 'dashboard' },
+  { href: '/about/', label: '소개', key: 'about' },
 ];
 ---
 
 <nav id="nav">
   <!-- Desktop -->
   <div class="nav-pill hidden md:flex items-center gap-1">
-    <a href={`${base}`} onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
-      <img src={`${base}logo.png`} alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+    <a href="/" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src="/logo.png" alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
       <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
     </a>
-    <div style="width:1px;height:1.2rem;background:rgba(79,195,247,.2);margin:0 .3rem;"></div>
-    {links.map(link => (
-      <a href={`${base}${link.href.slice(1)}`} class={`nav-link ${activePage === link.key ? 'nav-link-active' : ''}`}>
-        {link.label}
-      </a>
+    <div style="width:1px;height:1.2rem;background:var(--glass-border);margin:0 .3rem;"></div>
+    {links.map(l => (
+      <a href={l.href} class={`nav-link${activePage === l.key ? ' nav-link-active' : ''}`}>{l.label}</a>
     ))}
     <div style="width:1px;height:1.2rem;background:var(--divider);margin:0 .4rem;"></div>
+    <button onclick="toggleSearch()" class="nav-search-btn" aria-label="검색">
+      <iconify-icon icon="solar:magnifer-linear" style="font-size:1.05rem;"></iconify-icon>
+    </button>
     <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
       <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
     </a>
@@ -35,20 +35,18 @@ const links = [
 
   <!-- Mobile -->
   <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
-    <a href={`${base}`} onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
-      <img src={`${base}logo.png`} alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+    <a href="/" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
+      <img src="/logo.png" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
       <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
     </a>
     <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
-      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.35rem;"></iconify-icon>
+      <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.3rem;"></iconify-icon>
     </button>
   </div>
-  <div id="mobile-menu" class="hidden md:hidden mt-2" style="border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);border:1px solid var(--glass-border);box-shadow:0 12px 40px rgba(0,0,0,.15);">
+  <div id="mobile-menu" class="hidden md:hidden mt-2" style="border-radius:20px;background:var(--glass-bg);backdrop-filter:blur(28px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);">
     <div class="px-4 py-3 flex flex-col gap-1">
-      {links.map(link => (
-        <a href={`${base}${link.href.slice(1)}`} class={`py-2.5 px-3 text-sm rounded-xl ${activePage === link.key ? 'font-semibold' : ''}`} style={activePage === link.key ? 'color:var(--accent);' : 'color:var(--text-dim);'}>
-          {link.label}
-        </a>
+      {links.map(l => (
+        <a href={l.href} class="py-2.5 px-3 text-sm rounded-xl" style={activePage === l.key ? 'color:var(--accent);font-weight:600;' : 'color:var(--text-dim);'}>{l.label}</a>
       ))}
       <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
     </div>

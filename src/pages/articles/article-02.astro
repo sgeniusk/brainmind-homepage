@@ -1,0 +1,430 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="유료 강좌가 당신 뇌를 속이는 5가지 방법 — 뇌와 마음사이" activePage="research">
+
+
+<!-- READING PROGRESS BAR -->
+<div id="reading-progress">
+  <span class="progress-meta" style="color:var(--accent);font-weight:700;">읽는 중</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+    <div class="section-dot" id="dot-0" style="top:0;" title="Ch.1 퍼널 설계도"></div>
+    <div class="section-dot" id="dot-1" style="top:12%;" title="Ch.2 가용성 편향"></div>
+    <div class="section-dot" id="dot-2" style="top:24%;" title="Ch.3 던닝-크루거"></div>
+    <div class="section-dot" id="dot-3" style="top:36%;" title="Ch.4 정보 격차"></div>
+    <div class="section-dot" id="dot-4" style="top:48%;" title="Ch.5 권위 편향"></div>
+    <div class="section-dot" id="dot-5" style="top:60%;" title="Ch.6 매몰 비용"></div>
+    <div class="section-dot" id="dot-6" style="top:72%;" title="Ch.7 구조적 문제"></div>
+    <div class="section-dot" id="dot-7" style="top:84%;" title="Ch.8 방어법"></div>
+    <div class="section-dot" id="dot-8" style="top:96%;" title="Ch.9 파는 쪽"></div>
+  </div>
+  <span id="current-section-label" class="progress-meta" style="color:var(--accent);">Ch.1 퍼널 설계도</span>
+  <span id="time-remaining" class="progress-meta">약 14분</span>
+</div>
+
+<!-- BANNER IMAGE -->
+<div style="width:100%;max-height:420px;overflow:hidden;margin-top:4.5rem;">
+  <img src="images/art02/banner.png" alt="유료 강좌와 인지 편향" style="width:100%;height:auto;object-fit:cover;display:block;">
+</div>
+
+<!-- ARTICLE HERO -->
+<section style="padding-top:3rem;padding-bottom:3rem;">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
+      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
+      <span style="margin:0 .4rem;opacity:.5;">›</span>
+      <span>🧠 뇌가 속는 방법</span>
+    </p>
+
+    <div style="margin-bottom:1.25rem;">
+      <span class="badge badge-mind">🧠 뇌가 속는 방법</span>
+    </div>
+
+    <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.18;word-break:keep-all;margin-bottom:1rem;">
+      유료 강좌가 당신 뇌를 속이는 5가지 방법
+    </h1>
+
+    <p style="font-size:1.15rem;color:var(--text-dim);line-height:1.6;word-break:keep-all;margin-bottom:0;">
+      "누구나 월 천만원" 광고를 보면 사고 싶어지는 진짜 이유
+    </p>
+
+    <!-- Meta -->
+    <div class="flex flex-wrap items-center gap-4 mt-6 pb-6" style="border-bottom:1px solid var(--divider);">
+      <span style="font-size:.85rem;color:var(--text-muted);">📄 논문 5편 기반</span>
+      <span style="font-size:.85rem;color:var(--text-muted);">⏱ 약 14분</span>
+      <span style="font-size:.85rem;color:var(--text-muted);">📅 2026.03.23</span>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLE BODY -->
+<section id="article-body" class="article-body" style="padding-bottom:6rem;">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <p class="reveal">유튜브에서 이런 광고를 본 적 있으세요?</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">"저는 6개월 전까지 평범한 직장인이었습니다. 지금은 월 천만원을 벌고 있습니다. 누구나 할 수 있습니다."</p>
+    </div>
+
+    <p class="reveal">혹시 — 잠깐이라도 사고 싶었던 적 있으세요?</p>
+
+    <p class="reveal">그건 당신이 멍청해서가 아닙니다. 그 광고가 당신 뇌의 <span class="kw">인지 편향 5개</span>를 동시에 타격하도록 설계되어 있기 때문입니다.</p>
+
+    <p class="reveal">이 글에서는 유료 강좌 마케팅 퍼널이 뇌의 어떤 편향을 어떤 순서로 공격하는지를 하나씩 따라갑니다. 그리고 끝에서 구체적인 방어법 세 가지를 가져가게 됩니다.</p>
+
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art02/hero.png" alt="마케팅 퍼널 구조" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 1 -->
+    <h2 id="s-ch1" class="reveal"><span class="ch-num">Chapter 1</span>마케팅 퍼널의 진짜 설계도</h2>
+
+    <p class="reveal">유료 강좌 마케팅은 거의 다 같은 순서를 따릅니다.</p>
+
+    <div class="reveal" style="margin:1.5rem 0 2rem;">
+      <div class="funnel-step"><span class="funnel-num">1</span><strong>광고 노출</strong> — 성공 후기 반복 → <span class="kw">가용성 편향</span></div>
+      <div class="funnel-step"><span class="funnel-num">2</span><strong>"누구나 가능"</strong> — 자신감 부풀림 → <span class="kw">던닝-크루거</span></div>
+      <div class="funnel-step"><span class="funnel-num">3</span><strong>무료 웨비나</strong> — 핵심은 유료에만 → <span class="kw">정보 격차</span></div>
+      <div class="funnel-step"><span class="funnel-num">4</span><strong>"지금만 할인"</strong> → 시간 압박 + 충동</div>
+      <div class="funnel-step"><span class="funnel-num">5</span><strong>결제</strong> — 빠져나오지 못함 → <span class="kw">매몰 비용</span></div>
+      <div class="funnel-step" style="border-color:var(--accent);"><span class="funnel-num" style="background:var(--alert);">∞</span><strong>전 과정</strong> — 검증 없는 권위 → <span class="kw">권위 편향</span></div>
+    </div>
+
+    <p class="reveal">편향 하나는 이겨낼 수 있어요. 문제는 이 마케팅이 다섯 개를 동시에 쓴다는 겁니다.</p>
+
+    <p class="reveal" style="font-size:1.25rem;font-weight:700;color:var(--accent);">자, 하나씩 보겠습니다.</p>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 2 -->
+    <h2 id="s-ch2" class="reveal"><span class="ch-num">Chapter 2</span>성공 후기 10개를 보면, 뇌는 그게 평균이라고 계산합니다</h2>
+
+    <p class="reveal">인스타 피드를 넘기다 보면 성공 후기가 쏟아집니다. "3개월 만에 퇴사했습니다." "월 500만원 달성." "인생이 바뀌었습니다." 이런 후기가 10개, 20개 반복되면 뇌에 특별한 일이 일어납니다.</p>
+
+    <p class="reveal">Tversky와 Kahneman이 1973년에 밝힌 <span class="kw">가용성 편향(Availability Heuristic)</span>입니다.</p>
+
+    <p class="reveal">사건의 실제 확률이 아니라, 머릿속에 얼마나 쉽게 떠오르는지로 확률을 판단하는 현상. 성공 후기가 10개 반복 노출되면, 뇌는 그게 일반적 결과라고 착각합니다. 실패한 999명은요? 후기를 안 남기니까, 뇌한테는 존재하지 않는 겁니다.</p>
+
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art02/availability.png" alt="성공 10명 vs 실패 999명" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <!-- Countup -->
+    <div class="countup-row reveal-scale">
+      <div class="countup-item">
+        <div class="countup-num" data-target="10">0</div>
+        <div class="countup-label">성공 후기 (보이는 것)</div>
+      </div>
+      <div class="countup-item">
+        <div class="countup-num" data-target="999" style="color:var(--text-muted);">0</div>
+        <div class="countup-label">실패 사례 (보이지 않는 것)</div>
+      </div>
+    </div>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">가용성 편향 — 떠올리기 쉬우면 더 자주 일어난다고 착각한다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">사건의 실제 빈도가 아니라, 머릿속에 얼마나 쉽게 떠오르는지로 확률을 판단한다. 비행기 사고 뉴스를 본 직후 비행이 더 위험하게 느껴지는 것이 대표적 예시다. 성공 후기가 반복 노출되면 뇌는 그것이 평균적 결과라고 자동 계산한다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Tversky, A. & Kahneman, D. (1973). "Availability: A Heuristic for Judging Frequency and Probability." <em>Cognitive Psychology</em>, 5(2), 207-232.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 3 -->
+    <h2 id="s-ch3" class="reveal"><span class="ch-num">Chapter 3</span>"누구나 할 수 있다"가 초보자에게 가장 잘 먹히는 이유</h2>
+
+    <p class="reveal">광고가 확률을 왜곡했다면, 다음 단계는 자신감을 부풀리는 겁니다.</p>
+
+    <p class="reveal">"누구나 할 수 있습니다." "특별한 기술이 필요 없습니다." "저도 처음에는 아무것도 몰랐습니다." 이 말이 왜 초보자에게 유독 강력한지를 설명하는 연구가 있습니다.</p>
+
+    <p class="reveal">1999년, Kruger와 Dunning이 발표한 <span class="kw">던닝-크루거 효과(Dunning-Kruger Effect)</span>.</p>
+
+    <p class="reveal">능력이 낮을수록 자기 능력을 과대평가합니다. <span class="kw">하위 25%가 자기를 상위 40%로 평가</span>했습니다. 핵심은 이중 부담입니다. 능력이 부족하면, 그 부족을 인지할 메타인지도 부족합니다.</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">"나는 안 속겠지"라고 생각하는 사람이 가장 취약합니다. 속고 있다는 걸 모르니까요.</p>
+    </div>
+
+    <!-- 던닝-크루거 곡선 — HTML/CSS 인포그래픽 -->
+    <div class="reveal-scale" style="margin:2.5rem 0;padding:2rem 1.5rem;background:var(--paper-bg);border:1px solid var(--paper-border);border-radius:16px;">
+      <p style="font-size:.75rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem;text-align:center;">던닝-크루거 효과 — 자기 평가 vs 실제 능력</p>
+      <div style="position:relative;width:100%;max-width:520px;margin:0 auto;height:280px;">
+        <!-- Y축 -->
+        <div style="position:absolute;left:0;top:0;bottom:30px;width:1px;background:var(--divider);"></div>
+        <span style="position:absolute;left:-2px;top:0;font-size:.65rem;color:var(--text-muted);transform:translateX(-100%);padding-right:6px;white-space:nowrap;">높음</span>
+        <span style="position:absolute;left:-2px;bottom:30px;font-size:.65rem;color:var(--text-muted);transform:translateX(-100%);padding-right:6px;white-space:nowrap;">낮음</span>
+        <span style="position:absolute;left:-40px;top:50%;font-size:.68rem;color:var(--text-dim);font-weight:600;transform:rotate(-90deg) translateX(-50%);transform-origin:center;white-space:nowrap;">자기 평가</span>
+        <!-- X축 -->
+        <div style="position:absolute;left:0;right:0;bottom:30px;height:1px;background:var(--divider);"></div>
+        <span style="position:absolute;left:8px;bottom:10px;font-size:.65rem;color:var(--text-muted);">초보</span>
+        <span style="position:absolute;right:8px;bottom:10px;font-size:.65rem;color:var(--text-muted);">전문가</span>
+        <span style="position:absolute;left:50%;bottom:0;font-size:.68rem;color:var(--text-dim);font-weight:600;transform:translateX(-50%);white-space:nowrap;">실제 능력</span>
+        <!-- 곡선 SVG -->
+        <svg viewBox="0 0 500 230" style="position:absolute;left:8px;top:5px;right:8px;bottom:35px;width:calc(100% - 16px);height:calc(100% - 40px);" preserveAspectRatio="none">
+          <!-- 실제 능력 대각선 (점선) -->
+          <line x1="0" y1="230" x2="500" y2="0" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="6,4" opacity=".3"/>
+          <!-- DK 곡선 -->
+          <path d="M0,40 C60,20 100,30 140,45 C180,60 200,180 260,190 C320,200 360,120 400,60 C440,20 470,10 500,5" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          <!-- 피크 포인트 -->
+          <circle cx="70" cy="28" r="6" fill="var(--accent)" stroke="#fff" stroke-width="2"/>
+          <!-- 밸리 포인트 -->
+          <circle cx="260" cy="190" r="5" fill="var(--text-muted)" stroke="#fff" stroke-width="2"/>
+          <!-- 전문가 포인트 -->
+          <circle cx="500" cy="5" r="5" fill="#66BB6A" stroke="#fff" stroke-width="2"/>
+        </svg>
+        <!-- 라벨들 -->
+        <div style="position:absolute;left:10%;top:0;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;white-space:nowrap;transform:translateX(-50%);">
+          "누구나 가능" 타격 지점
+        </div>
+        <div style="position:absolute;left:50%;top:72%;font-size:.65rem;color:var(--text-muted);font-weight:600;transform:translateX(-50%);white-space:nowrap;">
+          절망의 계곡
+        </div>
+        <div style="position:absolute;right:0;top:0;font-size:.65rem;color:#66BB6A;font-weight:600;white-space:nowrap;">
+          진짜 전문가
+        </div>
+      </div>
+      <p style="font-size:.78rem;color:var(--text-dim);text-align:center;margin-top:1rem;line-height:1.6;word-break:keep-all;">
+        <span style="color:var(--accent);font-weight:700;">●</span> 자기 평가 곡선 &nbsp;&nbsp;
+        <span style="color:var(--text-muted);">- -</span> 실제 능력 &nbsp;&nbsp;
+        하위 25%가 자기를 상위 40%로 평가 (Kruger & Dunning, 1999)
+      </p>
+    </div>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">던닝-크루거 효과 — 능력이 부족할수록 자기 능력을 모른다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">4개의 실험을 통해, 능력이 낮은 사람일수록 자기 능력을 과대평가한다는 것을 증명했다. 핵심은 이중 부담: 능력이 부족하면 그 부족을 인지하는 메타인지 자체도 부족하다. 하위 25%가 자기를 상위 40%로 평가한 결과는 이 분야의 가장 유명한 수치 중 하나다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Kruger, J. & Dunning, D. (1999). "Unskilled and Unaware of It: How Difficulties in Recognizing One's Own Incompetence Lead to Inflated Self-Assessments." <em>JPSP</em>, 77(6), 1121-1134.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 4 -->
+    <h2 id="s-ch4" class="reveal"><span class="ch-num">Chapter 4</span>핵심을 숨기면, 뇌는 견딜 수 없습니다</h2>
+
+    <p class="reveal">무료 웨비나에서 90%를 보여줍니다. 유용한 내용입니다. 그런데 마지막에 이렇게 말합니다. "진짜 핵심은 유료 과정에서만 알려드립니다."</p>
+
+    <p class="reveal">Loewenstein이 1994년에 설명한 <span class="kw">정보 격차 이론(Information Gap Theory)</span>입니다.</p>
+
+    <p class="reveal">호기심은 즐거움이 아닙니다. 불편함에 가깝습니다. 알고 있는 것과 알고 싶은 것 사이에 격차가 생기면, 그 격차를 메우지 않으면 불쾌감이 됩니다.</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">결제는 호기심 해소가 아닙니다. 불편함의 해소 행동입니다.</p>
+    </div>
+
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art02/info_gap.png" alt="마지막 퍼즐 조각에 가격표" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">정보 격차 이론 — 호기심은 즐거움이 아니라 불편함이다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">호기심은 알고 있는 것과 알고 싶은 것 사이의 격차에서 발생한다. 이 격차가 인지되면 해소 욕구가 불쾌감 수준으로 강해진다. 무료 콘텐츠에서 "핵심은 유료에만"이라는 신호를 보내면, 뇌는 그 갭을 메우지 않으면 견딜 수 없게 된다. 결제는 정보 획득이 아니라 불편함 해소 행동이다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Loewenstein, G. (1994). "The Psychology of Curiosity: A Review and Reinterpretation." <em>Psychological Bulletin</em>, 116(1), 75-98.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 5 -->
+    <h2 id="s-ch5" class="reveal"><span class="ch-num">Chapter 5</span>"월 천만원 벌었습니다" — 검증 없는 권위</h2>
+
+    <p class="reveal">"월 천만원 벌었습니다." 이걸 검증할 방법은 없습니다. 하지만 뇌는 숫자 + 자신감 + 성공 서사의 조합을 권위로 받아들입니다.</p>
+
+    <p class="reveal">1963년, Milgram의 실험. 참가자의 <span class="kw">65%</span>가 권위자의 지시에 따라 최대 전압까지 올렸습니다. 권위의 내용을 검증한 게 아니라, 외적 표지 — 흰 가운, 자신 있는 태도, 기관의 이름 — 에 반응한 겁니다.</p>
+
+    <p class="reveal">유료 강좌 마케팅에서 권위의 외적 표지는 이렇습니다. 수입 인증 스크린샷. 고급 호텔 배경의 브이로그. "수강생 3,000명 돌파." 실제 전문성과 무관한 신호들이지만, 뇌는 이것만으로 신뢰를 형성합니다.</p>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">권위 편향 — 외적 표지만으로 복종이 유도된다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">실험 참가자의 65%가 권위자의 지시에 따라 최대 450V 전기 충격까지 올렸다. 참가자들은 권위의 실제 내용을 검증하지 않았고, 흰 가운·자신 있는 태도·기관의 이름이라는 외적 표지에만 반응했다. 유료 강좌에서 수입 인증 스크린샷과 고급 배경이 하는 역할도 동일하다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Milgram, S. (1963). "Behavioral Study of Obedience." <em>Journal of Abnormal and Social Psychology</em>, 67(4), 371-378.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 6 -->
+    <h2 id="s-ch6" class="reveal"><span class="ch-num">Chapter 6</span>돈 낸 순간, 자동 잠금장치가 걸립니다</h2>
+
+    <p class="reveal">마지막 편향은 결제 후에 작동합니다.</p>
+
+    <p class="reveal">돈 낸 순간, 뇌는 자동으로 "이건 가치가 있어야 한다"고 판단을 왜곡합니다. 1985년, Arkes와 Blumer가 밝힌 <span class="kw">매몰 비용 효과(Sunk Cost Fallacy)</span>입니다.</p>
+
+    <p class="reveal">강의가 별로여도 "이미 투자했으니" 계속 따라갑니다. 심지어 "나한테 도움이 됐다"고 스스로를 설득하기도 합니다. 그만둬야 할 타이밍을 놓치는 건 의지력 문제가 아닙니다. 뇌가 지불한 비용을 정당화하려는 자동 반응입니다.</p>
+
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art02/sunk_cost.png" alt="매몰 비용 잠금 루프" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">매몰 비용 효과 — 이미 낸 돈이 판단을 오염시킨다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">이미 지불한 비용이 이후의 모든 판단을 체계적으로 오염시킨다. 실험에서 참가자들은 더 비싼 티켓을 산 공연이 덜 재미있어도 그 공연을 선택했다. 합리적이라면 미래 가치만 따져야 하지만, 뇌는 과거 지출을 정당화하려는 자동 반응을 만든다. 유료 강좌에서 "별로인데 효과가 있었다"고 스스로를 설득하는 것이 바로 이 메커니즘이다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Arkes, H.R. & Blumer, C. (1985). "The Psychology of Sunk Cost." <em>Organizational Behavior and Human Decision Processes</em>, 35(1), 124-140.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src="images/art02/empathy.png" alt="혼자 앉아 핸드폰을 보는 사람" style="width:100%;height:auto;display:block;">
+    </div>
+
+    <!-- Chapter 7 -->
+    <h2 id="s-ch7" class="reveal"><span class="ch-num">Chapter 7</span>이건 당신이 멍청해서가 아닙니다</h2>
+
+    <p class="reveal">솔직히 말하면, 저도 한 번 산 적 있어요.</p>
+
+    <p class="reveal">"이걸 알면 다를 거야"라는 생각에. 결제하고 나서 첫 영상 3개 봤는데 — 유튜브에서 무료로 볼 수 있는 내용이더라고요. 근데 그때 제가 한 생각이 뭔지 아세요? "아직 핵심이 안 나왔나 보다. 좀 더 들어봐야지." 매몰 비용이었습니다.</p>
+
+    <p class="reveal">이 연구들을 정리하면서 깨달은 건 — 이건 개인의 멍청함이 아니라 <span class="kw">설계의 문제</span>라는 겁니다.</p>
+
+    <p class="reveal">인지 편향은 인류가 수십만 년간 쌓아온 생존 전략이에요. 빠르게 패턴을 읽고, 권위에 따르고, 이미 투자한 것을 지키려는 본능. 이건 정글에서는 생존에 유리했습니다. 다만 그 전략을 마케팅이 역이용하는 겁니다.</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">5개 편향이 동시에 작동하면, 누구나 당합니다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 8 -->
+    <h2 id="s-ch8" class="reveal"><span class="ch-num">Chapter 8</span>방어하는 세 가지 방법</h2>
+
+    <p class="reveal">메커니즘을 알면 방어할 수 있습니다.</p>
+
+    <div class="defense-card reveal">
+      <div class="defense-num">01</div>
+      <h3 style="margin-top:0;color:var(--text);">사고 싶으면 24시간 기다리세요</h3>
+      <p style="margin-bottom:0;">정보 격차가 만드는 충동은 시간이 지나면 줄어듭니다. "지금만 할인"이라는 압박은 이 시간을 주지 않으려는 설계입니다. 24시간 뒤에도 사고 싶다면 그때 판단해도 늦지 않습니다.</p>
+    </div>
+
+    <div class="defense-card reveal">
+      <div class="defense-num">02</div>
+      <h3 style="margin-top:0;color:var(--text);">"이 강의 실패 후기"를 검색하세요</h3>
+      <p style="margin-bottom:0;">가용성 편향을 깨뜨리려면 반대 데이터를 직접 찾아야 합니다. 성공 후기 10개에 맞서는 건 의지력이 아니라 정보입니다.</p>
+    </div>
+
+    <div class="defense-card reveal">
+      <div class="defense-num">03</div>
+      <h3 style="margin-top:0;color:var(--text);">"누구나 할 수 있다"가 나오면 의심하세요</h3>
+      <p style="margin-bottom:0;">그건 당신의 능력을 칭찬하는 게 아닙니다. 메타인지를 비활성화하는 트리거입니다. "누구나"라는 단어가 나오는 순간, "정말 그런가?"라고 한 번만 되물어보세요. 그것만으로 던닝-크루거의 잠금이 풀립니다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Chapter 9 -->
+    <h2 id="s-ch9" class="reveal"><span class="ch-num">Chapter 9</span>파는 쪽의 뇌도 속고 있습니다</h2>
+
+    <p class="reveal">파는 사람도 자기가 맞다고 믿습니다. 던닝-크루거 효과는 구매자에게만 작동하는 게 아닙니다. 실제로 조금의 성과를 낸 사람이 그 성과를 과대평가하고, 자기 방법론이 보편적이라고 확신하는 것도 같은 메커니즘입니다.</p>
+
+    <p class="reveal">여기에 매몰 비용이 더해집니다. 이미 강좌를 만들고, 마케팅에 투자하고, 수강생을 모은 사람은 "내 강좌가 별로일 수 있다"는 가능성을 받아들이기 어렵습니다.</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">사기꾼과 자기 확신의 경계는 생각보다 흐릿합니다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Closing -->
+    <div class="reveal" style="text-align:center;padding:3rem 0;">
+      <p style="font-size:1.15rem;color:var(--text-dim);margin-bottom:1.5rem;">코르의 질문</p>
+      <p style="font-size:1.3rem;font-weight:700;line-height:1.7;word-break:keep-all;">마지막으로 유료 강좌 광고에 흔들렸던 게 언제인가요?<br>그때 뇌의 어떤 편향이 작동했을 것 같으세요?</p>
+      <p style="font-size:1.05rem;color:var(--text-dim);margin-top:1.5rem;line-height:1.8;">속은 게 아닙니다. 뇌가 설계된 대로 반응한 것입니다.<br>메커니즘을 알면, 다음부터는 방어할 수 있습니다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ 코르의 노트 ═══════════ -->
+    <hr class="section-divider">
+    <section id="s-kor-note" style="padding:2rem 0;">
+      <h2 class="reveal" style="text-align:center;margin-bottom:1.5rem;">코르의 노트</h2>
+
+      <div style="display:flex;gap:2rem;justify-content:center;margin-bottom:1.5rem;" class="reveal">
+        <div style="text-align:center;">
+          <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">이해도</p>
+          <p style="font-size:1.3rem;letter-spacing:.15em;">★★★★☆</p>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">체감도</p>
+          <p style="font-size:1.3rem;letter-spacing:.15em;">★★★★★</p>
+        </div>
+      </div>
+
+      <p class="reveal">이 주제를 정리하면서 가장 불편했던 건, 다섯 가지 편향이 전부 제 안에서도 작동하고 있었다는 사실이었습니다.</p>
+      <p class="reveal">성공 후기를 보면 "나도 될 수 있지 않을까"라는 생각이 떠오르고, "누구나 가능하다"는 말에 고개가 끄덕여지고, 핵심을 안 알려주면 알고 싶어 견딜 수 없고, 돈을 내면 "이건 가치가 있어야 한다"고 자동으로 판단을 바꿉니다. 전부 경험했습니다.</p>
+      <p class="reveal">그래서 이 글의 메시지는 "조심하세요"가 아닙니다. "당신 탓이 아닙니다"입니다. 이건 수십만 년간 작동해온 생존 전략이 마케팅에 역이용당한 것이지, 개인의 판단력 문제가 아닙니다.</p>
+
+      <h3 class="reveal">우리에게 주는 함의</h3>
+      <p class="reveal">인지 편향은 없앨 수 없습니다. 다만 이름을 알면 작동하는 순간을 알아챌 수 있습니다. "지금 내 뇌에서 가용성 편향이 작동하고 있구나" — 이 한 문장이 떠오르는 것만으로 자동 반응이 멈춥니다. 메타인지는 그렇게 시작됩니다.</p>
+
+      <h3 class="reveal">다음 이야기에서는</h3>
+      <p class="reveal">마케팅이 뇌를 속이는 방법을 봤다면, 다음은 우리 자신이 스스로를 속이는 방법입니다. 왜 첫인상은 틀려도 좀처럼 바뀌지 않을까? 뇌가 만든 첫 번째 판단이 어떻게 자물쇠가 되는지를 파고 들어갑니다.</p>
+    </section>
+
+    <!-- References -->
+    <div class="reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-dim);margin-bottom:1rem;letter-spacing:.04em;">참고 문헌</h3>
+      <ol style="font-size:.85rem;color:var(--text-dim);line-height:2;padding-left:1.2rem;">
+        <li>Tversky, A. & Kahneman, D. (1973). "Availability: A Heuristic for Judging Frequency and Probability." <em>Cognitive Psychology</em>, 5(2).</li>
+        <li>Kruger, J. & Dunning, D. (1999). "Unskilled and Unaware of It." <em>JPSP</em>, 77(6).</li>
+        <li>Loewenstein, G. (1994). "The Psychology of Curiosity." <em>Psychological Bulletin</em>, 116(1).</li>
+        <li>Arkes, H.R. & Blumer, C. (1985). "The Psychology of Sunk Cost." <em>OBHDP</em>, 35(1).</li>
+        <li>Milgram, S. (1963). "Behavioral Study of Obedience." <em>JASP</em>, 67(4).</li>
+      </ol>
+    </div>
+
+    <!-- Related -->
+    <div class="reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-dim);margin-bottom:1rem;">다른 연구 아티클</h3>
+      <a href="article_01.html" class="related-card">
+        <span class="badge badge-brain" style="margin-bottom:.5rem;">🤖 뇌, AI랑 다를까요?</span>
+        <p style="font-weight:700;font-size:1.05rem;margin:.4rem 0 .25rem;color:var(--text);">사람의 뇌는 AI보다 뛰어난 걸까?</p>
+        <p style="font-size:.85rem;color:var(--text-dim);margin:0;">접시 위 뉴런 20만 개가 둠을 플레이한 날, 떠오른 질문</p>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+</BaseLayout>

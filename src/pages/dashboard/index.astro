@@ -1,0 +1,862 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="대시보드 — 뇌와 마음사이" activePage="dashboard">
+
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 1. SUB-PAGE HERO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:8rem 0 4rem;background:var(--bg-deep);">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <span class="badge badge-neu" style="margin-bottom:1.2rem;display:inline-flex;">ONTOLOGY-BASED SYSTEM</span>
+    </div>
+    <h1 class="reveal d1" style="font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:.75rem;">
+      시스템 대시보드
+    </h1>
+    <p class="reveal d2" style="font-size:1.15rem;color:var(--text-dim);line-height:1.6;max-width:540px;">
+      뇌와마음사이 콘텐츠 생산 파이프라인의 현재 상태
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 2. SYSTEM CYCLE DIAGRAM -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">시스템 사이클 <span style="font-size:.65rem;font-weight:600;color:var(--accent);vertical-align:middle;margin-left:.4rem;">v2</span></p>
+      <p class="section-sub">6개 서브시스템이 2-Tier 구조로 콘텐츠를 생산합니다</p>
+    </div>
+
+    <!-- Desktop cycle -->
+    <div class="cycle-desktop reveal d1" style="display:none;flex-direction:column;align-items:center;gap:0;">
+      <!-- Tier 1: MUSE -> NOVA -> AXON -->
+      <div style="display:flex;align-items:center;gap:1rem;justify-content:center;width:100%;flex-wrap:wrap;">
+        <!-- MUSE -->
+        <div class="cycle-node" style="border-color:rgba(79,195,247,.35);">
+          <div class="cycle-node-icon" style="background:rgba(79,195,247,.12);color:#4FC3F7;">
+            <iconify-icon icon="solar:pen-new-square-bold"></iconify-icon>
+          </div>
+          <span style="font-size:.95rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">MUSE</span>
+          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">리서치+글쓰기</span>
+        </div>
+        <div class="cycle-arrow" style="display:flex;flex-direction:column;align-items:center;">
+          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">ART</span>
+          <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
+        </div>
+        <!-- NOVA -->
+        <div class="cycle-node" style="border-color:rgba(255,112,67,.35);">
+          <div class="cycle-node-icon" style="background:rgba(255,112,67,.12);color:#FF7043;">
+            <iconify-icon icon="solar:global-bold"></iconify-icon>
+          </div>
+          <span style="font-size:.95rem;font-weight:800;color:#FF7043;letter-spacing:-.01em;">NOVA</span>
+          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">발행/디자인</span>
+        </div>
+        <div class="cycle-arrow" style="display:flex;flex-direction:column;align-items:center;">
+          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">HTML</span>
+          <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
+        </div>
+        <!-- AXON -->
+        <div class="cycle-node" style="border-color:rgba(255,213,79,.35);">
+          <div class="cycle-node-icon" style="background:rgba(255,213,79,.12);color:#FFD54F;">
+            <iconify-icon icon="solar:videocamera-bold"></iconify-icon>
+          </div>
+          <span style="font-size:.95rem;font-weight:800;color:#FFD54F;letter-spacing:-.01em;">AXON</span>
+          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">영상</span>
+        </div>
+      </div>
+
+      <!-- LEO (shared service) -->
+      <div style="display:flex;justify-content:center;margin:.6rem 0;">
+        <div style="display:flex;align-items:center;gap:.6rem;padding:.5rem 1.2rem;border-radius:100px;background:rgba(233,30,99,.06);border:1px dashed rgba(233,30,99,.25);">
+          <iconify-icon icon="solar:palette-bold" style="font-size:1.1rem;color:#E91E63;"></iconify-icon>
+          <span style="font-size:.82rem;font-weight:700;color:#E91E63;">LEO</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">비주얼 서비스 — 모든 시스템이 호출</span>
+        </div>
+      </div>
+
+      <!-- Vertical connectors -->
+      <div style="display:flex;justify-content:space-between;width:100%;max-width:680px;padding:0 2rem;">
+        <!-- Left up arrow -->
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <iconify-icon icon="solar:arrow-up-bold" style="font-size:1.4rem;color:var(--text-muted);"></iconify-icon>
+          <div style="width:2px;height:2rem;background:linear-gradient(180deg,var(--text-muted),transparent);opacity:.3;"></div>
+          <span style="font-size:.65rem;color:var(--text-muted);">피드백</span>
+        </div>
+        <!-- Right down arrow -->
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <span style="font-size:.65rem;color:var(--text-muted);">에피소드</span>
+          <div style="width:2px;height:2rem;background:linear-gradient(180deg,transparent,var(--text-muted));opacity:.3;"></div>
+          <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.4rem;color:var(--text-muted);"></iconify-icon>
+        </div>
+      </div>
+
+      <!-- Bottom row: PULSE <- QUALITAS -->
+      <div style="display:flex;align-items:center;gap:1.2rem;justify-content:center;width:100%;">
+        <!-- PULSE -->
+        <div class="cycle-node" style="border-color:rgba(171,71,188,.35);">
+          <div class="cycle-node-icon" style="background:rgba(171,71,188,.12);color:#AB47BC;">
+            <iconify-icon icon="solar:chart-bold"></iconify-icon>
+          </div>
+          <span style="font-size:.95rem;font-weight:800;color:#AB47BC;letter-spacing:-.01em;">PULSE</span>
+          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">상태 관리+분석</span>
+        </div>
+        <!-- Arrow -->
+        <div class="cycle-arrow" style="display:flex;flex-direction:column;align-items:center;">
+          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">인사이트</span>
+          <iconify-icon icon="solar:arrow-left-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
+        </div>
+        <!-- QUALITAS -->
+        <div class="cycle-node" style="border-color:rgba(102,187,106,.35);">
+          <div class="cycle-node-icon" style="background:rgba(102,187,106,.12);color:#66BB6A;">
+            <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
+          </div>
+          <span style="font-size:.95rem;font-weight:800;color:#66BB6A;letter-spacing:-.01em;">QUALITAS</span>
+          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">품질 평가</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile cycle (vertical) -->
+    <div class="cycle-mobile reveal d1" style="display:none;flex-direction:column;align-items:center;gap:.75rem;">
+      <!-- Tier 1 label -->
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:-.2rem;">TIER 1 — 프로덕션</div>
+      <!-- MUSE -->
+      <div class="cycle-node" style="border-color:rgba(79,195,247,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
+        <div class="cycle-node-icon" style="background:rgba(79,195,247,.12);color:#4FC3F7;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
+          <iconify-icon icon="solar:pen-new-square-bold"></iconify-icon>
+        </div>
+        <div>
+          <span style="font-size:.85rem;font-weight:800;color:#4FC3F7;">MUSE</span>
+          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">리서치+글쓰기</span>
+        </div>
+      </div>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <!-- NOVA -->
+      <div class="cycle-node" style="border-color:rgba(255,112,67,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
+        <div class="cycle-node-icon" style="background:rgba(255,112,67,.12);color:#FF7043;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
+          <iconify-icon icon="solar:global-bold"></iconify-icon>
+        </div>
+        <div>
+          <span style="font-size:.85rem;font-weight:800;color:#FF7043;">NOVA</span>
+          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">발행/디자인</span>
+        </div>
+      </div>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <!-- AXON -->
+      <div class="cycle-node" style="border-color:rgba(255,213,79,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
+        <div class="cycle-node-icon" style="background:rgba(255,213,79,.12);color:#FFD54F;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
+          <iconify-icon icon="solar:videocamera-bold"></iconify-icon>
+        </div>
+        <div>
+          <span style="font-size:.85rem;font-weight:800;color:#FFD54F;">AXON</span>
+          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">영상</span>
+        </div>
+      </div>
+      <!-- LEO (shared) -->
+      <div style="width:100%;max-width:280px;padding:.6rem 1rem;border-radius:100px;background:rgba(233,30,99,.06);border:1px dashed rgba(233,30,99,.25);display:flex;align-items:center;gap:.6rem;justify-content:center;">
+        <iconify-icon icon="solar:palette-bold" style="font-size:1rem;color:#E91E63;"></iconify-icon>
+        <span style="font-size:.82rem;font-weight:700;color:#E91E63;">LEO</span>
+        <span style="font-size:.72rem;color:var(--text-dim);">비주얼 서비스</span>
+      </div>
+      <!-- Tier 2 label -->
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem;margin-bottom:-.2rem;">TIER 2 — 메타</div>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <!-- QUALITAS -->
+      <div class="cycle-node" style="border-color:rgba(102,187,106,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
+        <div class="cycle-node-icon" style="background:rgba(102,187,106,.12);color:#66BB6A;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
+          <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
+        </div>
+        <div>
+          <span style="font-size:.85rem;font-weight:800;color:#66BB6A;">QUALITAS</span>
+          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">품질 평가</span>
+        </div>
+      </div>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <!-- PULSE -->
+      <div class="cycle-node" style="border-color:rgba(171,71,188,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
+        <div class="cycle-node-icon" style="background:rgba(171,71,188,.12);color:#AB47BC;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
+          <iconify-icon icon="solar:chart-bold"></iconify-icon>
+        </div>
+        <div>
+          <span style="font-size:.85rem;font-weight:800;color:#AB47BC;">PULSE</span>
+          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">상태 관리+분석</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        <iconify-icon icon="solar:arrow-up-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+        <span style="font-size:.7rem;color:var(--text-muted);">MUSE로 피드백</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 3. STATS COUNTERS (updated) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:2rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal" style="display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;" id="stats-grid">
+      <div class="stat-box d1">
+        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-label">아이디어</div>
+        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.25rem;">3개 카테고리</div>
+      </div>
+      <div class="stat-box d2">
+        <div class="stat-number" data-target="72">0</div>
+        <div class="stat-label">연구자료 (RS)</div>
+        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.25rem;">활성 4 · 축적 68</div>
+      </div>
+      <div class="stat-box d3">
+        <div class="stat-number" data-target="1">0</div>
+        <div class="stat-label">리서치노트 (RN)</div>
+      </div>
+      <div class="stat-box d4">
+        <div class="stat-number" data-target="11">0</div>
+        <div class="stat-label">플레이리스트</div>
+      </div>
+      <div class="stat-box d5">
+        <div class="stat-number" data-target="4">0</div>
+        <div class="stat-label">시스템 문서</div>
+      </div>
+      <div class="stat-box" style="transition-delay:.6s;">
+        <div class="stat-number" data-target="14">0</div>
+        <div class="stat-label">개선과제</div>
+      </div>
+    </div>
+    <style>
+      @media(max-width:640px){
+        #stats-grid{grid-template-columns:repeat(3,1fr)!important;}
+      }
+      @media(max-width:380px){
+        #stats-grid{grid-template-columns:repeat(2,1fr)!important;}
+      }
+    </style>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 4. TOPIC CREATION WORKFLOW -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">토픽 생성 워크플로</p>
+      <p class="section-sub">MUSE 리서치가 완료되면, NOVA 핸드오프 시점에 토픽 폴더가 탄생합니다</p>
+    </div>
+
+    <div class="reveal d1 workflow-row" style="display:flex;align-items:stretch;gap:1rem;">
+      <!-- Phase 1: MUSE -->
+      <div class="workflow-box" style="flex:1;border-left:3px solid #4FC3F7;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
+          <iconify-icon icon="solar:test-tube-bold" style="font-size:1.1rem;color:#4FC3F7;"></iconify-icon>
+          <span style="font-size:.85rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">MUSE</span>
+          <span class="pl-badge" style="margin-left:auto;">MUSE 폴더</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:lightbulb-bold" style="font-size:.9rem;color:#FFD54F;"></iconify-icon>
+            <span>아이디어</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>RS (연구자료)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>RN (리서치노트)</span>
+          </div>
+        </div>
+        <p style="font-size:.72rem;color:var(--text-muted);margin-top:.6rem;font-style:italic;">토픽 폴더 없음</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="workflow-arrow">
+        <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;"></iconify-icon>
+      </div>
+
+      <!-- Phase 2: NOVA Handoff -->
+      <div class="workflow-box" style="flex:1;border-left:3px solid #FF7043;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
+          <iconify-icon icon="solar:pen-bold" style="font-size:1.1rem;color:#FF7043;"></iconify-icon>
+          <span style="font-size:.85rem;font-weight:800;color:#FF7043;letter-spacing:-.01em;">NOVA 핸드오프</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:folder-bold" style="font-size:.9rem;color:#FF7043;"></iconify-icon>
+            <span>토픽 폴더 생성</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>TOPIC_NNN.md 탄생</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>아티클 작성</span>
+          </div>
+        </div>
+        <p style="font-size:.72rem;color:var(--text-muted);margin-top:.6rem;font-style:italic;">토픽 폴더 탄생 시점</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="workflow-arrow">
+        <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;"></iconify-icon>
+      </div>
+
+      <!-- Phase 3: AXON -->
+      <div class="workflow-box" style="flex:1;border-left:3px solid #FFD54F;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
+          <iconify-icon icon="solar:videocamera-bold" style="font-size:1.1rem;color:#FFD54F;"></iconify-icon>
+          <span style="font-size:.85rem;font-weight:800;color:#FFD54F;letter-spacing:-.01em;">AXON 영상</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:clapperboard-bold" style="font-size:.9rem;color:#FFD54F;"></iconify-icon>
+            <span>스토리보드 기반 제작</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>에피소드 렌더</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-dim);">
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.8rem;"></iconify-icon>
+            <span>업로드</span>
+          </div>
+        </div>
+        <p style="font-size:.72rem;color:var(--text-muted);margin-top:.6rem;font-style:italic;">영상 완성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 5. TOPIC PIPELINE STATUS (updated: 1 active + RN pipeline) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">토픽 파이프라인</p>
+      <p class="section-sub">아이디어 8개 · MUSE 리서치 축적 중</p>
+    </div>
+
+    <!-- Status legend -->
+    <div class="reveal d1" style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        <span style="width:10px;height:10px;border-radius:50%;background:#FFD54F;"></span>
+        <span style="font-size:.78rem;color:var(--text-dim);">AXON 전달</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        <span style="width:10px;height:10px;border-radius:50%;background:var(--text-muted);"></span>
+        <span style="font-size:.78rem;color:var(--text-dim);">연구 대기</span>
+      </div>
+    </div>
+
+    <!-- Active topic card -->
+    <div class="reveal d2" style="margin-bottom:2rem;">
+      <div class="topic-card" style="border-color:rgba(255,213,79,.3);max-width:360px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="topic-num">#001</span>
+          <span class="pl-badge">뇌 vs AI</span>
+        </div>
+        <p class="topic-title">사람의 뇌는 AI보다 뛰어난 걸까</p>
+        <div>
+          <span class="status-badge status-axon">
+            <span style="width:6px;height:6px;border-radius:50%;background:currentColor;" class="pdot"></span>
+            AXON 전달
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanation note -->
+    <div class="reveal d3" style="background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);border-radius:14px;padding:1.2rem 1.5rem;margin-bottom:2rem;max-width:600px;">
+      <div style="display:flex;align-items:flex-start;gap:.7rem;">
+        <iconify-icon icon="solar:info-circle-bold" style="font-size:1.2rem;color:var(--brain);flex-shrink:0;margin-top:2px;"></iconify-icon>
+        <div>
+          <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.3rem;">토픽 생성 방식이 변경되었습니다</p>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">
+            TOPIC_001·003 연구 완료 → NOVA에서 ART_01·02 초안 완성. RS 77개, RN 3개 활성. 다음 단계: 아티클 리뷰 후 퍼블리싱, 동시에 AXON EP001 진행 중.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline status -->
+    <div class="reveal d4">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;">
+        <iconify-icon icon="solar:notebook-bold" style="font-size:1.1rem;color:var(--brain);"></iconify-icon>
+        <span style="font-size:.95rem;font-weight:700;">파이프라인 현황</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;">
+        <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
+          <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">MUSE</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">아이디어 3개 폴더 운영 중</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">RN 1개 · RS 72개 축적</p>
+        </div>
+        <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
+          <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">NOVA</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">ART_01·02 초안 완료</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">플레이리스트 11개 정의됨</p>
+        </div>
+        <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
+          <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">AXON</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">EP001 스토리보드 진행 중</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">기존 에피소드 museum 아카이브</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 6. SYSTEM PROFILES (updated AXON) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">시스템 프로파일</p>
+      <p class="section-sub">각 서브시스템의 역량과 개선점</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;">
+
+      <!-- MUSE (구 MUSE) -->
+      <div class="sys-profile reveal d1">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(79,195,247,.12);color:#4FC3F7;">
+            <iconify-icon icon="solar:pen-new-square-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">MUSE</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">리서치+글쓰기 시스템</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>5가지 질문 프레임워크</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>RS 재사용 구조 + 아티클 정제 통합</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>블로그 글쓰기 역할 추가</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>아이디어 소싱 루틴 정착 필요</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">RS 운영 습관 + 아티클 3개 정제</p>
+        </div>
+      </div>
+
+      <!-- LEO (신설) -->
+      <div class="sys-profile reveal d2">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(233,30,99,.12);color:#E91E63;">
+            <iconify-icon icon="solar:palette-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#E91E63;letter-spacing:-.01em;">LEO</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">비주얼 에셋 시스템</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>Midjourney 프롬프트 공식 정립</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>에셋 네이밍/관리 체계</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>실제 에셋 생성 시작 필요</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">첫 3개 토픽 이미지 완성</p>
+        </div>
+      </div>
+
+      <!-- NOVA -->
+      <div class="sys-profile reveal d3">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(255,112,67,.12);color:#FF7043;">
+            <iconify-icon icon="solar:global-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#FF7043;letter-spacing:-.01em;">NOVA</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">발행/디자인 시스템</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>디자인 시스템 완성</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>홈페이지 발행 전담으로 전문화</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>발행 파이프라인 자동화 필요</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">아티클 3개 퍼블리싱</p>
+        </div>
+      </div>
+
+      <!-- AXON (updated) -->
+      <div class="sys-profile reveal d3">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(255,213,79,.12);color:#FFD54F;">
+            <iconify-icon icon="solar:videocamera-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#FFD54F;letter-spacing:-.01em;">AXON</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">영상 제작 시스템</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>스토리보드 기반 7단계 + 4게이트</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>코르 캐릭터 일관성</span>
+          </div>
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>Remotion 렌더링</span>
+          </div>
+        </div>
+        <!-- Pipeline steps -->
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem;">PIPELINE</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;">
+            <span class="pipe-step">
+              <iconify-icon icon="solar:document-bold" style="font-size:.7rem;"></iconify-icon>각본
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:clipboard-list-bold" style="font-size:.7rem;"></iconify-icon>스토리보드
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:gallery-bold" style="font-size:.7rem;"></iconify-icon>이미지수급
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:code-bold" style="font-size:.7rem;"></iconify-icon>씬JSON
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:microphone-bold" style="font-size:.7rem;"></iconify-icon>TTS
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:clapperboard-bold" style="font-size:.7rem;"></iconify-icon>렌더
+            </span>
+            <iconify-icon icon="solar:arrow-right-linear" style="font-size:.7rem;color:var(--text-muted);"></iconify-icon>
+            <span class="pipe-step">
+              <iconify-icon icon="solar:upload-bold" style="font-size:.7rem;"></iconify-icon>업로드
+            </span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:info-circle-bold" style="color:var(--brain);font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>02_episodes/ 비움, 기존 에피소드 museum 아카이브</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">영상 품질 7.5+</p>
+        </div>
+      </div>
+
+      <!-- QUALITAS -->
+      <div class="sys-profile reveal d4">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(102,187,106,.12);color:#66BB6A;">
+            <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#66BB6A;letter-spacing:-.01em;">QUALITAS</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">품질 평가</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>기존 AXON 품질 데이터</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>연구/아티클 평가 부재</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">3단계 평가 체계 구축</p>
+        </div>
+      </div>
+
+      <!-- PULSE -->
+      <div class="sys-profile reveal d5">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(171,71,188,.12);color:#AB47BC;">
+            <iconify-icon icon="solar:chart-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#AB47BC;letter-spacing:-.01em;">PULSE</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">배포/분석</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item">
+            <iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>YouTube Analytics 접근</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item">
+            <iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon>
+            <span>체계적 기록 없음</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">성과 추적 + 피드백 루프</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 7. ROADMAP PROGRESS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">Q2 2026 로드맵</p>
+      <p class="section-sub">시스템별 분기 목표 진행 상황</p>
+    </div>
+
+    <div class="reveal d1" style="display:flex;flex-direction:column;gap:.65rem;">
+
+      <!-- MUSE goals -->
+      <div style="margin-bottom:.4rem;">
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4FC3F7;margin-bottom:.5rem;">MUSE</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">5가지 질문 프레임워크 확립</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">기존 연구 정리 + 아카이브</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료 · museum 이관</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">RS 운영 습관 정착</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">진행 중</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVA goals -->
+      <div style="margin-bottom:.4rem;">
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#FF7043;margin-bottom:.5rem;">NOVA</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">디자인 시스템 구축</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">5단계 아티클 파이프라인 설계</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">아티클 3개 퍼블리싱</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">진행 중 (2/3 초안)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AXON goals -->
+      <div style="margin-bottom:.4rem;">
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#FFD54F;margin-bottom:.5rem;">AXON</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">스토리보드 기반 7단계 + 4게이트 확립</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">영상 품질 7.5+ 달성</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">진행 중</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">기존 에피소드 museum 아카이브</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">완료</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUALITAS goals -->
+      <div style="margin-bottom:.4rem;">
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#66BB6A;margin-bottom:.5rem;">QUALITAS</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="roadmap-item">
+            <div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">3단계 평가 체계 구축</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">진행 중</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check todo"></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">연구/아티클 품질 평가 기준 수립</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">예정</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PULSE goals -->
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#AB47BC;margin-bottom:.5rem;">PULSE</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="roadmap-item">
+            <div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">성과 추적 시스템 구축</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">진행 중</p>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-check todo"></div>
+            <div>
+              <p style="font-size:.88rem;font-weight:600;">피드백 루프 자동화</p>
+              <p style="font-size:.75rem;color:var(--text-muted);">예정</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 8. ONTOLOGY STRUCTURE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section style="padding:3rem 0 5rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">온톨로지 구조</p>
+      <p class="section-sub">시스템을 관통하는 4계층 데이터 아키텍처</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:.85rem;">
+      <!-- Layer 1 -->
+      <div class="onto-layer reveal d1">
+        <div class="onto-num" style="background:rgba(79,195,247,.12);color:#4FC3F7;">1</div>
+        <div>
+          <p style="font-size:.95rem;font-weight:700;margin-bottom:.3rem;">콘텐츠 층위</p>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">Topic Hub, RS(연구자료), RN(리서치노트), ART(아티클), Episode(에피소드) — 콘텐츠의 생애주기를 구성하는 핵심 노드</p>
+        </div>
+      </div>
+      <!-- Layer 2 -->
+      <div class="onto-layer reveal d2">
+        <div class="onto-num" style="background:rgba(255,112,67,.12);color:#FF7043;">2</div>
+        <div>
+          <p style="font-size:.95rem;font-weight:700;margin-bottom:.3rem;">택소노미 층위</p>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">다축 도메인 분류, Playlist 그룹핑, 블로그 카테고리 연결 — 콘텐츠를 발견 가능하게 만드는 분류 체계</p>
+        </div>
+      </div>
+      <!-- Layer 3 -->
+      <div class="onto-layer reveal d3">
+        <div class="onto-num" style="background:rgba(102,187,106,.12);color:#66BB6A;">3</div>
+        <div>
+          <p style="font-size:.95rem;font-weight:700;margin-bottom:.3rem;">시스템 진화 층위</p>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">SystemProfile, RoadmapGoal, ImprovementTask — 시스템 자체의 성장을 추적하는 메타 구조</p>
+        </div>
+      </div>
+      <!-- Layer 4 -->
+      <div class="onto-layer reveal d4">
+        <div class="onto-num" style="background:rgba(171,71,188,.12);color:#AB47BC;">4</div>
+        <div>
+          <p style="font-size:.95rem;font-weight:700;margin-bottom:.3rem;">품질/분석 층위</p>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">QUALITAS 평가 데이터 + PULSE 성과 분석 — 순환적 피드백 루프를 통한 지속적 개선</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+
+</BaseLayout>
