@@ -3,13 +3,14 @@ interface Props {
   activePage?: string;
 }
 const { activePage = '' } = Astro.props;
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const links = [
-  { href: '/', label: '홈', key: 'home' },
-  { href: '/blog/', label: '블로그', key: 'blog' },
-  { href: '/research/', label: '연구', key: 'research' },
-  { href: '/videos/', label: '영상', key: 'videos' },
-  { href: '/dashboard/', label: '대시보드', key: 'dashboard' },
-  { href: '/about/', label: '소개', key: 'about' },
+  { href: b, label: '홈', key: 'home' },
+  { href: `${b}blog/`, label: '블로그', key: 'blog' },
+  { href: `${b}research/`, label: '연구', key: 'research' },
+  { href: `${b}videos/`, label: '영상', key: 'videos' },
+  { href: `${b}dashboard/`, label: '대시보드', key: 'dashboard' },
+  { href: `${b}about/`, label: '소개', key: 'about' },
 ];
 ---
 

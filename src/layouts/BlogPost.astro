@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const { frontmatter } = Astro.props;
 const chapterLabel = frontmatter.series_chapter === 0
   ? (frontmatter.blog_id === 'BLOG_00' ? '프롤로그' : '에필로그')
@@ -75,12 +76,12 @@ const chapterLabel = frontmatter.series_chapter === 0
     <!-- Navigation -->
     <div class="blog-nav">
       {frontmatter.series_chapter > 0 ? (
-        <a href={`/blog/post-${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
+        <a href={`${base}blog/post-${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
           <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
         </a>
       ) : <span></span>}
       {frontmatter.series_chapter < 13 ? (
-        <a href={`/blog/post-${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
+        <a href={`${base}blog/post-${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
           다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
         </a>
       ) : <span></span>}
