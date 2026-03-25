@@ -4,6 +4,53 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <BaseLayout title="유료 강좌가 당신 뇌를 속이는 5가지 방법 — 뇌와 마음사이" activePage="research">
 
+<style is:global>
+  #reading-progress{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:.4rem}
+  .progress-track{width:8px;height:55vh;max-height:640px;min-height:400px;background:var(--progress-track,rgba(255,255,255,.08));border-radius:100px;position:relative;overflow:visible}
+  .progress-fill{width:8px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent-glow) 100%);border-radius:100px;position:absolute;top:0;left:0;transition:height .15s ease;height:0}
+  .section-dot{position:absolute;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--progress-dot,rgba(255,255,255,.12));border:2.5px solid var(--progress-dot-border,rgba(255,255,255,.2));cursor:pointer;transition:all .2s}
+  .section-dot.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+  .section-dot::after{content:attr(title);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--bg-card);border:1px solid var(--card-border);border-radius:8px;padding:.3rem .65rem;font-size:.72rem;font-weight:600;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .section-dot:hover::after{opacity:1}
+  .progress-meta{font-size:.72rem;font-weight:600;color:var(--text-muted);text-align:right;white-space:nowrap}
+  @media(max-width:1200px){#reading-progress{display:none}}
+  .article-body{font-size:1.05rem;line-height:1.85;letter-spacing:-0.02em;word-break:keep-all;color:var(--text)}
+  .article-body p{margin-bottom:1.6rem}
+  .article-body h2{font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;line-height:1.3;margin:3rem 0 1.2rem;word-break:keep-all}
+  .article-body h2 .ch-num{display:block;font-size:.78rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+  .paper-cite{background:var(--paper-bg,rgba(255,255,255,.03));border:1px solid var(--paper-border,rgba(255,255,255,.08));border-radius:12px;padding:1.1rem 1.25rem;margin:1.2rem 0;cursor:pointer;transition:all .3s ease}
+  .paper-cite:hover{border-color:var(--accent);background:var(--quote-bg,rgba(79,195,247,.04))}
+  .paper-detail{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+  .paper-cite.expanded .paper-detail{max-height:200px;opacity:1;margin-top:.75rem}
+  .paper-toggle{font-size:.75rem;color:var(--accent);font-weight:600;margin-top:.5rem;display:inline-flex;align-items:center;gap:.3rem}
+  .paper-cite.expanded .paper-toggle iconify-icon{transform:rotate(180deg)}
+  .kw{color:var(--accent);font-weight:700;border-bottom:2px solid rgba(255,112,67,.2)}
+  .section-divider{border:none;border-top:1px solid var(--divider);margin:2.5rem 0}
+  .related-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;transition:all .25s ease;display:block}
+  .related-card:hover{background:var(--card-hover-bg);border-color:var(--accent);transform:translateY(-2px)}
+  .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal-left.visible{opacity:1;transform:translateX(0)}
+  .reveal-scale{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+  .reveal-scale.visible{opacity:1;transform:scale(1)}
+  .countup-row{display:flex;gap:2rem;flex-wrap:wrap;margin:1.8rem 0 2.2rem;justify-content:center}
+  .countup-item{text-align:center;min-width:100px}
+  .countup-num{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+  .countup-label{font-size:.78rem;color:var(--text-dim);margin-top:.35rem;word-break:keep-all}
+  .bar-chart{display:flex;align-items:flex-end;gap:3rem;justify-content:center;padding:2rem 0;margin:1.5rem 0 2rem}
+  .bar-col{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .bar-track{width:64px;height:200px;background:var(--progress-track,rgba(255,255,255,.08));border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+  .bar-fill{width:100%;border-radius:12px;transition:height 1.2s cubic-bezier(.16,1,.3,1);height:0}
+  .bar-fill.animated{height:var(--target-h)}
+  .bar-value{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+  .bar-label{font-size:.82rem;color:var(--text-dim);word-break:keep-all;text-align:center;max-width:90px}
+  .compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0 2rem;border-radius:12px;overflow:hidden;border:1px solid var(--card-border)}
+  .compare-table th{background:var(--paper-bg,rgba(255,255,255,.03));font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--text-dim);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--divider)}
+  .compare-table td{padding:.65rem 1rem;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--divider);line-height:1.5}
+  .compare-table tr:last-child td{border-bottom:none}
+  .img-slot{width:100%;border-radius:16px;overflow:hidden;margin:2.5rem 0;position:relative;background:linear-gradient(135deg,rgba(79,195,247,.08),rgba(255,112,67,.06));border:1px dashed var(--card-border);min-height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+</style>
 
 <!-- READING PROGRESS BAR -->
 <div id="reading-progress">
@@ -426,5 +473,72 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   </div>
 </section>
 
+<script is:inline>
+  const progressFill=document.getElementById('progress-fill');
+  const currentSectionLabel=document.getElementById('current-section-label');
+  const timeRemaining=document.getElementById('time-remaining');
+  const dots=document.querySelectorAll('.section-dot');
+  const sections=[
+    {id:'s-ch1',name:'Ch.1 퍼널 설계도',dot:0},
+    {id:'s-ch2',name:'Ch.2 가용성 편향',dot:1},
+    {id:'s-ch3',name:'Ch.3 던닝-크루거',dot:2},
+    {id:'s-ch4',name:'Ch.4 정보 격차',dot:3},
+    {id:'s-ch5',name:'Ch.5 권위 편향',dot:4},
+    {id:'s-ch6',name:'Ch.6 매몰 비용',dot:5},
+    {id:'s-ch7',name:'Ch.7 구조적 문제',dot:6},
+    {id:'s-ch8',name:'Ch.8 방어법',dot:7},
+    {id:'s-ch9',name:'Ch.9 파는 쪽',dot:8}
+  ];
+  function updateProgress(){
+    const articleBody=document.getElementById('article-body');
+    if(!articleBody)return;
+    const articleTop=articleBody.offsetTop;
+    const articleHeight=articleBody.offsetHeight;
+    const scrolled=window.scrollY+window.innerHeight/2-articleTop;
+    const progress=Math.max(0,Math.min(100,(scrolled/articleHeight)*100));
+    if(progressFill)progressFill.style.height=progress+'%';
+    const remaining=Math.max(0,Math.round(14*(1-progress/100)));
+    if(timeRemaining)timeRemaining.textContent=remaining>0?`약 ${remaining}분`:'완료';
+    dots.forEach(d=>d.classList.remove('active'));
+    let currentIdx=0;
+    sections.forEach((s,i)=>{
+      const el=document.getElementById(s.id);
+      if(el&&window.scrollY>=el.offsetTop-160)currentIdx=i;
+    });
+    if(dots[currentIdx])dots[currentIdx].classList.add('active');
+    if(currentSectionLabel)currentSectionLabel.textContent=sections[currentIdx].name;
+  }
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  updateProgress();
+  dots.forEach((dot,i)=>{
+    dot.addEventListener('click',()=>{
+      const el=document.getElementById(sections[i]?.id);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+  const revealObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}});
+  },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>revealObserver.observe(el));
+  const tlObserver=new IntersectionObserver((entries)=>{
+    entries.forEach((entry,i)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('visible'),i*200);tlObserver.unobserve(entry.target);}});
+  },{threshold:0.2});
+  document.querySelectorAll('.tl-item').forEach(el=>tlObserver.observe(el));
+  function animateCountup(el){
+    const target=parseInt(el.dataset.target);const suffix=el.dataset.suffix||'';const duration=1800;const start=performance.now();
+    function step(now){const elapsed=now-start;const progress=Math.min(elapsed/duration,1);const eased=1-Math.pow(1-progress,3);
+      el.textContent=(target>=10000?Math.round(eased*target).toLocaleString():Math.round(eased*target))+suffix;
+      if(progress<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  const countupObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.querySelectorAll('.countup-num').forEach(animateCountup);countupObserver.unobserve(entry.target);}});
+  },{threshold:0.5});
+  document.querySelectorAll('.countup-row').forEach(el=>countupObserver.observe(el));
+  const chartObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.querySelectorAll('.bar-fill').forEach(bar=>bar.classList.add('animated'));chartObserver.unobserve(entry.target);}});
+  },{threshold:0.3});
+  document.querySelectorAll('.bar-chart').forEach(el=>chartObserver.observe(el));
+</script>
 
 </BaseLayout>
