@@ -117,139 +117,107 @@ const base = import.meta.env.BASE_URL;
       <p class="section-sub">6개 서브시스템이 순환하며 콘텐츠를 생산합니다</p>
     </div>
 
-    <!-- Desktop cycle: MUSE → LEO → NOVA / PULSE ← QUALITAS ← AXON -->
-    <div class="cycle-desktop reveal d1" style="display:none;flex-direction:column;align-items:center;gap:0;">
-      <!-- Row 1 -->
-      <div style="display:flex;align-items:center;gap:1.2rem;justify-content:center;width:100%;">
+    <!-- Desktop: Hub-and-Spoke Architecture -->
+    <div class="cycle-desktop reveal d1" style="display:none;flex-direction:column;align-items:center;gap:2rem;">
+      <!-- Main Pipeline Row -->
+      <div style="display:flex;align-items:center;gap:1rem;justify-content:center;width:100%;">
         <div class="cycle-node" style="border-color:rgba(255,112,67,.35);">
           <div class="cycle-node-icon" style="background:rgba(255,112,67,.12);color:#FF7043;">
             <iconify-icon icon="solar:pen-2-bold"></iconify-icon>
           </div>
-          <span style="font-size:.95rem;font-weight:800;color:#FF7043;letter-spacing:-.01em;">MUSE</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">글쓰기</span>
+          <span style="font-size:.95rem;font-weight:800;color:#FF7043;">MUSE</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">연구 · 글쓰기</span>
         </div>
-        <div class="cycle-arrow">
-          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">원고</span>
-          <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
-        </div>
-        <div class="cycle-node" style="border-color:rgba(255,167,38,.35);">
-          <div class="cycle-node-icon" style="background:rgba(255,167,38,.12);color:#FFA726;">
-            <iconify-icon icon="solar:gallery-bold"></iconify-icon>
-          </div>
-          <span style="font-size:.95rem;font-weight:800;color:#FFA726;letter-spacing:-.01em;">LEO</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">이미지</span>
-        </div>
-        <div class="cycle-arrow">
-          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">에셋</span>
-          <iconify-icon icon="solar:arrow-right-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
-        </div>
+        <div class="cycle-arrow"><iconify-icon icon="solar:arrow-right-bold" style="font-size:1.5rem;color:var(--text-muted);"></iconify-icon></div>
         <div class="cycle-node" style="border-color:rgba(79,195,247,.35);">
           <div class="cycle-node-icon" style="background:rgba(79,195,247,.12);color:#4FC3F7;">
             <iconify-icon icon="solar:global-bold"></iconify-icon>
           </div>
-          <span style="font-size:.95rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">NOVA</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">퍼블리싱</span>
+          <span style="font-size:.95rem;font-weight:800;color:#4FC3F7;">NOVA</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">디자인 · 발행</span>
         </div>
-      </div>
-      <!-- Connectors -->
-      <div style="display:flex;justify-content:space-between;width:100%;max-width:680px;padding:0 2rem;">
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <iconify-icon icon="solar:arrow-up-bold" style="font-size:1.4rem;color:var(--text-muted);"></iconify-icon>
-          <div style="width:2px;height:2rem;background:linear-gradient(180deg,var(--text-muted),transparent);opacity:.3;"></div>
-          <span style="font-size:.65rem;color:var(--text-muted);">피드백</span>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <span style="font-size:.65rem;color:var(--text-muted);">에피소드</span>
-          <div style="width:2px;height:2rem;background:linear-gradient(180deg,transparent,var(--text-muted));opacity:.3;"></div>
-          <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.4rem;color:var(--text-muted);"></iconify-icon>
-        </div>
-      </div>
-      <!-- Row 2 -->
-      <div style="display:flex;align-items:center;gap:1.2rem;justify-content:center;width:100%;">
-        <div class="cycle-node" style="border-color:rgba(171,71,188,.35);">
-          <div class="cycle-node-icon" style="background:rgba(171,71,188,.12);color:#AB47BC;">
-            <iconify-icon icon="solar:chart-bold"></iconify-icon>
-          </div>
-          <span style="font-size:.95rem;font-weight:800;color:#AB47BC;letter-spacing:-.01em;">PULSE</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">분석</span>
-        </div>
-        <div class="cycle-arrow">
-          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">인사이트</span>
-          <iconify-icon icon="solar:arrow-left-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
-        </div>
-        <div class="cycle-node" style="border-color:rgba(102,187,106,.35);">
-          <div class="cycle-node-icon" style="background:rgba(102,187,106,.12);color:#66BB6A;">
-            <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
-          </div>
-          <span style="font-size:.95rem;font-weight:800;color:#66BB6A;letter-spacing:-.01em;">QUALITAS</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">평가</span>
-        </div>
-        <div class="cycle-arrow">
-          <span style="font-size:.65rem;color:var(--text-muted);margin-bottom:.2rem;">영상</span>
-          <iconify-icon icon="solar:arrow-left-bold" style="font-size:1.6rem;color:var(--text-muted);"></iconify-icon>
-        </div>
+        <div class="cycle-arrow"><iconify-icon icon="solar:arrow-right-bold" style="font-size:1.5rem;color:var(--text-muted);"></iconify-icon></div>
         <div class="cycle-node" style="border-color:rgba(255,213,79,.35);">
           <div class="cycle-node-icon" style="background:rgba(255,213,79,.12);color:#FFD54F;">
             <iconify-icon icon="solar:videocamera-bold"></iconify-icon>
           </div>
-          <span style="font-size:.95rem;font-weight:800;color:#FFD54F;letter-spacing:-.01em;">AXON</span>
-          <span style="font-size:.75rem;color:var(--text-dim);font-weight:500;">영상</span>
+          <span style="font-size:.95rem;font-weight:800;color:#FFD54F;">AXON</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">영상 제작</span>
         </div>
+      </div>
+
+      <!-- LEO Support Layer -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:560px;">
+        <div style="position:absolute;top:50%;left:20%;right:20%;height:1px;border-top:2px dashed rgba(255,167,38,.25);"></div>
+        <div style="display:flex;align-items:center;gap:2.5rem;position:relative;z-index:1;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;">
+            <iconify-icon icon="solar:arrow-up-bold" style="font-size:1rem;color:rgba(255,167,38,.5);"></iconify-icon>
+            <span style="font-size:.6rem;color:var(--text-muted);">요청 시</span>
+          </div>
+          <div class="cycle-node" style="border-color:rgba(255,167,38,.4);background:rgba(255,167,38,.03);min-width:150px;">
+            <div class="cycle-node-icon" style="background:rgba(255,167,38,.15);color:#FFA726;">
+              <iconify-icon icon="solar:gallery-bold"></iconify-icon>
+            </div>
+            <span style="font-size:.95rem;font-weight:800;color:#FFA726;">LEO</span>
+            <span style="font-size:.72rem;color:var(--text-dim);">이미지 · 인포그래픽</span>
+            <span style="font-size:.6rem;color:var(--text-muted);font-style:italic;">on-demand 지원</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;">
+            <iconify-icon icon="solar:arrow-up-bold" style="font-size:1rem;color:rgba(255,167,38,.5);"></iconify-icon>
+            <span style="font-size:.6rem;color:var(--text-muted);">요청 시</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Row -->
+      <div style="display:flex;align-items:center;gap:1rem;justify-content:center;width:100%;">
+        <div style="display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:12px;border:1px dashed rgba(171,71,188,.3);">
+          <iconify-icon icon="solar:chart-bold" style="color:#AB47BC;font-size:1.1rem;"></iconify-icon>
+          <span style="font-size:.82rem;font-weight:700;color:#AB47BC;">PULSE</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">분석</span>
+        </div>
+        <iconify-icon icon="solar:arrow-left-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+        <div style="display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:12px;border:1px dashed rgba(102,187,106,.3);">
+          <iconify-icon icon="solar:shield-check-bold" style="color:#66BB6A;font-size:1.1rem;"></iconify-icon>
+          <span style="font-size:.82rem;font-weight:700;color:#66BB6A;">QUALITAS</span>
+          <span style="font-size:.72rem;color:var(--text-dim);">평가</span>
+        </div>
+        <span style="font-size:.7rem;color:var(--text-muted);margin-left:.5rem;">→ MUSE로 피드백</span>
       </div>
     </div>
 
-    <!-- Mobile cycle (vertical) -->
-    <div class="cycle-mobile reveal d1" style="display:none;flex-direction:column;align-items:center;gap:.75rem;">
+    <!-- Mobile cycle -->
+    <div class="cycle-mobile reveal d1" style="display:none;flex-direction:column;align-items:center;gap:.6rem;">
+      <p style="font-size:.7rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;margin-bottom:.3rem;">메인 파이프라인</p>
       <div class="cycle-node" style="border-color:rgba(255,112,67,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(255,112,67,.12);color:#FF7043;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:pen-2-bold"></iconify-icon>
-        </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#FF7043;">MUSE</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">글쓰기</span></div>
+        <div class="cycle-node-icon" style="background:rgba(255,112,67,.12);color:#FF7043;width:42px;height:42px;min-width:42px;font-size:1.2rem;"><iconify-icon icon="solar:pen-2-bold"></iconify-icon></div>
+        <div><span style="font-size:.85rem;font-weight:800;color:#FF7043;">MUSE</span><span style="font-size:.72rem;color:var(--text-dim);margin-left:.4rem;">연구 · 글쓰기</span></div>
       </div>
-      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
-      <div class="cycle-node" style="border-color:rgba(255,167,38,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(255,167,38,.12);color:#FFA726;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:gallery-bold"></iconify-icon>
-        </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#FFA726;">LEO</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">이미지</span></div>
-      </div>
-      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1rem;color:var(--text-muted);"></iconify-icon>
       <div class="cycle-node" style="border-color:rgba(79,195,247,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(79,195,247,.12);color:#4FC3F7;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:global-bold"></iconify-icon>
-        </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#4FC3F7;">NOVA</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">퍼블리싱</span></div>
+        <div class="cycle-node-icon" style="background:rgba(79,195,247,.12);color:#4FC3F7;width:42px;height:42px;min-width:42px;font-size:1.2rem;"><iconify-icon icon="solar:global-bold"></iconify-icon></div>
+        <div><span style="font-size:.85rem;font-weight:800;color:#4FC3F7;">NOVA</span><span style="font-size:.72rem;color:var(--text-dim);margin-left:.4rem;">디자인 · 발행</span></div>
       </div>
-      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
+      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1rem;color:var(--text-muted);"></iconify-icon>
       <div class="cycle-node" style="border-color:rgba(255,213,79,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(255,213,79,.12);color:#FFD54F;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:videocamera-bold"></iconify-icon>
-        </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#FFD54F;">AXON</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">영상</span></div>
+        <div class="cycle-node-icon" style="background:rgba(255,213,79,.12);color:#FFD54F;width:42px;height:42px;min-width:42px;font-size:1.2rem;"><iconify-icon icon="solar:videocamera-bold"></iconify-icon></div>
+        <div><span style="font-size:.85rem;font-weight:800;color:#FFD54F;">AXON</span><span style="font-size:.72rem;color:var(--text-dim);margin-left:.4rem;">영상 제작</span></div>
       </div>
-      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
-      <div class="cycle-node" style="border-color:rgba(102,187,106,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(102,187,106,.12);color:#66BB6A;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
-        </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#66BB6A;">QUALITAS</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">평가</span></div>
+      <div style="margin:1rem 0 .3rem;"><p style="font-size:.7rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;">ON-DEMAND 지원</p></div>
+      <div class="cycle-node" style="border-color:rgba(255,167,38,.4);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;background:rgba(255,167,38,.02);">
+        <div class="cycle-node-icon" style="background:rgba(255,167,38,.15);color:#FFA726;width:42px;height:42px;min-width:42px;font-size:1.2rem;"><iconify-icon icon="solar:gallery-bold"></iconify-icon></div>
+        <div><span style="font-size:.85rem;font-weight:800;color:#FFA726;">LEO</span><span style="font-size:.72rem;color:var(--text-dim);margin-left:.3rem;">→ NOVA · AXON에 이미지 지원</span></div>
       </div>
-      <iconify-icon icon="solar:arrow-down-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
-      <div class="cycle-node" style="border-color:rgba(171,71,188,.35);width:100%;max-width:280px;flex-direction:row;gap:1rem;padding:1rem 1.2rem;">
-        <div class="cycle-node-icon" style="background:rgba(171,71,188,.12);color:#AB47BC;width:42px;height:42px;min-width:42px;font-size:1.2rem;">
-          <iconify-icon icon="solar:chart-bold"></iconify-icon>
+      <div style="margin:.8rem 0 .3rem;"><p style="font-size:.7rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;">피드백 루프</p></div>
+      <div style="display:flex;gap:.5rem;width:100%;max-width:280px;">
+        <div style="flex:1;display:flex;align-items:center;gap:.4rem;padding:.7rem;border-radius:12px;border:1px dashed rgba(102,187,106,.3);">
+          <iconify-icon icon="solar:shield-check-bold" style="color:#66BB6A;font-size:1rem;"></iconify-icon>
+          <span style="font-size:.78rem;font-weight:700;color:#66BB6A;">QUALITAS</span>
         </div>
-        <div><span style="font-size:.85rem;font-weight:800;color:#AB47BC;">PULSE</span>
-          <span style="font-size:.75rem;color:var(--text-dim);margin-left:.4rem;">분석</span></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:.4rem;">
-        <iconify-icon icon="solar:arrow-up-bold" style="font-size:1.2rem;color:var(--text-muted);"></iconify-icon>
-        <span style="font-size:.7rem;color:var(--text-muted);">MUSE로 피드백</span>
+        <div style="flex:1;display:flex;align-items:center;gap:.4rem;padding:.7rem;border-radius:12px;border:1px dashed rgba(171,71,188,.3);">
+          <iconify-icon icon="solar:chart-bold" style="color:#AB47BC;font-size:1rem;"></iconify-icon>
+          <span style="font-size:.78rem;font-weight:700;color:#AB47BC;">PULSE</span>
+        </div>
       </div>
     </div>
   </div>
@@ -296,14 +264,14 @@ const base = import.meta.env.BASE_URL;
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal">
       <p class="section-title">토픽 생성 워크플로</p>
-      <p class="section-sub">CORTEX 연구가 완료되면, NOVA 핸드오프 시점에 토픽 폴더가 탄생합니다</p>
+      <p class="section-sub">MUSE 연구가 완료되면, NOVA 핸드오프 시점에 토픽 폴더가 탄생합니다</p>
     </div>
 
     <div class="reveal d1 workflow-row" style="display:flex;align-items:stretch;gap:1rem;">
       <div class="workflow-box" style="flex:1;border-left:3px solid #4FC3F7;">
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
           <iconify-icon icon="solar:test-tube-bold" style="font-size:1.1rem;color:#4FC3F7;"></iconify-icon>
-          <span style="font-size:.85rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">CORTEX</span>
+          <span style="font-size:.85rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">MUSE</span>
           <span class="pl-badge" style="margin-left:auto;">cortex/ 폴더</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:.4rem;">
@@ -384,7 +352,7 @@ const base = import.meta.env.BASE_URL;
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal">
       <p class="section-title">토픽 파이프라인</p>
-      <p class="section-sub">아이디어 8개 · CORTEX 연구 축적 중</p>
+      <p class="section-sub">아이디어 8개 · MUSE 연구 축적 중</p>
     </div>
 
     <div class="reveal d1" style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;">
@@ -433,7 +401,7 @@ const base = import.meta.env.BASE_URL;
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;">
         <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
-          <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">CORTEX</p>
+          <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">MUSE</p>
           <p style="font-size:.88rem;color:var(--text-dim);">아이디어 3개 폴더 운영 중</p>
           <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">RN 1개 · RS 72개 축적</p>
         </div>
@@ -463,15 +431,15 @@ const base = import.meta.env.BASE_URL;
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;">
 
-      <!-- CORTEX -->
+      <!-- MUSE -->
       <div class="sys-profile reveal d1">
         <div style="display:flex;align-items:center;gap:.85rem;">
-          <div class="sys-icon-box" style="background:rgba(79,195,247,.12);color:#4FC3F7;">
-            <iconify-icon icon="solar:test-tube-bold"></iconify-icon>
+          <div class="sys-icon-box" style="background:rgba(255,112,67,.12);color:#FF7043;">
+            <iconify-icon icon="solar:pen-2-bold"></iconify-icon>
           </div>
           <div>
-            <p style="font-size:1.05rem;font-weight:800;color:#4FC3F7;letter-spacing:-.01em;">CORTEX</p>
-            <p style="font-size:.82rem;color:var(--text-dim);">연구 시스템</p>
+            <p style="font-size:1.05rem;font-weight:800;color:#FF7043;letter-spacing:-.01em;">MUSE</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">연구 · 글쓰기</p>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:.45rem;">
@@ -485,6 +453,31 @@ const base = import.meta.env.BASE_URL;
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
           <p style="font-size:.85rem;font-weight:600;color:var(--text);">RS 운영 습관 정착</p>
+        </div>
+      </div>
+
+      <!-- LEO -->
+      <div class="sys-profile reveal d2">
+        <div style="display:flex;align-items:center;gap:.85rem;">
+          <div class="sys-icon-box" style="background:rgba(255,167,38,.15);color:#FFA726;">
+            <iconify-icon icon="solar:gallery-bold"></iconify-icon>
+          </div>
+          <div>
+            <p style="font-size:1.05rem;font-weight:800;color:#FFA726;letter-spacing:-.01em;">LEO</p>
+            <p style="font-size:.82rem;color:var(--text-dim);">이미지 · 인포그래픽</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="strength-item"><iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>Midjourney v8 + Niji v7 + Freepik</span></div>
+          <div class="strength-item"><iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>asset_manifest 기반 버전 관리</span></div>
+          <div class="strength-item"><iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>NOVA · AXON on-demand 지원</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.45rem;">
+          <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>인포그래픽 자동화 미구현</span></div>
+        </div>
+        <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
+          <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROLE</p>
+          <p style="font-size:.85rem;font-weight:600;color:var(--text);">NOVA/AXON에 이미지 에셋 제공</p>
         </div>
       </div>
 
@@ -617,7 +610,7 @@ const base = import.meta.env.BASE_URL;
     <div class="reveal d1" style="display:flex;flex-direction:column;gap:.65rem;">
 
       <div style="margin-bottom:.4rem;">
-        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4FC3F7;margin-bottom:.5rem;">CORTEX</p>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4FC3F7;margin-bottom:.5rem;">MUSE</p>
         <div style="display:flex;flex-direction:column;gap:.5rem;">
           <div class="roadmap-item"><div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">5가지 질문 프레임워크 확립</p><p style="font-size:.75rem;color:var(--text-muted);">완료</p></div></div>
           <div class="roadmap-item"><div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">기존 연구 정리 + 아카이브</p><p style="font-size:.75rem;color:var(--text-muted);">완료 · museum 이관</p></div></div>

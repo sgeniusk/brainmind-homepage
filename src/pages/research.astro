@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <BaseLayout title="연구 노트 — 뇌와 마음사이" activePage="research">
   <style>
@@ -97,7 +97,7 @@ const base = import.meta.env.BASE_URL;
     <div class="research-grid" id="card-list">
 
       <!-- Card 02 — FEATURED (최신) -->
-      <a href="article_02.html" class="research-card featured reveal d1" data-category="뇌가 속는 방법">
+      <a href={`${base}articles/article-02/`} class="research-card featured reveal d1" data-category="뇌가 속는 방법">
         <div class="research-card-img" style="background:linear-gradient(135deg, rgba(255,112,67,.15), rgba(26,26,62,.4));display:flex;align-items:center;justify-content:center;">
           <span style="font-size:3rem;">🧠</span>
         </div>
@@ -112,7 +112,7 @@ const base = import.meta.env.BASE_URL;
       </a>
 
       <!-- Card 01 -->
-      <a href="article_01.html" class="research-card reveal d2" data-category="뇌의 착각">
+      <a href={`${base}articles/article-01/`} class="research-card reveal d2" data-category="뇌의 착각">
         <div class="research-card-img">
           <img src={`${base}images/art01/banner.png`} alt="뇌세포가 게임을 배운 실험" loading="lazy">
         </div>
