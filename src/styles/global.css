@@ -17,7 +17,9 @@
   --badge-mind-bg:rgba(255,112,67,.08);--badge-mind-border:rgba(255,112,67,.2);
   --noise-opacity:.015;
   --divider:rgba(0,0,0,.08);
-  --paper-bg:rgba(79,195,247,.04);--paper-border:rgba(79,195,247,.12)
+  --paper-bg:rgba(0,0,0,.02);--paper-border:rgba(255,112,67,.12);
+  --quote-bg:rgba(255,112,67,.03);--quote-border:var(--accent);
+  --progress-track:rgba(0,0,0,.08);--progress-dot:rgba(0,0,0,.2);--progress-dot-border:rgba(0,0,0,.3)
 }
 [data-theme="science"]{
   --accent:#4FC3F7;--accent-secondary:#2196F3;
@@ -29,7 +31,10 @@
   --badge-brain-bg:rgba(79,195,247,.1);--badge-brain-border:rgba(79,195,247,.28);
   --badge-mind-bg:rgba(255,213,79,.08);--badge-mind-border:rgba(255,213,79,.28);
   --noise-opacity:.028;
-  --divider:rgba(255,255,255,.08)
+  --divider:rgba(255,255,255,.08);
+  --paper-bg:rgba(26,26,62,.5);--paper-border:rgba(79,195,247,.12);
+  --quote-bg:rgba(79,195,247,.05);--quote-border:var(--accent);
+  --progress-track:rgba(255,255,255,.15);--progress-dot:rgba(255,255,255,.3);--progress-dot-border:rgba(255,255,255,.5)
 }
 
 /* ══ RESET ══ */
