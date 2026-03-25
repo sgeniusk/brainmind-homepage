@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const { frontmatter } = Astro.props;
+const fmtDate = (d: string | Date) => { const dt = new Date(d); return `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`; };
 const chapterLabel = frontmatter.series_chapter === 0
   ? (frontmatter.blog_id === 'BLOG_00' ? '프롤로그' : '에필로그')
   : `Chapter ${frontmatter.series_chapter}`;
@@ -191,7 +192,7 @@ const sections = [
       <div class="blog-meta reveal d2">
         <span>{frontmatter.reading_time}</span>
         <span style="opacity:.4;">·</span>
-        <span>{frontmatter.created}</span>
+        <span>{fmtDate(frontmatter.created)}</span>
         {frontmatter.status === 'published' && (
           <>
             <span style="opacity:.4;">·</span>

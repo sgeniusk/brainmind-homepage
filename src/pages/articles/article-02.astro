@@ -50,6 +50,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .compare-table td{padding:.65rem 1rem;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--divider);line-height:1.5}
   .compare-table tr:last-child td{border-bottom:none}
   .img-slot{width:100%;border-radius:16px;overflow:hidden;margin:2.5rem 0;position:relative;background:linear-gradient(135deg,rgba(79,195,247,.08),rgba(255,112,67,.06));border:1px dashed var(--card-border);min-height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+
+  /* ── Funnel Steps ── */
+  .funnel-step{display:flex;align-items:center;gap:.85rem;padding:.85rem 1.2rem;margin-bottom:.5rem;border-left:3px solid var(--divider);border-radius:0 12px 12px 0;background:var(--paper-bg);transition:all .5s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateX(-20px)}
+  .funnel-step.visible{opacity:1;transform:translateX(0)}
+  .funnel-step:hover{border-left-color:var(--accent);background:var(--quote-bg)}
+  .funnel-num{display:flex;align-items:center;justify-content:center;width:32px;height:32px;min-width:32px;border-radius:50%;background:var(--accent);color:#fff;font-size:.85rem;font-weight:800;flex-shrink:0}
+
+  /* ── SVG Draw on Scroll ── */
+  .svg-draw-path{stroke-dasharray:var(--path-length,1200);stroke-dashoffset:var(--path-length,1200);transition:stroke-dashoffset 2s cubic-bezier(.16,1,.3,1)}
+  .svg-draw-path.drawn{stroke-dashoffset:0}
+  .svg-draw-dot{opacity:0;transform:scale(0);transition:opacity .4s ease,transform .4s cubic-bezier(.34,1.56,.64,1)}
+  .svg-draw-dot.drawn{opacity:1;transform:scale(1)}
+  .svg-draw-label{opacity:0;transition:opacity .6s ease .3s}
+  .svg-draw-label.drawn{opacity:1}
 </style>
 
 <!-- READING PROGRESS BAR -->
@@ -223,23 +237,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <svg viewBox="0 0 500 230" style="position:absolute;left:8px;top:5px;right:8px;bottom:35px;width:calc(100% - 16px);height:calc(100% - 40px);" preserveAspectRatio="none">
           <!-- 실제 능력 대각선 (점선) -->
           <line x1="0" y1="230" x2="500" y2="0" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="6,4" opacity=".3"/>
-          <!-- DK 곡선 -->
-          <path d="M0,40 C60,20 100,30 140,45 C180,60 200,180 260,190 C320,200 360,120 400,60 C440,20 470,10 500,5" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          <!-- DK 곡선 (scroll draw) -->
+          <path class="svg-draw-path" style="--path-length:1200;" d="M0,40 C60,20 100,30 140,45 C180,60 200,180 260,190 C320,200 360,120 400,60 C440,20 470,10 500,5" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
           <!-- 피크 포인트 -->
-          <circle cx="70" cy="28" r="6" fill="var(--accent)" stroke="#fff" stroke-width="2"/>
+          <circle class="svg-draw-dot" cx="70" cy="28" r="6" fill="var(--accent)" stroke="#fff" stroke-width="2"/>
           <!-- 밸리 포인트 -->
-          <circle cx="260" cy="190" r="5" fill="var(--text-muted)" stroke="#fff" stroke-width="2"/>
+          <circle class="svg-draw-dot" cx="260" cy="190" r="5" fill="var(--text-muted)" stroke="#fff" stroke-width="2"/>
           <!-- 전문가 포인트 -->
-          <circle cx="500" cy="5" r="5" fill="#66BB6A" stroke="#fff" stroke-width="2"/>
+          <circle class="svg-draw-dot" cx="500" cy="5" r="5" fill="#66BB6A" stroke="#fff" stroke-width="2"/>
         </svg>
         <!-- 라벨들 -->
-        <div style="position:absolute;left:10%;top:0;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;white-space:nowrap;transform:translateX(-50%);">
+        <div class="svg-draw-label" style="position:absolute;left:10%;top:0;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;white-space:nowrap;transform:translateX(-50%);">
           "누구나 가능" 타격 지점
         </div>
-        <div style="position:absolute;left:50%;top:72%;font-size:.65rem;color:var(--text-muted);font-weight:600;transform:translateX(-50%);white-space:nowrap;">
+        <div class="svg-draw-label" style="position:absolute;left:50%;top:72%;font-size:.65rem;color:var(--text-muted);font-weight:600;transform:translateX(-50%);white-space:nowrap;">
           절망의 계곡
         </div>
-        <div style="position:absolute;right:0;top:0;font-size:.65rem;color:#66BB6A;font-weight:600;white-space:nowrap;">
+        <div class="svg-draw-label" style="position:absolute;right:0;top:0;font-size:.65rem;color:#66BB6A;font-weight:600;white-space:nowrap;">
           진짜 전문가
         </div>
       </div>
@@ -539,6 +553,41 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     entries.forEach(entry=>{if(entry.isIntersecting){entry.target.querySelectorAll('.bar-fill').forEach(bar=>bar.classList.add('animated'));chartObserver.unobserve(entry.target);}});
   },{threshold:0.3});
   document.querySelectorAll('.bar-chart').forEach(el=>chartObserver.observe(el));
+
+  // Funnel steps staggered reveal
+  const funnelObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const steps=entry.target.querySelectorAll('.funnel-step');
+        steps.forEach((step,i)=>{setTimeout(()=>step.classList.add('visible'),i*180);});
+        funnelObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.funnel-step')?.forEach(el=>{
+    const parent=el.parentElement;
+    if(parent&&!parent._funnelObserved){parent._funnelObserved=true;funnelObserver.observe(parent);}
+  });
+
+  // SVG draw on scroll
+  const svgDrawObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('.svg-draw-path').forEach(p=>p.classList.add('drawn'));
+        setTimeout(()=>{
+          entry.target.querySelectorAll('.svg-draw-dot').forEach((d,i)=>setTimeout(()=>d.classList.add('drawn'),i*300));
+          entry.target.querySelectorAll('.svg-draw-label').forEach((l,i)=>setTimeout(()=>l.classList.add('drawn'),i*200+400));
+        },800);
+        svgDrawObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('svg').forEach(svg=>{
+    if(svg.querySelector('.svg-draw-path')){
+      const container=svg.closest('[class*="reveal"]')||svg.parentElement;
+      if(container)svgDrawObserver.observe(container);
+    }
+  });
 </script>
 
 </BaseLayout>
