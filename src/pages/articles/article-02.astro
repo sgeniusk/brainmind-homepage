@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <BaseLayout title="유료 강좌가 당신 뇌를 속이는 5가지 방법 — 뇌와 마음사이" activePage="research">
@@ -16,8 +17,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   @media(max-width:1200px){#reading-progress{display:none}}
   .article-body{font-size:1.05rem;line-height:1.85;letter-spacing:-0.02em;word-break:keep-all;color:var(--text)}
   .article-body p{margin-bottom:1.6rem}
-  .article-body h2{font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;line-height:1.3;margin:3rem 0 1.2rem;word-break:keep-all}
-  .article-body h2 .ch-num{display:block;font-size:.78rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+  .article-body h2{font-size:1.85rem;font-weight:800;letter-spacing:-0.03em;line-height:1.35;margin:3.5rem 0 1.4rem;word-break:keep-all}
+  .article-body h2 .ch-num{display:block;font-size:.88rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
   .paper-cite{background:var(--paper-bg,rgba(255,255,255,.03));border:1px solid var(--paper-border,rgba(255,255,255,.08));border-radius:12px;padding:1.1rem 1.25rem;margin:1.2rem 0;cursor:pointer;transition:all .3s ease}
   .paper-cite:hover{border-color:var(--accent);background:var(--quote-bg,rgba(79,195,247,.04))}
   .paper-detail{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
@@ -87,7 +88,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <!-- BANNER IMAGE -->
 <div style="width:100%;max-height:420px;overflow:hidden;margin-top:4.5rem;">
-  <img src="images/art02/banner.png" alt="유료 강좌와 인지 편향" style="width:100%;height:auto;object-fit:cover;display:block;">
+  <img src={`${base}images/art02/banner.png`} alt="유료 강좌와 인지 편향" style="width:100%;height:auto;object-fit:cover;display:block;">
 </div>
 
 <!-- ARTICLE HERO -->
@@ -138,7 +139,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p class="reveal">이 글에서는 유료 강좌 마케팅 퍼널이 뇌의 어떤 편향을 어떤 순서로 공격하는지를 하나씩 따라갑니다. 그리고 끝에서 구체적인 방어법 세 가지를 가져가게 됩니다.</p>
 
     <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
-      <img src="images/art02/hero.png" alt="마케팅 퍼널 구조" style="width:100%;height:auto;display:block;">
+      <img src={`${base}images/art02/hero.png`} alt="마케팅 퍼널 구조" style="width:100%;height:auto;display:block;">
     </div>
 
     <hr class="section-divider">
@@ -173,7 +174,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p class="reveal">사건의 실제 확률이 아니라, 머릿속에 얼마나 쉽게 떠오르는지로 확률을 판단하는 현상. 성공 후기가 10개 반복 노출되면, 뇌는 그게 일반적 결과라고 착각합니다. 실패한 999명은요? 후기를 안 남기니까, 뇌한테는 존재하지 않는 겁니다.</p>
 
     <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
-      <img src="images/art02/availability.png" alt="성공 10명 vs 실패 999명" style="width:100%;height:auto;display:block;">
+      <img src={`${base}images/art02/availability.png`} alt="성공 10명 vs 실패 999명" style="width:100%;height:auto;display:block;">
     </div>
 
     <!-- Countup -->
@@ -294,7 +295,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
 
     <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
-      <img src="images/art02/info_gap.png" alt="마지막 퍼즐 조각에 가격표" style="width:100%;height:auto;display:block;">
+      <img src={`${base}images/art02/info_gap.png`} alt="마지막 퍼즐 조각에 가격표" style="width:100%;height:auto;display:block;">
     </div>
 
     <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
@@ -348,7 +349,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p class="reveal">강의가 별로여도 "이미 투자했으니" 계속 따라갑니다. 심지어 "나한테 도움이 됐다"고 스스로를 설득하기도 합니다. 그만둬야 할 타이밍을 놓치는 건 의지력 문제가 아닙니다. 뇌가 지불한 비용을 정당화하려는 자동 반응입니다.</p>
 
     <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
-      <img src="images/art02/sunk_cost.png" alt="매몰 비용 잠금 루프" style="width:100%;height:auto;display:block;">
+      <img src={`${base}images/art02/sunk_cost.png`} alt="매몰 비용 잠금 루프" style="width:100%;height:auto;display:block;">
     </div>
 
     <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
@@ -368,7 +369,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <hr class="section-divider">
 
     <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
-      <img src="images/art02/empathy.png" alt="혼자 앉아 핸드폰을 보는 사람" style="width:100%;height:auto;display:block;">
+      <img src={`${base}images/art02/empathy.png`} alt="혼자 앉아 핸드폰을 보는 사람" style="width:100%;height:auto;display:block;">
     </div>
 
     <!-- Chapter 7 -->
