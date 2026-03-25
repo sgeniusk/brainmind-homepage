@@ -87,9 +87,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 </div>
 
 <!-- BANNER IMAGE SLOT -->
-<div class="img-slot" style="width:100%;max-height:420px;margin-top:4.5rem;min-height:320px;border-radius:0;">
-  <span class="img-slot-label">BANNER IMAGE</span>
-  <span class="img-slot-prompt">메타인지의 함정 — 공부했다고 착각하는 뇌</span>
+<div class="reveal-scale" style="width:100%;margin-top:4.5rem;overflow:hidden;">
+  <img src={`${base}images/art03/fluency_illusion.png`} alt="메타인지의 함정 — 공부했다고 착각하는 뇌" style="width:100%;height:auto;display:block;">
 </div>
 
 <!-- ARTICLE HERO -->
@@ -150,9 +149,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <p class="reveal">뇌에는 설계 결함이 하나 있다. 정보가 매끄럽게 들어오면 이해한 것으로 처리한다. 이 버그를 인지심리학에서는 <span class="kw">메타인지의 착각</span>이라고 부른다. 당신의 뇌가 당신을 속이고 있다. 가장 친절한 방식으로.</p>
 
     <!-- Hero Image Slot -->
-    <div class="img-slot reveal-scale">
-      <span class="img-slot-label">HERO IMAGE</span>
-      <span class="img-slot-prompt">시험지 위에서 머리가 하얘진 학생 — 메타인지 착각 삽화</span>
+    <div class="reveal-scale" style="margin:2.5rem 0;border-radius:16px;overflow:hidden;">
+      <img src={`${base}images/art03/fluency_illusion.png`} alt="시험지 위에서 머리가 하얘진 학생 — 메타인지 착각 삽화" style="width:100%;height:auto;display:block;">
     </div>
 
     <hr class="section-divider">
