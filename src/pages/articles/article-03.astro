@@ -1,0 +1,613 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<BaseLayout title="공부했다고 착각하는 뇌 — 뇌와 마음사이" activePage="research">
+
+<style is:global>
+  #reading-progress{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:.4rem}
+  .progress-track{width:8px;height:55vh;max-height:640px;min-height:400px;background:var(--progress-track,rgba(255,255,255,.08));border-radius:100px;position:relative;overflow:visible}
+  .progress-fill{width:8px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent-glow) 100%);border-radius:100px;position:absolute;top:0;left:0;transition:height .15s ease;height:0}
+  .section-dot{position:absolute;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--progress-dot,rgba(255,255,255,.12));border:2.5px solid var(--progress-dot-border,rgba(255,255,255,.2));cursor:pointer;transition:all .2s}
+  .section-dot.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+  .section-dot::after{content:attr(title);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--bg-card);border:1px solid var(--card-border);border-radius:8px;padding:.3rem .65rem;font-size:.72rem;font-weight:600;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .section-dot:hover::after{opacity:1}
+  .progress-meta{font-size:.72rem;font-weight:600;color:var(--text-muted);text-align:right;white-space:nowrap}
+  @media(max-width:1200px){#reading-progress{display:none}}
+  .article-body{font-size:1.05rem;line-height:1.85;letter-spacing:-0.02em;word-break:keep-all;color:var(--text)}
+  .article-body p{margin-bottom:1.6rem}
+  .article-body h2{font-size:1.85rem;font-weight:800;letter-spacing:-0.03em;line-height:1.35;margin:3.5rem 0 1.4rem;word-break:keep-all}
+  .article-body h2 .ch-num{display:block;font-size:.88rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+  .article-body h3{font-size:1.25rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--text)}
+  .paper-cite{background:var(--paper-bg,rgba(255,255,255,.03));border:1px solid var(--paper-border,rgba(255,255,255,.08));border-radius:12px;padding:1.1rem 1.25rem;margin:1.2rem 0;cursor:pointer;transition:all .3s ease}
+  .paper-cite:hover{border-color:var(--accent);background:var(--quote-bg,rgba(79,195,247,.04))}
+  .paper-detail{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;opacity:0}
+  .paper-cite.expanded .paper-detail{max-height:200px;opacity:1;margin-top:.75rem}
+  .paper-toggle{font-size:.75rem;color:var(--accent);font-weight:600;margin-top:.5rem;display:inline-flex;align-items:center;gap:.3rem}
+  .paper-cite.expanded .paper-toggle iconify-icon{transform:rotate(180deg)}
+  .kw{color:var(--accent);font-weight:700;border-bottom:2px solid rgba(255,112,67,.2)}
+  .section-divider{border:none;border-top:1px solid var(--divider);margin:2.5rem 0}
+  .related-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.1rem 1.2rem;text-decoration:none;color:inherit;transition:all .25s ease;display:block}
+  .related-card:hover{background:var(--card-hover-bg);border-color:var(--accent);transform:translateY(-2px)}
+  .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal-left.visible{opacity:1;transform:translateX(0)}
+  .reveal-scale{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+  .reveal-scale.visible{opacity:1;transform:scale(1)}
+  .countup-row{display:flex;gap:2rem;flex-wrap:wrap;margin:1.8rem 0 2.2rem;justify-content:center}
+  .countup-item{text-align:center;min-width:100px}
+  .countup-num{font-size:2.6rem;font-weight:900;letter-spacing:-.04em;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+  .countup-label{font-size:.78rem;color:var(--text-dim);margin-top:.35rem;word-break:keep-all}
+  .bar-chart{display:flex;align-items:flex-end;gap:3rem;justify-content:center;padding:2rem 0;margin:1.5rem 0 2rem}
+  .bar-col{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .bar-track{width:64px;height:200px;background:var(--progress-track,rgba(255,255,255,.08));border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+  .bar-fill{width:100%;border-radius:12px;transition:height 1.2s cubic-bezier(.16,1,.3,1);height:0}
+  .bar-fill.animated{height:var(--target-h)}
+  .bar-value{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+  .bar-label{font-size:.82rem;color:var(--text-dim);word-break:keep-all;text-align:center;max-width:90px}
+  .compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0 2rem;border-radius:12px;overflow:hidden;border:1px solid var(--card-border)}
+  .compare-table th{background:var(--paper-bg,rgba(255,255,255,.03));font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--text-dim);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--divider)}
+  .compare-table td{padding:.65rem 1rem;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--divider);line-height:1.5}
+  .compare-table tr:last-child td{border-bottom:none}
+  .img-slot{width:100%;border-radius:16px;overflow:hidden;margin:2.5rem 0;position:relative;background:linear-gradient(135deg,rgba(79,195,247,.08),rgba(255,112,67,.06));border:1px dashed var(--card-border);min-height:240px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+  .img-slot-label{font-size:.75rem;color:var(--text-muted);font-weight:600;letter-spacing:.05em}
+  .img-slot-prompt{font-size:.7rem;color:var(--text-muted);opacity:.6;max-width:400px;text-align:center;line-height:1.5;font-style:italic;padding:0 1rem}
+
+  /* ── Method Card ── */
+  .method-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.4rem 1.5rem;margin:1.2rem 0;transition:all .3s ease}
+  .method-card:hover{border-color:var(--accent);background:var(--card-hover-bg)}
+  .method-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-size:.95rem;font-weight:800;margin-bottom:.75rem}
+
+  /* ── Pie-like stat blocks ── */
+  .stat-block{display:flex;gap:2rem;flex-wrap:wrap;margin:1.8rem 0 2.2rem;justify-content:center}
+  .stat-item{text-align:center;min-width:120px;padding:1.2rem;background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px}
+  .stat-value{font-size:2rem;font-weight:900;color:var(--accent);line-height:1}
+  .stat-label{font-size:.78rem;color:var(--text-dim);margin-top:.4rem;word-break:keep-all}
+</style>
+
+<!-- READING PROGRESS BAR -->
+<div id="reading-progress">
+  <span class="progress-meta" style="color:var(--accent);font-weight:700;">읽는 중</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+    <div class="section-dot" id="dot-0" style="top:0;" title="Ch.1 유창함의 함정"></div>
+    <div class="section-dot" id="dot-1" style="top:12%;" title="Ch.2 착각의 얼굴들"></div>
+    <div class="section-dot" id="dot-2" style="top:24%;" title="Ch.3 해마"></div>
+    <div class="section-dot" id="dot-3" style="top:36%;" title="Ch.4 인출의 힘"></div>
+    <div class="section-dot" id="dot-4" style="top:48%;" title="Ch.5 고통과 성장"></div>
+    <div class="section-dot" id="dot-5" style="top:60%;" title="Ch.6 AI 메타인지"></div>
+    <div class="section-dot" id="dot-6" style="top:72%;" title="Ch.7 수면과 휴식"></div>
+    <div class="section-dot" id="dot-7" style="top:84%;" title="Ch.8 테스트법"></div>
+    <div class="section-dot" id="dot-8" style="top:96%;" title="코르의 노트"></div>
+  </div>
+  <span id="current-section-label" class="progress-meta" style="color:var(--accent);">Ch.1 유창함의 함정</span>
+  <span id="time-remaining" class="progress-meta">약 15분</span>
+</div>
+
+<!-- BANNER IMAGE SLOT -->
+<div class="img-slot" style="width:100%;max-height:420px;margin-top:4.5rem;min-height:320px;border-radius:0;">
+  <span class="img-slot-label">BANNER IMAGE</span>
+  <span class="img-slot-prompt">메타인지의 함정 — 공부했다고 착각하는 뇌</span>
+</div>
+
+<!-- ARTICLE HERO -->
+<section style="padding-top:3rem;padding-bottom:3rem;">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
+      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
+      <span style="margin:0 .4rem;opacity:.5;">›</span>
+      <span>🧠 뇌가 속는 방법</span>
+    </p>
+
+    <div style="margin-bottom:1.25rem;">
+      <span class="badge badge-mind">🧠 뇌가 속는 방법</span>
+    </div>
+
+    <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.18;word-break:keep-all;margin-bottom:1rem;">
+      공부했다고 착각하는 뇌
+    </h1>
+
+    <p style="font-size:1.15rem;color:var(--text-dim);line-height:1.6;word-break:keep-all;margin-bottom:0;">
+      왜 다 안다고 느꼈는데 막상 설명하면 못 할까
+    </p>
+
+    <!-- Meta -->
+    <div style="display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--divider);">
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:user-circle-linear" style="font-size:1rem;color:var(--accent);"></iconify-icon>코르
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:calendar-linear" style="font-size:1rem;"></iconify-icon>2026.03.25
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:clock-circle-linear" style="font-size:1rem;"></iconify-icon>읽기 약 15분
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--text-dim);">
+        <iconify-icon icon="solar:document-text-linear" style="font-size:1rem;color:var(--mind);"></iconify-icon>논문 5편
+      </span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ARTICLE BODY -->
+<section id="article-body" class="article-body" style="padding-bottom:6rem;">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <p class="reveal">인강을 다섯 개 듣고 나면 뿌듯하다. 형광펜으로 밑줄을 쫙 긋고 나면 안심이 된다. 노트 정리를 마치면 오늘 공부 좀 했다는 느낌이 든다.</p>
+
+    <p class="reveal">그런데 시험장에 앉으면 머리가 하얘진다.</p>
+
+    <p class="reveal">분명 봤는데 기억이 안 난다. 분명 이해했는데 설명이 안 된다. 어제 밤까지 다 안다고 느꼈던 내용이 문제지 위에서 낯선 글자가 된다. 이 경험을 해본 사람은 알 것이다. 열심히 안 해서가 아니다. 오히려 열심히 한 사람일수록 더 당황한다.</p>
+
+    <p class="reveal">시험만의 이야기가 아니다. 책을 읽었는데 며칠 뒤 핵심이 뭐였는지 말하지 못한다. 유튜브에서 좋은 강의를 봤는데 친구에게 설명하려면 입이 열리지 않는다. 회의에서 들은 내용을 정리하려면 노트 없이는 한 줄도 쓰지 못한다. "분명 알았는데"라는 말을 하루에도 몇 번씩 한다.</p>
+
+    <p class="reveal">문제는 노력이 아니었다. 뇌였다.</p>
+
+    <p class="reveal">뇌에는 설계 결함이 하나 있다. 정보가 매끄럽게 들어오면 이해한 것으로 처리한다. 이 버그를 인지심리학에서는 <span class="kw">메타인지의 착각</span>이라고 부른다. 당신의 뇌가 당신을 속이고 있다. 가장 친절한 방식으로.</p>
+
+    <!-- Hero Image Slot -->
+    <div class="img-slot reveal-scale">
+      <span class="img-slot-label">HERO IMAGE</span>
+      <span class="img-slot-prompt">시험지 위에서 머리가 하얘진 학생 — 메타인지 착각 삽화</span>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 1 ═══════════ -->
+    <h2 id="s-ch1" class="reveal"><span class="ch-num">Chapter 1</span>유창함의 함정</h2>
+
+    <p class="reveal">시작은 간단한 질문이다. 인강을 듣고 나서 "아, 이해했다"라고 느끼는 순간, 그 느낌은 어디에서 오는가.</p>
+
+    <p class="reveal">인지심리학에서는 이것을 <span class="kw">유창함 착각(Fluency Illusion)</span>이라고 부른다. 정보가 매끄럽게 처리되면, 뇌는 그 매끄러움을 '이해'로 분류한다. 강사가 유창하게 설명하면 학생은 자기 이해도를 높게 평가한다. 실제 시험 성적과는 무관하게. 교재가 깔끔하게 정리되어 있을 때도 같은 일이 벌어진다. 시각적으로 세련된 자료를 보면 뇌는 그 정보를 '익숙한 것'으로 분류하고, 익숙함을 이해로 둔갑시킨다.</p>
+
+    <p class="reveal">문제는 이 과정이 완전히 자동이라는 점이다. 의식적으로 판단한 게 아니다. 뇌가 알아서 한다. "이건 쉽게 읽혔으니까 내가 아는 거겠지"라는 추론을 뇌가 자체적으로 수행하고, 우리는 그 결론만 전달받는다. 다 아는 것 같다는 느낌. 그 느낌이 착각이라는 걸 알아챌 방법이 없다. 느낌 자체가 진짜이니까.</p>
+
+    <p class="reveal">여기서 한 가지 더. 학습 직후에 이 착각은 가장 강해진다. 방금 들은 내용이 아직 작업 기억에 남아있기 때문이다. "다 기억나는데?" 당연하다. 5분 전에 들었으니까. 진짜 테스트는 하루가 지난 뒤다. 24시간 뒤에 떠올려 보라. 그때 남아 있는 것이 진짜 이해한 것이다.</p>
+
+    <p class="reveal">2013년, 심리학자 던로스키(Dunlosky)와 동료들이 수백 편의 학습 연구를 분석해서 10가지 학습 기법의 효과를 평가했다. 결과는 불편했다. 학생들이 가장 많이 쓰는 세 가지 전략 — 재독, 하이라이트, 노트 정리 — 이 모두 <span class="kw">'낮은 효과(low utility)'</span>로 판정받았다. 교재를 반복해서 읽는 건 시간 대비 효과가 매우 낮았고, 하이라이트는 추론이 필요한 과제에서 오히려 성적을 떨어뜨릴 수 있었다. 노트 정리는 교재를 펴놓고 베끼는 수준이면 단순 노출에 가까웠다.</p>
+
+    <p class="reveal">이 세 가지의 공통점이 있다. 전부 편하다. 그리고 전부 뇌에게 "공부했다"는 느낌을 준다.</p>
+
+    <div class="paper-cite reveal-left" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">학습 기법 메타분석 — 가장 많이 쓰는 방법이 가장 효과 없다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">수백 편의 학습 연구를 분석한 결과, 재독·하이라이트·노트 정리가 모두 '낮은 효과'로 평가됐다. 반면 인출 연습(Active Recall)과 간격 반복(Spaced Practice)이 '높은 효과'로 판정됐다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Dunlosky, J. et al. (2013). "Improving Students' Learning With Effective Learning Techniques." <em>Psychological Science in the Public Interest</em>, 14(1), 4-58.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">매끄럽게 들어왔다는 것은 내 것이 됐다는 뜻이 아니다. 뇌는 이 둘을 구분하지 못한다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 2 ═══════════ -->
+    <h2 id="s-ch2" class="reveal"><span class="ch-num">Chapter 2</span>알고 있다는 착각의 얼굴들</h2>
+
+    <p class="reveal">유창함 착각은 빙산의 일각이다. 뇌가 "나는 안다"는 느낌을 만들어내는 경로는 여러 가지다.</p>
+
+    <p class="reveal"><strong style="color:var(--accent);">거짓 기억.</strong> 기억은 재구성된다. 매번 떠올릴 때마다 조금씩 바뀐다. 친구가 "그때 비 왔잖아"라고 말하면, 비가 오지 않았어도 비 온 기억이 생겨난다. 기억 동조(memory conformity)라고 부르는 현상이다. 우리가 확신하는 기억 중 상당수가 이렇게 만들어졌을 수 있다.</p>
+
+    <p class="reveal"><strong style="color:var(--accent);">사후 확신 편향.</strong> 시험 결과가 나오면 "역시 이게 나올 줄 알았다"고 생각한다. 나오기 전에는 전혀 예상하지 못했는데. 결과를 안 뒤에 자기 지식을 소급 적용하는 것이다. 이 편향은 학습에서 특히 위험하다. "나는 원래 알고 있었다"고 느끼면 복습할 동기가 사라진다.</p>
+
+    <p class="reveal"><strong style="color:var(--accent);">알고 있다는 느낌.</strong> SNS에서 같은 정보를 여러 번 보면, 그 정보가 사실인지 아닌지와 무관하게 "이건 맞는 얘기"라고 느끼기 시작한다. 반복 노출이 친숙함을 만들고, 친숙함이 진실의 느낌을 만든다. 가짜 뉴스가 퍼지는 메커니즘과 학습의 착각이 같은 뿌리를 공유한다.</p>
+
+    <p class="reveal">그리고 가장 유명한 것. <strong style="color:var(--accent);">더닝-크루거 효과.</strong> 1999년 코넬 대학의 더닝과 크루거가 발견한 현상이다. 논리 추론, 문법, 유머 감각 테스트에서 <span class="kw">하위 25%에 속하는 참가자들이 자기 실력을 상위 40%로 평가</span>했다. 이 현상의 핵심은 "모르는 것을 모른다"는 점이다. 어떤 분야의 지식이 부족하면, 자기 지식의 한계를 인식할 능력도 동시에 부족해진다.</p>
+
+    <p class="reveal">역설적으로 지식이 늘어날수록 자신감은 잠시 떨어진다. 알아갈수록 모르는 것의 범위가 보이기 때문이다. 프로그래밍을 3일 배운 사람이 "이거 쉽네"라고 말한다. 3개월째인 사람은 "이거 끝이 없다"고 한다. 3년째인 사람이 되어야 비로소 "내가 뭘 알고 뭘 모르는지 안다"가 가능해진다.</p>
+
+    <p class="reveal">공자는 이것을 이렇게 말했다. "진정한 지식은 자신의 무지함의 범위를 아는 것이다." 메타인지의 본질이 이것이다. 내가 모른다는 것을 아는 능력. 그런데 뇌는 이 능력을 방해하도록 설계되어 있다. "나는 안다"는 느낌을 만들어내는 데 지나치게 관대하다.</p>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">더닝-크루거 효과 — 능력이 부족할수록 자기 능력을 모른다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">4개의 실험을 통해, 능력이 낮은 사람일수록 자기 능력을 과대평가한다는 것을 증명했다. 하위 25%가 자기를 상위 40%로 평가. 능력이 부족하면 그 부족을 인지하는 메타인지 자체도 부족하다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Kruger, J. & Dunning, D. (1999). "Unskilled and Unaware of It: How Difficulties in Recognizing One's Own Incompetence Lead to Inflated Self-Assessments." <em>JPSP</em>, 77(6), 1121-1134.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 3 ═══════════ -->
+    <h2 id="s-ch3" class="reveal"><span class="ch-num">Chapter 3</span>해마는 임시 보관함이다</h2>
+
+    <p class="reveal">왜 이런 착각이 발생하는지 이해하려면, 기억이 만들어지는 과정을 봐야 한다.</p>
+
+    <p class="reveal">새로운 정보가 들어오면 먼저 <span class="kw">해마(hippocampus)</span>가 받는다. 해마는 뇌의 임시 보관함이다. 오늘 들은 강의, 읽은 기사, 나눈 대화 — 전부 여기에 잠시 머문다. 문제는 이 보관함의 용량이 작다는 것이다. 작업 기억은 한 번에 2~4개의 정보만 처리할 수 있다.</p>
+
+    <p class="reveal">인강을 하루에 다섯 개 듣는 건 이 작은 컵에 물을 계속 붓는 것과 같다. 컵은 이미 넘치고 있다. 물은 들어왔다 나갔다를 반복할 뿐 어디에도 남지 않는다. 작업 기억에서 처리되지 못한 정보는 장기기억으로 넘어가지 않고 그냥 사라진다. "분명 들었는데 기억이 안 난다"의 정체다. 정보가 부족한 게 아니다. 처리 용량이 부족한 것이다.</p>
+
+    <p class="reveal">진짜 기억이 되려면 해마에 있는 정보가 대뇌피질로 넘어가야 한다. 장기기억이라는 물탱크로 옮겨져야 하는 것이다. 이 전환에는 두 가지가 필요하다.</p>
+
+    <p class="reveal">하나는 꺼내보는 것. 같은 정보를 반복해서 인출하면 해마가 "이건 중요한 정보다"라고 판단해서 장기기억으로 보관한다. 다른 하나는 수면이다. 잠을 자는 동안 해마에 임시 저장된 정보가 대뇌피질로 정리된다. 컴퓨터의 백그라운드 정리 작업과 비슷하다. 6시간 이하 수면이 3일만 이어져도 전두엽의 판단력과 집중력이 급격하게 떨어진다. 밤샘 공부는 효율이 아니라 자멸이다.</p>
+
+    <!-- 학습 시간 배분 바 차트 -->
+    <div class="reveal-scale" style="margin:2.5rem 0;padding:2rem 1.5rem;background:var(--paper-bg);border:1px solid var(--paper-border);border-radius:16px;">
+      <p style="font-size:.75rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem;text-align:center;">효율적 학습 시간 배분</p>
+      <div class="bar-chart" id="study-chart">
+        <div class="bar-col">
+          <div class="bar-value">30%</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="--target-h:30%;background:linear-gradient(180deg,var(--accent),rgba(79,195,247,.4));border-radius:12px;"></div>
+          </div>
+          <div class="bar-label">📥 입력<br><span style="font-size:.7rem;">(인강, 교재)</span></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-value">40%</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="--target-h:40%;background:linear-gradient(180deg,#66BB6A,rgba(102,187,106,.4));border-radius:12px;"></div>
+          </div>
+          <div class="bar-label">🧠 구조화<br><span style="font-size:.7rem;">(정리, 연결)</span></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-value">30%</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="--target-h:30%;background:linear-gradient(180deg,var(--alert),rgba(255,112,67,.4));border-radius:12px;"></div>
+          </div>
+          <div class="bar-label">📤 인출<br><span style="font-size:.7rem;">(문제, 설명)</span></div>
+        </div>
+      </div>
+      <p style="font-size:.78rem;color:var(--text-dim);text-align:center;margin-top:.5rem;line-height:1.6;word-break:keep-all;">대부분의 학생은 이 비율이 정반대다. 10시간 중 7시간을 입력에 쓴다.</p>
+    </div>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">더 많이 넣는 게 아니라, 더 적게 넣고 더 자주 꺼내봐야 한다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 4 ═══════════ -->
+    <h2 id="s-ch4" class="reveal"><span class="ch-num">Chapter 4</span>증거 — 인출의 힘</h2>
+
+    <p class="reveal">그럼 뭘 해야 하는가. 답은 불편할 정도로 단순하다. 꺼내봐야 한다.</p>
+
+    <p class="reveal">인지심리학에서 가장 강력한 학습 전략으로 꼽히는 것이 <span class="kw">인출 연습(Active Recall)</span>이다. 읽는 대신 떠올린다. 교재를 덮고 방금 읽은 내용을 말로 설명해본다. 기출 문제를 풀 때 해설을 바로 보지 않고 끙끙댄다. 이 과정이 학습이다. 100년 이상의 연구가 이것을 뒷받침한다.</p>
+
+    <p class="reveal">1939년, 제2차 세계대전이 시작되던 해에 이미 이 실험이 이루어졌다. 학생들을 두 그룹으로 나누고, 하나는 평소대로 공부시켰고, 다른 하나는 같은 방식으로 공부한 뒤 마지막에 연습 시험을 한 번 치르게 했다. 결과. 연습 시험 한 번으로 성적이 <span class="kw">10~15%</span> 올랐다. 한 번이다.</p>
+
+    <p class="reveal">2010년 연구에서는 격차가 더 벌어졌다. 재학습 그룹은 1주일 후 테스트에서 30~40%를 맞았다. 인출 연습 그룹은 60%를 맞았다. 최대 30% 차이. 같은 시간을 공부하고, 같은 내용을 배우고, 한 가지만 달랐다. 끝에 한 번 떠올려 봤는지 안 봤는지.</p>
+
+    <!-- Countup: 인출 연습 효과 -->
+    <div class="countup-row reveal-scale">
+      <div class="countup-item">
+        <div class="countup-num" data-target="40" data-suffix="%">0</div>
+        <div class="countup-label">재학습 그룹 정답률</div>
+      </div>
+      <div class="countup-item">
+        <div class="countup-num" data-target="60" data-suffix="%" style="color:var(--accent);">0</div>
+        <div class="countup-label">인출 연습 그룹 정답률</div>
+      </div>
+    </div>
+
+    <p class="reveal">가장 인상적인 실험은 2011년 Karpicke와 Blunt의 연구다. 학생들을 네 그룹으로 나눴다. 첫 번째는 글을 한 번 읽었다. 두 번째는 같은 글을 네 번 읽었다. 세 번째는 한 번 읽고 마인드맵을 만들었다. 네 번째는 한 번 읽고 기억나는 걸 전부 적어봤다. 인출 연습이다.</p>
+
+    <p class="reveal">결과는 명확했다. 사실 질문에서도 추론 질문에서도 인출 연습 그룹이 네 번 읽기 그룹을 압도했다. 한 번 읽고 떠올려 본 것이 네 번 읽는 것보다 나았다.</p>
+
+    <p class="reveal">여기서 반전이 있다. 실험 전에 학생들에게 "어떤 방법이 가장 효과적일 것 같나?"고 물었다. 학생들은 반복 읽기가 최고라고 예측했다. 인출 연습은 가장 비효과적이라고 답했다. <span class="kw">학습자의 직관이 정확히 반대 방향을 가리키고 있었다.</span></p>
+
+    <p class="reveal">이것이 메타인지 착각의 핵심이다. 효과적인 방법은 불편하고, 비효과적인 방법은 편하다. 그리고 뇌는 편한 쪽을 "효과적"이라고 느끼도록 설계되어 있다.</p>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">인출 연습의 힘 — 한 번 꺼내보기가 네 번 읽기를 이긴다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">네 가지 학습 조건을 비교한 결과, 한 번 읽고 인출 연습을 한 그룹이 네 번 반복 읽기 그룹과 마인드맵 그룹을 모두 능가했다. 학생들의 직관은 정확히 반대 방향을 가리켰다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Karpicke, J.D. & Blunt, J.R. (2011). "Retrieval Practice Produces More Learning than Elaborative Studying with Concept Mapping." <em>Science</em>, 331(6018), 772-775.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 5 ═══════════ -->
+    <h2 id="s-ch5" class="reveal"><span class="ch-num">Chapter 5</span>고통이 성장의 증거다</h2>
+
+    <p class="reveal">인출 연습이 왜 강력한지를 이해하려면 시냅스 수준으로 내려가야 한다.</p>
+
+    <p class="reveal">신경과학에서 유명한 원리가 있다. <span class="kw">"함께 활성화되는 뉴런은 함께 연결된다(Neurons that fire together wire together)."</span> 기억을 꺼내는 행위 자체가 해마와 전두엽 사이의 연결을 물리적으로 강화시킨다. 이것이 시냅스 가소성이다. 쉽게 말해, 뉴런 사이의 통로가 사용할수록 넓어진다.</p>
+
+    <p class="reveal">문제를 붙잡고 머리가 아픈 그 시간. 답이 안 나와서 짜증나는 그 순간. 그게 뉴런과 뉴런 사이의 연결이 만들어지고 있다는 증거다. 근육 운동과 같다. 무게를 들어서 근섬유가 찢어지고 회복하면서 더 굵어지듯, 뇌도 인지적 고통 속에서 새로운 연결을 만든다.</p>
+
+    <p class="reveal">해설을 바로 보는 건 뇌가 운동할 기회를 빼앗는 것이다. 눈으로 읽는 수동적 학습은 시냅스 연결을 만들지 못한다. 내 힘으로 답을 떠올리려는 능동적 과정이 필요하다.</p>
+
+    <p class="reveal">에빙하우스 이후의 학습 연구들은 이것을 <span class="kw">바람직한 어려움(Desirable Difficulties)</span>이라고 부른다. 학습이 힘들게 느껴질수록 실제로 더 많이 배운다. 쉬운 학습은 생산적으로 느껴질 뿐이다. 편한 공부가 아니라 불편한 공부가 진짜 공부다.</p>
+
+    <p class="reveal">다만 고통에도 질이 있다. 방향 없이 끙끙대는 것은 비효율적이다. 문제를 틀렸을 때, "어디서 막혔는지"를 먼저 파악한 상태에서 다시 시도해야 한다. 일반적인 문제는 10~30분 고민 후, 고난이도 문제는 하루 정도 간격을 두고 재시도한 뒤에 해설을 보는 것이 적절하다. 핵심은 "내 사고의 빈 곳"을 자각하는 것이다.</p>
+
+    <p class="reveal">강의 직후 10~20분은 기억이 가장 선명한 골든타임이다. 이 시간에 핵심을 요약하고, 그 요약을 바탕으로 처음부터 끝까지 설명해 보라. 남에게 설명하는 순간 전두엽이 강하게 활성화된다. 막힘없이 설명하면 내 지식이다. 중간에 막히면 거기가 남의 지식이다. 이 피드백은 형광펜이 절대 줄 수 없다.</p>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">편하게 공부했다면 의심해야 한다. 뇌가 바뀌는 순간은 항상 불편하다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 6 ═══════════ -->
+    <h2 id="s-ch6" class="reveal"><span class="ch-num">Chapter 6</span>AI 시대의 메타인지</h2>
+
+    <p class="reveal">여기까지는 전통적인 학습의 이야기였다. 지금부터는 2025년의 이야기를 해야 한다.</p>
+
+    <p class="reveal">ChatGPT가 등장한 이후, 메타인지 착각은 새로운 차원에 진입했다. 2022년부터 2026년까지 발표된 41개 출판물을 분석한 리뷰 연구가 있다. 결론은 일관됐다. AI가 생성한 유창한 응답은 학습자의 자신감을 높이지만, 깊은 개념적 이해는 향상시키지 않는다. 글쓰기, 수학, 과학, 피드백 — 영역을 가리지 않고 같은 패턴이 반복됐다.</p>
+
+    <div class="reveal-scale" style="margin:2rem 0;padding:1.5rem;background:var(--paper-bg);border:1px solid var(--paper-border);border-radius:14px;text-align:center;">
+      <p style="font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:.5rem;">유창한 AI 응답</p>
+      <p style="font-size:1.5rem;margin:.3rem 0;">→</p>
+      <p style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">자신감 상승</p>
+      <p style="font-size:1.5rem;margin:.3rem 0;">→</p>
+      <p style="font-size:1.1rem;font-weight:700;color:var(--text-muted);">실제 이해 변화 없음</p>
+    </div>
+
+    <p class="reveal">이것은 강사 유창성 효과의 디지털 확장판이다. 좋은 강사의 설명을 들으면 이해한 느낌이 드는 것처럼, ChatGPT의 깔끔한 답변을 읽으면 아는 느낌이 든다. 문제는 그 느낌의 출처가 내 이해가 아니라 AI의 유창함이라는 점이다.</p>
+
+    <p class="reveal">2025년 British Journal of Educational Technology에 실린 연구는 이것을 <span class="kw">'메타인지 게으름(Metacognitive Laziness)'</span>이라고 명명했다. ChatGPT를 사용한 학생 그룹이 에세이 점수는 더 높았다. 하지만 지식 획득과 전이에서는 유의미한 차이가 없었다. 겉으로 보이는 성과는 올랐지만, 실제 머릿속에 남은 것은 같았다. AI가 자기 조절 능력과 깊은 학습 참여를 방해한 것이다.</p>
+
+    <p class="reveal">알토 대학교 연구는 더 직접적이다. ChatGPT를 사용할 때 모든 사용자가 자기 실력을 정확하게 평가하지 못했다. AI가 잘 정리된 답을 주면 "이해한 기분"이 들지만, AI 없이 같은 질문을 받으면 답하지 못한다. "안다는 느낌"의 출처가 내 머리가 아니라 AI의 응답이었던 것이다.</p>
+
+    <p class="reveal">이것은 구조적인 변화다. 2011년 컬럼비아 대학의 벳시 스패로우 연구팀은 <span class="kw">'구글 효과'</span>를 발견했다. 나중에 검색할 수 있다고 생각하면, 사람들은 정보 자체를 기억하려는 노력을 줄이고 대신 "어디서 찾을 수 있는지"를 기억한다. 기억의 내용이 아니라 위치를 저장하는 것이다.</p>
+
+    <p class="reveal">AI 시대에 이 현상은 한 단계 더 나아갔다. 검색은 적어도 키워드를 떠올리고, 결과를 훑어보고, 적절한 정보를 골라내는 인지 작업이 필요했다. ChatGPT는 질문만 하면 된다. 선별 과정조차 AI가 대신한다. 인지 작업의 마지막 보루까지 외주화된 것이다.</p>
+
+    <p class="reveal">AI에게 모르는 문제의 답을 바로 물어보는 행위는, 기출문제 해설을 바로 보는 행위의 디지털 확장판이다. 뇌가 끙끙대며 시냅스를 강화할 기회를 AI가 빼앗는다. 그리고 해설지보다 더 위험한 점이 하나 있다. AI의 답은 해설지보다 유창하다. 유창함 착각이 스테로이드를 맞은 셈이다.</p>
+
+    <p class="reveal">교과서는 적어도 읽는 데 노력이 필요했다. AI는 노력 자체를 제거한다. 그리고 가장 무서운 건, 이 게으름이 '편리함'이라는 이름으로 포장되어 있다는 점이다.</p>
+
+    <div class="paper-cite reveal" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <iconify-icon icon="solar:document-text-bold" style="font-size:1.3rem;color:var(--accent);flex-shrink:0;margin-top:.1rem;"></iconify-icon>
+        <div>
+          <p style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 .4rem;line-height:1.5;">구글 효과 — 검색할 수 있으면 기억하지 않는다</p>
+          <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;margin:0;word-break:keep-all;">나중에 검색할 수 있다고 생각하면, 사람들은 정보 자체보다 "어디서 찾을 수 있는지"를 기억한다. AI 시대에는 키워드조차 필요 없어졌다. 인지 작업의 마지막 보루까지 외주화된 것이다.</p>
+          <div class="paper-detail">
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0;">Sparrow, B. et al. (2011). "Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips." <em>Science</em>, 333(6043), 776-778.</p>
+          </div>
+          <span class="paper-toggle"><iconify-icon icon="solar:alt-arrow-down-linear" style="font-size:.85rem;"></iconify-icon> 출처 보기</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kor-quote reveal">
+      <p style="margin-bottom:0;font-size:1.05rem;line-height:1.8;">AI가 더 잘 설명해줄수록, 당신의 뇌는 더 적게 일한다. 더 적게 일할수록, 더 적게 바뀐다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 7 ═══════════ -->
+    <h2 id="s-ch7" class="reveal"><span class="ch-num">Chapter 7</span>뇌가 정리하는 시간</h2>
+
+    <p class="reveal">학습의 마지막 퍼즐이 남았다. 수면과 휴식이다.</p>
+
+    <p class="reveal">앞에서 해마의 정보가 대뇌피질로 넘어가려면 수면이 필요하다고 했다. 좀 더 구체적으로 보자. 우리가 잠을 자는 동안, 해마에 담겨 있던 임시 정보들이 대뇌피질로 옮겨가며 장기기억으로 정리된다. 임시 보관함의 파일이 정식 폴더로 자동 분류되는 것과 같다. 자기 전 30분과 기상 후 30분이 기억 정착의 골든타임인 이유도 여기에 있다. 자기 전에 복습한 내용을 수면 중에 뇌가 정리하고, 아침에 다시 꺼내보면 기억이 선명해진다.</p>
+
+    <p class="reveal">수면만이 아니다. 깨어있을 때의 휴식도 중요하다.</p>
+
+    <p class="reveal"><span class="kw">디폴트 모드 네트워크(DMN)</span>는 우리가 외부 작업에 집중하지 않을 때 — 샤워, 산책, 멍때리기 — 활성화되는 뇌 네트워크다. DMN이 켜지면 뇌는 들어온 정보를 정리하고 여러 생각을 서로 연결하는 내부 작업을 수행한다. 공부한 뒤에 멍때리는 시간이 낭비가 아니라 필수인 이유다.</p>
+
+    <p class="reveal">그런데 문제가 있다. 대부분의 현대인은 쉬는 시간에 멍때리지 않는다. 쇼츠를 넘긴다. 인스타그램을 스크롤한다. 게임을 한다. 몸은 쉬고 있지만 뇌 입장에서는 끊임없이 새로운 정보를 처리하느라 작업 모드를 끄지 못하는 상태다. DMN이 작동할 틈이 없다. 학습한 내용이 정리되지 않는다.</p>
+
+    <p class="reveal">이것이 "쉬어도 피곤한" 이유다. 겉으로는 휴식이지만 뇌 안에서는 과로. 스마트폰의 짧고 강렬한 콘텐츠는 노력 없이 즉각적인 쾌락을 제공하기 때문에, 뇌의 도파민 시스템이 저렴한 자극에 점점 익숙해진다. 공부처럼 보상이 늦게 오는 일에 집중하기가 점점 어려워지는 것이다.</p>
+
+    <p class="reveal">진짜 휴식은 뇌를 비우는 것이다. 외부 입력을 차단하고, 감각에 집중한다. 산책할 때 발바닥의 감촉. 차를 마실 때 온기와 향. 이렇게 주의의 초점을 추상적 생각에서 구체적 감각으로 전환하면, 반추(과거 후회, 미래 걱정을 끝없이 되씹는 현상)가 멈추고 DMN이 건강한 방향으로 작동하기 시작한다.</p>
+
+    <p class="reveal">도파민이 아니라 세로토닌이 채워지는 휴식. 승패를 가르는 경쟁이 아니라 "지금 이대로 충분하다"는 안정감. 이것이 뇌를 실제로 회복시키는 휴식이다.</p>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ Chapter 8 ═══════════ -->
+    <h2 id="s-ch8" class="reveal"><span class="ch-num">Chapter 8</span>당신의 뇌를 테스트하는 법</h2>
+
+    <p class="reveal">메타인지 착각을 깨는 구체적인 방법을 정리한다.</p>
+
+    <div class="method-card reveal">
+      <div class="method-num">01</div>
+      <h3 style="margin-top:0;color:var(--text);">파인만 기법</h3>
+      <p style="margin-bottom:0;">물리학자 리처드 파인만의 방법이다. 방금 배운 개념을 초등학생에게 설명하듯 자기 말로 풀어본다. 쉬운 용어와 비유를 사용해야 한다. 막히는 부분이 보인다. 거기가 진짜 모르는 지점이다. 형광펜으로 줄을 긋는 것과는 차원이 다른 피드백이다. 전문용어를 나열할 수 있으면 지식이라고 착각하기 쉽다. 전문용어 없이 설명할 수 있어야 진짜 이해다.</p>
+    </div>
+
+    <div class="method-card reveal">
+      <div class="method-num">02</div>
+      <h3 style="margin-top:0;color:var(--text);">질문 기반 학습</h3>
+      <p style="margin-bottom:0;">노트를 만들지 말고 질문을 만들어라. 강의를 듣거나 책을 읽을 때 요약하는 대신 질문을 적는다. "이 개념의 핵심이 뭐였지?" "이걸 다른 사례에 적용하면?" "이게 틀릴 수 있는 조건은?" 복습할 때 그 질문에 답하는 과정이 인출 연습이 된다. 노트 정리의 안심감 대신, 질문의 불편함을 선택하는 것이다.</p>
+    </div>
+
+    <div class="method-card reveal">
+      <div class="method-num">03</div>
+      <h3 style="margin-top:0;color:var(--text);">간격 반복</h3>
+      <p style="margin-bottom:0;">한 번에 몰아서 공부하지 않는다. 에빙하우스의 망각 곡선을 역이용한다. 같은 내용을 3일 간격으로 반복한다. 처음에는 느리다. 1회독에 일주일이 걸리면, 2회독은 5일, 3회독은 3일. 주기가 짧아지면 제대로 작동하고 있는 것이다. 이것이 반복되면 개별 지식이 연결되어 '스키마' — 지식의 패턴 — 가 만들어진다. 스키마가 축적되면 이해의 깊이가 기하급수적으로 늘어난다. 지적 복리 효과다.</p>
+    </div>
+
+    <div class="method-card reveal">
+      <div class="method-num">04</div>
+      <h3 style="margin-top:0;color:var(--text);">학습 직후의 자신감을 믿지 마라</h3>
+      <p style="margin-bottom:0;">하루가 지난 뒤 다시 떠올려 보라. 작업 기억이 비워진 뒤에 남아 있는 것이 진짜 이해한 것이다. 방금 공부한 내용이 "다 아는 것 같다"면, 그 느낌이 유창함 착각일 확률이 높다.</p>
+    </div>
+
+    <div class="method-card reveal">
+      <div class="method-num">05</div>
+      <h3 style="margin-top:0;color:var(--text);">AI 사용 후 셀프 테스트</h3>
+      <p style="margin-bottom:0;">ChatGPT가 설명해준 내용을 AI 없이 자기 말로 다시 설명해본다. 못하면 이해한 게 아니다. AI의 유창한 답변이 준 "아는 느낌"은 내 이해가 아니라 AI의 유창함이었을 뿐이다. AI를 써도 된다. 다만 그 뒤에 반드시 꺼내봐야 한다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ═══════════ 코르의 노트 ═══════════ -->
+    <section id="s-kor-note" style="padding:2rem 0;">
+      <h2 class="reveal" style="text-align:center;margin-bottom:1.5rem;">코르의 노트</h2>
+
+      <div style="display:flex;gap:2rem;justify-content:center;margin-bottom:1.5rem;" class="reveal">
+        <div style="text-align:center;">
+          <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">이해도</p>
+          <p style="font-size:1.3rem;letter-spacing:.15em;">★★★★☆</p>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.35rem;">체감도</p>
+          <p style="font-size:1.3rem;letter-spacing:.15em;">★★★★★</p>
+        </div>
+      </div>
+
+      <p class="reveal">이 글을 쓰면서 한 가지 해봤다. 리서치를 마치고, 논문을 덮고, 핵심 세 줄을 입으로 말해보려 했다. 세 줄은커녕 한 줄도 안 나왔다. 한 시간 넘게 읽었다. 밑줄도 그었다. 고개도 끄덕였다. 그런데 막상 입을 열면 "그러니까... 메타인지가... 뭐였더라" 수준이었다.</p>
+
+      <p class="reveal">민망하지만 지금도 가끔 그런다. 좋은 글을 읽으면 다 이해한 기분이 든다. 유튜브에서 강의를 보면 고개가 끄덕여진다. 그리고 며칠 뒤 누군가한테 설명하려 하면 멈칫한다. 아, 또 당했구나. 매번 알면서도 당한다. 완전히 고쳐지지는 않는 것 같다.</p>
+
+      <p class="reveal">다만 신경 쓰기 시작한 뒤로 멈칫하는 횟수가 좀 줄었다. 좀. 읽고 나면 덮고 한 문장이라도 말해본다. 안 나오면 안 나오는 대로 놔둔다. 나중에 다시 읽는다. AI한테 물어본 다음에는 창을 닫고 내 말로 다시 해본다. 대부분 엉성하다. 하지만 엉성한 게 맞다. 매끄러운 건 AI 거고, 엉성한 게 내 거다.</p>
+
+      <p class="reveal">가끔 서로 다른 걸 읽다가 연결이 보일 때가 있다. 유창함 착각이랑 더닝-크루거가 결국 같은 뿌리라는 게 갑자기 떠오른다거나. 그럴 때가 좀 좋다. 억지로 만든 연결이 아니라, 꺼내보다 보니 붙어 있던 것이 보이는 감각. 아마 이게 스키마라는 거겠지.</p>
+
+      <p class="reveal">편하게 공부한 날은 좀 찜찜하다. 불편했던 날이 오히려 괜찮다. 매번 그러진 못하지만, 적어도 편한 날에 의심하는 습관은 생겼다.</p>
+
+      <h3 class="reveal">우리에게 주는 함의</h3>
+      <p class="reveal">뇌는 "매끄럽게 들어왔다"와 "내 것이 됐다"를 구분하지 못한다. 이 버그를 아는 것만으로 학습의 방향이 바뀐다. 편한 공부에 의심을 품고, 불편한 공부에서 성장의 신호를 읽는 것. 메타인지는 그렇게 시작된다.</p>
+
+      <h3 class="reveal">다음 이야기에서는</h3>
+      <p class="reveal">뇌가 스스로를 속이는 메커니즘을 봤다면, 다음은 그 메커니즘이 첫인상에서 어떻게 작동하는지입니다. 왜 첫인상은 틀려도 좀처럼 바뀌지 않을까? 뇌가 만든 첫 번째 판단이 어떻게 자물쇠가 되는지를 파고 들어갑니다.</p>
+    </section>
+
+    <!-- Outro -->
+    <hr class="section-divider">
+    <div style="text-align:center;padding:2rem 0 1rem;">
+      <p style="font-size:1.05rem;color:var(--accent);font-weight:700;font-style:italic;">— 뇌와 마음 사이에서.</p>
+    </div>
+
+    <!-- References -->
+    <div style="border-top:1px solid var(--divider);padding-top:2rem;margin-top:2rem;">
+      <p style="font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;">참고 논문</p>
+      <div style="display:flex;flex-direction:column;gap:.65rem;">
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Dunlosky, J. et al. (2013). Improving Students' Learning With Effective Learning Techniques. <em>Psychological Science in the Public Interest</em>, 14(1), 4-58.</p>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Kruger, J. & Dunning, D. (1999). Unskilled and Unaware of It. <em>JPSP</em>, 77(6), 1121-1134.</p>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Karpicke, J.D. & Blunt, J.R. (2011). Retrieval Practice Produces More Learning than Elaborative Studying with Concept Mapping. <em>Science</em>, 331(6018), 772-775.</p>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Sparrow, B. et al. (2011). Google Effects on Memory. <em>Science</em>, 333(6043), 776-778.</p>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Bjork, R.A. (1994). Memory and Metamemory Considerations in the Training of Human Beings. In <em>Metacognition: Knowing about Knowing</em>.</p>
+      </div>
+    </div>
+
+    <!-- Related -->
+    <div class="reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-dim);margin-bottom:1rem;">다른 연구 아티클</h3>
+      <a href={`${base}articles/article-02/`} class="related-card" style="margin-bottom:.85rem;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+          <div style="flex:1;min-width:0;">
+            <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">ART_02</p>
+            <p style="font-size:1.02rem;font-weight:700;color:var(--text);line-height:1.4;word-break:keep-all;">유료 강좌가 당신 뇌를 속이는 5가지 방법</p>
+          </div>
+          <span class="badge badge-mind" style="flex-shrink:0;margin-top:.15rem;">🧠 뇌가 속는 방법</span>
+        </div>
+      </a>
+      <a href={`${base}articles/article-01/`} class="related-card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+          <div style="flex:1;min-width:0;">
+            <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">ART_01</p>
+            <p style="font-size:1.02rem;font-weight:700;color:var(--text);line-height:1.4;word-break:keep-all;">사람의 뇌는 AI보다 뛰어난 걸까?</p>
+          </div>
+          <span class="badge badge-brain" style="flex-shrink:0;margin-top:.15rem;">🤖 뇌, AI랑 다를까요?</span>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- PREV / NEXT NAV -->
+<div style="border-top:1px solid var(--divider);padding:2.5rem 0;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;" class="max-w-3xl mx-auto px-6">
+  <a href={`${base}articles/article-02/`} style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+     onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+    <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>이전 노트
+  </a>
+  <a href={`${base}research/`} style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+     onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+    연구 노트 목록으로<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+  </a>
+</div>
+
+<script is:inline>
+  const progressFill=document.getElementById('progress-fill');
+  const currentSectionLabel=document.getElementById('current-section-label');
+  const timeRemaining=document.getElementById('time-remaining');
+  const dots=document.querySelectorAll('.section-dot');
+  const sections=[
+    {id:'s-ch1',name:'Ch.1 유창함의 함정',dot:0},
+    {id:'s-ch2',name:'Ch.2 착각의 얼굴들',dot:1},
+    {id:'s-ch3',name:'Ch.3 해마',dot:2},
+    {id:'s-ch4',name:'Ch.4 인출의 힘',dot:3},
+    {id:'s-ch5',name:'Ch.5 고통과 성장',dot:4},
+    {id:'s-ch6',name:'Ch.6 AI 메타인지',dot:5},
+    {id:'s-ch7',name:'Ch.7 수면과 휴식',dot:6},
+    {id:'s-ch8',name:'Ch.8 테스트법',dot:7},
+    {id:'s-kor-note',name:'코르의 노트',dot:8}
+  ];
+  function updateProgress(){
+    const articleBody=document.getElementById('article-body');
+    if(!articleBody)return;
+    const articleTop=articleBody.offsetTop;
+    const articleHeight=articleBody.offsetHeight;
+    const scrolled=window.scrollY+window.innerHeight/2-articleTop;
+    const progress=Math.max(0,Math.min(100,(scrolled/articleHeight)*100));
+    if(progressFill)progressFill.style.height=progress+'%';
+    const remaining=Math.max(0,Math.round(15*(1-progress/100)));
+    if(timeRemaining)timeRemaining.textContent=remaining>0?`약 ${remaining}분`:'완료';
+    dots.forEach(d=>d.classList.remove('active'));
+    let currentIdx=0;
+    sections.forEach((s,i)=>{
+      const el=document.getElementById(s.id);
+      if(el&&window.scrollY>=el.offsetTop-160)currentIdx=i;
+    });
+    if(dots[currentIdx])dots[currentIdx].classList.add('active');
+    if(currentSectionLabel)currentSectionLabel.textContent=sections[currentIdx].name;
+  }
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  updateProgress();
+  dots.forEach((dot,i)=>{
+    dot.addEventListener('click',()=>{
+      const el=document.getElementById(sections[i]?.id);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+
+  // Scroll Reveal
+  const revealObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}
+    });
+  },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>revealObserver.observe(el));
+
+  // Countup
+  function animateCountup(el){
+    const target=parseInt(el.dataset.target);const suffix=el.dataset.suffix||'';const duration=1800;const start=performance.now();
+    function step(now){const elapsed=now-start;const progress=Math.min(elapsed/duration,1);const eased=1-Math.pow(1-progress,3);
+      el.textContent=(target>=10000?Math.round(eased*target).toLocaleString():Math.round(eased*target))+suffix;
+      if(progress<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  const countupObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.querySelectorAll('.countup-num').forEach(animateCountup);countupObserver.unobserve(entry.target);}});
+  },{threshold:0.5});
+  document.querySelectorAll('.countup-row').forEach(el=>countupObserver.observe(el));
+
+  // Bar Chart
+  const chartObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.querySelectorAll('.bar-fill').forEach(bar=>bar.classList.add('animated'));chartObserver.unobserve(entry.target);}});
+  },{threshold:0.3});
+  document.querySelectorAll('.bar-chart').forEach(el=>chartObserver.observe(el));
+</script>
+
+</BaseLayout>
