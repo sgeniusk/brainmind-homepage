@@ -1,0 +1,44 @@
+---
+interface Props {
+  variant?: 'full' | 'standard';
+}
+const { variant = 'standard' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<footer style="background:var(--bg-mid);border-top:1px solid var(--divider);padding:3rem 0 2rem;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href={`${base}`} class="flex items-center gap-2.5 mb-4">
+          <img src={`${base}logo.png`} alt="로고" class="w-8 h-8 object-contain rounded-xl">
+          <span style="font-size:.98rem;font-weight:800;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
+        </a>
+        <p style="font-size:.85rem;color:var(--text-dim);line-height:1.7;max-width:210px;word-break:keep-all;">인지신경과학 기반 — 뇌과학과 심리학을 하나의 언어로 묶는 채널</p>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.85rem;">콘텐츠</p>
+        <div class="flex flex-col gap-2.5">
+          <a href={`${base}blog`} style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">블로그</a>
+          <a href={`${base}research`} style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">연구</a>
+          <a href={`${base}videos`} style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">영상</a>
+          <a href={`${base}dashboard`} style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">대시보드</a>
+          <a href={`${base}about`} style="font-size:.88rem;color:var(--text-muted);text-decoration:none;">소개</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.85rem;">연결</p>
+        <div class="flex gap-2.5 mb-4">
+          <a href="https://youtube.com/@뇌와마음사이" target="_blank" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--card-hover-bg);border:1px solid var(--card-border);color:var(--text-dim);text-decoration:none;">
+            <iconify-icon icon="solar:youtube-linear" style="font-size:1rem;"></iconify-icon>
+          </a>
+        </div>
+        <p style="font-size:.82rem;color:var(--text-muted);line-height:1.65;word-break:keep-all;">모든 콘텐츠는 피어리뷰 논문 기반.<br>참고 문헌은 각 영상 설명란에서.</p>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--divider);padding-top:1.4rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+      <p style="font-size:.78rem;color:var(--text-muted);">© 2026 뇌와 마음사이 · Between Brain and Mind</p>
+      <p style="font-size:.75rem;color:var(--text-muted);word-break:keep-all;font-style:italic;">"뇌와 마음 사이에서."</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import NoiseLayer from '../components/NoiseLayer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  activePage: string;
+  footerVariant?: 'full' | 'standard';
+}
+
+const { title, description, activePage, footerVariant = 'standard' } = Astro.props;
+---
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script is:inline>
+    if(localStorage.getItem('theme')==='science')
+      document.documentElement.setAttribute('data-theme','science');
+  </script>
+</head>
+<body>
+  <NoiseLayer />
+  <Nav activePage={activePage} />
+
+  <slot />
+
+  <Footer variant={footerVariant} />
+
+  <script is:inline>
+    // Theme toggle
+    function toggleTheme(){
+      const html=document.documentElement;
+      if(html.getAttribute('data-theme')==='science'){
+        html.removeAttribute('data-theme');localStorage.setItem('theme','mind');
+      } else {
+        html.setAttribute('data-theme','science');localStorage.setItem('theme','science');
+      }
+    }
+
+    // Mobile menu
+    const ham=document.getElementById('ham');
+    const mm=document.getElementById('mobile-menu');
+    ham?.addEventListener('click',()=>mm.classList.toggle('hidden'));
+    mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.add('hidden')));
+
+    // Scroll reveal
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+    },{threshold:0.1});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>obs.observe(el));
+
+    // Nav scroll compact
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>{
+      nav.style.top=window.scrollY>80?'.75rem':'1.5rem';
+    },{passive:true});
+  </script>
+</body>
+</html>

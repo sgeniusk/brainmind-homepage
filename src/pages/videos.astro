@@ -1,9 +1,33 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
 ---
-
 <BaseLayout title="영상 — 뇌와 마음사이" activePage="videos">
-
+  <style>
+    /* Video card */
+    .video-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:18px;overflow:hidden;transition:all .3s cubic-bezier(.16,1,.3,1)}
+    .video-card:hover{transform:translateY(-5px);box-shadow:var(--glass-shadow)}
+    .video-card.brain:hover{border-color:rgba(79,195,247,.25)}
+    .video-card.mind:hover{border-color:rgba(255,213,79,.22)}
+    /* Thumbnail */
+    .vthumb{position:relative;aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .vplay-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent;transition:background .3s}
+    .video-card:hover .vplay-btn{background:rgba(0,0,0,.25)}
+    .vplay-icon{width:52px;height:52px;border-radius:50%;background:rgba(79,195,247,.92);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.7);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+    .video-card:hover .vplay-icon{opacity:1;transform:scale(1)}
+    /* Playlist tab */
+    .pl-tab{padding:.45rem 1.1rem;border-radius:100px;border:1px solid var(--divider);font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:var(--text-dim);white-space:nowrap}
+    .pl-tab:hover{border-color:var(--badge-brain-border);color:var(--text)}
+    .pl-tab.active{background:var(--badge-brain-bg);border-color:var(--badge-brain-border);color:var(--accent);font-weight:700}
+    /* Coming soon */
+    .soon-card{background:var(--bg-card);border:1px dashed var(--card-border);border-radius:16px;padding:1.4rem;transition:all .25s ease}
+    .soon-card:hover{background:var(--card-hover-bg);border-color:var(--badge-brain-border)}
+    /* Pulse dot */
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+    .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--alert);display:inline-block;animation:pulse-dot 1.6s ease-in-out infinite}
+    .badge-live{background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);color:var(--brain)}
+    .badge-soon{background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.22);color:var(--alert)}
+  </style>
 
 <!-- HERO -->
 <section style="padding:7rem 0 4rem;position:relative;overflow:hidden;">
@@ -69,43 +93,33 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <!-- PUBLISHED VIDEOS -->
 <section style="padding:4rem 0 3rem;">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
-
-    <!-- Section header -->
     <div class="reveal flex items-center gap-3 mb-6">
       <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;word-break:keep-all;">공개된 영상</h2>
       <span class="badge badge-live">● 공개</span>
     </div>
 
-    <!-- 2-column grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
       <!-- VIDEO CARD 1: EP001 -->
       <div class="video-card brain reveal d1" data-playlist="뇌의 착각">
-        <!-- Thumbnail -->
         <div class="vthumb" style="background:linear-gradient(135deg,rgba(79,195,247,.15) 0%,rgba(33,150,243,.25) 100%);">
-          <!-- Top-left badge -->
           <div style="position:absolute;top:.9rem;left:.9rem;z-index:2;">
             <span class="badge badge-brain">🧠 뇌의 착각</span>
           </div>
-          <!-- Bottom-right badge -->
           <div style="position:absolute;bottom:.9rem;right:.9rem;z-index:2;">
             <span class="badge badge-live">공개</span>
           </div>
-          <!-- Emoji -->
           <span style="font-size:5rem;line-height:1;user-select:none;">🧫</span>
-          <!-- Play overlay -->
           <div class="vplay-btn">
             <div class="vplay-icon">
               <iconify-icon icon="solar:play-bold" style="font-size:1.4rem;color:#0D1B2A;margin-left:3px;"></iconify-icon>
             </div>
           </div>
         </div>
-        <!-- Content -->
         <div style="padding:1.2rem;">
           <p style="font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.45rem;">EP.001</p>
           <h3 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;word-break:keep-all;margin-bottom:.7rem;">뇌세포 20만 개가 둠을 배웠다</h3>
           <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;word-break:keep-all;margin-bottom:1rem;">접시 위 뇌세포가 게임을 배웠다. 이건 AI가 인간을 대체한다는 뜻이 아니다. 오히려 인간 뇌가 얼마나 효율적인 계산 시스템인지를 더 선명하게 보여주는 사건이다.</p>
-          <!-- Meta row -->
           <div class="flex items-center gap-3 mb-4" style="font-size:.82rem;color:var(--text-dim);">
             <span class="flex items-center gap-1">
               <iconify-icon icon="solar:clock-circle-linear" style="font-size:.95rem;"></iconify-icon>
@@ -116,7 +130,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <span style="opacity:.4;">·</span>
             <span>논문 4편</span>
           </div>
-          <!-- CTA -->
           <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="inline-flex items-center gap-2" style="font-size:.92rem;font-weight:700;color:var(--accent);text-decoration:none;transition:gap .2s;">
             YouTube에서 보기
             <iconify-icon icon="solar:arrow-right-up-linear" style="font-size:1.05rem;"></iconify-icon>
@@ -126,31 +139,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <!-- VIDEO CARD 2: EP017 -->
       <div class="video-card brain reveal d2" data-playlist="뇌 vs AI">
-        <!-- Thumbnail -->
         <div class="vthumb" style="background:linear-gradient(135deg,rgba(79,195,247,.12) 0%,rgba(33,150,243,.22) 100%);">
-          <!-- Top-left badge -->
           <div style="position:absolute;top:.9rem;left:.9rem;z-index:2;">
             <span class="badge badge-brain">🤖 뇌 vs AI</span>
           </div>
-          <!-- Bottom-right badge -->
           <div style="position:absolute;bottom:.9rem;right:.9rem;z-index:2;">
             <span class="badge badge-live">공개</span>
           </div>
-          <!-- Emoji -->
           <span style="font-size:5rem;line-height:1;user-select:none;">🤖</span>
-          <!-- Play overlay -->
           <div class="vplay-btn">
             <div class="vplay-icon">
               <iconify-icon icon="solar:play-bold" style="font-size:1.4rem;color:#0D1B2A;margin-left:3px;"></iconify-icon>
             </div>
           </div>
         </div>
-        <!-- Content -->
         <div style="padding:1.2rem;">
           <p style="font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.45rem;">EP.017</p>
           <h3 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;word-break:keep-all;margin-bottom:.7rem;">AI가 생각을 대신해줄수록</h3>
           <p style="font-size:.92rem;color:var(--text-dim);line-height:1.7;word-break:keep-all;margin-bottom:1rem;">Google Effect, Brain Drain, Cognitive Offloading. 세 편의 논문이 말하는 것 — 뇌가 망가진 게 아니라, 더 빠른 경로에 최적화된 것이다.</p>
-          <!-- Meta row -->
           <div class="flex items-center gap-3 mb-4" style="font-size:.82rem;color:var(--text-dim);">
             <span class="flex items-center gap-1">
               <iconify-icon icon="solar:clock-circle-linear" style="font-size:.95rem;"></iconify-icon>
@@ -161,7 +167,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <span style="opacity:.4;">·</span>
             <span>논문 3편</span>
           </div>
-          <!-- CTA -->
           <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="inline-flex items-center gap-2" style="font-size:.92rem;font-weight:700;color:var(--accent);text-decoration:none;transition:gap .2s;">
             YouTube에서 보기
             <iconify-icon icon="solar:arrow-right-up-linear" style="font-size:1.05rem;"></iconify-icon>
@@ -176,8 +181,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <!-- COMING SOON GRID -->
 <section style="padding:3rem 0 5rem;">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
-
-    <!-- Section header -->
     <div class="reveal flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
       <div class="flex items-center gap-3">
         <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-.02em;word-break:keep-all;">준비 중인 영상</h2>
@@ -186,10 +189,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
     <p class="reveal d1 mb-7" style="font-size:.95rem;color:var(--text-dim);word-break:keep-all;">연구 노트가 완성되면 순서대로 영상이 됩니다</p>
 
-    <!-- 3-column grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      <!-- SOON CARD 1 -->
       <div class="soon-card reveal d1" data-playlist="뇌의 수면">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">😴</span>
@@ -205,7 +206,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- SOON CARD 2 -->
       <div class="soon-card reveal d2" data-playlist="마음의 회복">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">🔋</span>
@@ -221,7 +221,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- SOON CARD 3 -->
       <div class="soon-card reveal d3" data-playlist="마음의 온도">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">💛</span>
@@ -237,7 +236,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- SOON CARD 4 -->
       <div class="soon-card reveal d1" data-playlist="뇌의 훈련">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">📝</span>
@@ -253,7 +251,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- SOON CARD 5 -->
       <div class="soon-card reveal d2" data-playlist="뇌의 훈련">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">📚</span>
@@ -269,7 +266,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- SOON CARD 6 -->
       <div class="soon-card reveal d3" data-playlist="마음의 온도">
         <div class="flex items-start justify-between mb-3">
           <span style="font-size:2.5rem;line-height:1;user-select:none;">💛</span>
@@ -293,33 +289,40 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <section style="padding:0 0 5rem;">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="reveal" style="background:linear-gradient(135deg,var(--badge-brain-bg) 0%,rgba(33,150,243,.08) 100%);border:1px solid var(--badge-brain-border);border-radius:20px;padding:3rem 2.5rem;text-align:center;">
-
-      <!-- Logo + channel name -->
       <div class="flex items-center justify-center gap-3 mb-5">
-        <img src="logo.png" alt="뇌와 마음사이 로고" class="w-12 h-12 object-contain rounded-2xl" style="box-shadow:0 0 0 1.5px rgba(79,195,247,.3);">
+        <img src={`${base}logo.png`} alt="뇌와 마음사이 로고" class="w-12 h-12 object-contain rounded-2xl" style="box-shadow:0 0 0 1.5px rgba(79,195,247,.3);">
         <span style="font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
       </div>
-
       <h2 style="font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.3;word-break:keep-all;margin-bottom:.9rem;">
         지금 구독하면 EP.002를 가장 먼저 볼 수 있습니다
       </h2>
-
       <p style="font-size:.95rem;color:var(--text-dim);margin-bottom:1.8rem;word-break:keep-all;">
         @뇌와마음사이 | 인지신경과학 기반 콘텐츠
       </p>
-
       <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub" style="font-size:1.05rem;padding:.75rem 2rem;display:inline-flex;">
         <iconify-icon icon="solar:play-bold" style="font-size:1.05rem;"></iconify-icon>
         유튜브 채널 구독하기
       </a>
-
       <p style="font-size:.85rem;color:var(--text-dim);margin-top:.85rem;opacity:.7;">
         알림 설정도 꼭 해주세요 ☝️
       </p>
-
     </div>
   </div>
 </section>
 
-
+  <script is:inline>
+    // Playlist filter
+    const plTabs=document.querySelectorAll('.pl-tab');
+    const videoCards=document.querySelectorAll('[data-playlist]');
+    plTabs.forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        plTabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const pl=tab.dataset.playlist;
+        videoCards.forEach(card=>{
+          card.style.display=(pl==='전체'||card.dataset.playlist===pl)?'block':'none';
+        });
+      });
+    });
+  </script>
 </BaseLayout>

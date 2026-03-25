@@ -22,7 +22,9 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
   <meta name="description" content={description}>
   <link rel="icon" type="image/svg+xml" href="/brainmind-homepage/favicon.svg">
   <script is:inline src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script is:inline src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
   <script is:inline>
     tailwind.config = {
@@ -33,7 +35,7 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
             'bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)',
             'txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)',
           },
-          fontFamily: { sans: ['Paperlogy','Pretendard','system-ui','sans-serif'] },
+          fontFamily: { sans: ['Noto Sans KR','Paperlogy','system-ui','sans-serif'] },
         },
       },
     }
