@@ -153,6 +153,21 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <img src={`${base}images/art03/hero.png`} alt="시험지 위에서 머리가 하얘진 학생 — 메타인지 착각 삽화" style="width:100%;height:auto;display:block;">
     </div>
 
+    <!-- 🎙️ Podcast -->
+    <details class="reveal" style="margin:2rem 0;border:1px solid var(--card-border);border-radius:14px;background:var(--bg-card);overflow:hidden;">
+      <summary style="padding:1rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;font-size:.95rem;font-weight:700;color:var(--text);list-style:none;">
+        <iconify-icon icon="solar:microphone-3-bold" style="font-size:1.2rem;color:var(--accent);"></iconify-icon>
+        🎙️ 이 글을 팟캐스트로 듣기
+        <span style="margin-left:auto;font-size:.75rem;color:var(--text-muted);font-weight:500;">NotebookLM Deep Dive</span>
+      </summary>
+      <div style="padding:0 1.2rem 1.2rem;">
+        <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.8rem;line-height:1.6;">다 안다고 착각하게 만드는 유창함의 함정 — AI 팟캐스트가 메타인지 착각을 파헤칩니다.</p>
+        <audio controls preload="none" style="width:100%;border-radius:8px;">
+          <source src="https://lh3.googleusercontent.com/notebooklm/ANHLwAxqDOYgCMcetLDnSP8AdgMHVXTfxxSXqY-mkMaq_o1F9e_ZKFpWn9h03SAkyOBIkVbBOCvJUWejWM1rzbyjikQ0tZHTniXy267xNcXv9pwRUmx65A--wZ4ep1tEUIsQceg_9AHgogc_do7YXPU6TBdJz7rmuRg=m140-dv" type="audio/mp4">
+        </audio>
+      </div>
+    </details>
+
     <hr class="section-divider">
 
     <!-- ═══════════ Chapter 1 ═══════════ -->
