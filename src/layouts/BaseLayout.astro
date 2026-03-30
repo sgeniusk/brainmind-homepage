@@ -68,7 +68,7 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
     const obs=new IntersectionObserver(entries=>{
       entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
     },{threshold:0.1});
-    document.querySelectorAll('.reveal,.reveal-scale').forEach(el=>obs.observe(el));
+    document.querySelectorAll('.reveal,.reveal-scale,.slide-up,.slide-down,.slide-left,.slide-right,.slide-scale').forEach(el=>obs.observe(el));
 
     // Nav compact on scroll
     const nav=document.getElementById('nav');
