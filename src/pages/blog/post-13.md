@@ -9,11 +9,11 @@ subtitle: "에필로그 — 되돌려 받을 수도 있다"
 category: essay
 reading_time: "6분"
 teaser: "거창한 선언이 아니라, 내일부터 시작할 수 있는 하나."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 소박한 제안 하나
 
 프롤로그에서 나는 AI에게 글을 맡긴 이야기로 시작했다. 30초 만에 글이 나왔고, 문장은 깔끔했고, 마감은 지켜졌다. 그리고 이상한 허전함이 남았다. 그 허전함의 정체를 알고 싶어서 이 시리즈를 시작했다.
 

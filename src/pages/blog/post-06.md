@@ -9,11 +9,11 @@ subtitle: "기술은 중립적이지 않다"
 category: essay
 reading_time: "7분"
 teaser: "소유하지 않는 기술은 사용하는 것이 아니라 사용당하는 것이다."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 소유
 
 1440년, 구텐베르크가 인쇄기를 만들었을 때, 교회는 즉각 위협을 감지했다.
 

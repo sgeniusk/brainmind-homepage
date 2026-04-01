@@ -9,11 +9,11 @@ subtitle: "편리함의 진짜 가격표"
 category: essay
 reading_time: "7분"
 teaser: "무료라고 쓰여 있지만, 우리는 가장 비싼 것을 내고 있다."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 영수증
 
 인류 역사에서 "무료"라는 단어의 의미는 계속 바뀌어왔다.
 

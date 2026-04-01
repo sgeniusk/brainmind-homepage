@@ -9,11 +9,11 @@ subtitle: "느린 답을 선택하는 용기"
 category: essay
 reading_time: "7분"
 teaser: "3초 만에 답을 얻을 수 있는 시대에, 일부러 기다리는 것의 의미."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 멈추기
 
 질문을 받았다. 회의 중이었고, 복잡한 문제였다.
 

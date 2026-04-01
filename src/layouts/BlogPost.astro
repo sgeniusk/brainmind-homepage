@@ -2,236 +2,92 @@
 import BaseLayout from './BaseLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const { frontmatter } = Astro.props;
-const fmtDate = (d: string | Date) => { const dt = new Date(d); return `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`; };
+const isS2 = frontmatter.blog_id?.startsWith('BLOG_S2');
+const isS3 = frontmatter.blog_id?.startsWith('BLOG_S3');
+const postPrefix = isS3 ? 'post-s3-' : isS2 ? 'post-s2-' : 'post-';
 const chapterLabel = frontmatter.series_chapter === 0
-  ? (frontmatter.blog_id === 'BLOG_00' ? '프롤로그' : '에필로그')
+  ? (frontmatter.series_chapter === 0 && frontmatter.blog_id?.endsWith('00') ? '프롤로그' : '에필로그')
   : `Chapter ${frontmatter.series_chapter}`;
-
-type BlogFrontmatter = {
-  blog_id: string; series: string; series_chapter: number;
-  title: string; subtitle?: string; teaser?: string;
-  reading_time?: string; status?: string;
-};
-type BlogModule = { frontmatter: BlogFrontmatter };
-
-const postModules = Object.values(import.meta.glob('../pages/blog/post-*.md', { eager: true })) as BlogModule[];
-const posts = postModules
-  .map(({ frontmatter: fm }) => ({
-    ...fm,
-    href: `${base}blog/post-${String(fm.series_chapter).padStart(2, '0')}/`,
-  }))
-  .sort((a, b) => a.series_chapter - b.series_chapter);
-
-const prologue  = posts.find(p => p.series_chapter === 0);
-const epilogue  = posts.find(p => p.series_chapter === 13);
-const part1 = posts.filter(p => p.series_chapter >= 1 && p.series_chapter <= 4);
-const part2 = posts.filter(p => p.series_chapter >= 5 && p.series_chapter <= 8);
-const part3 = posts.filter(p => p.series_chapter >= 9 && p.series_chapter <= 12);
-const sections = [
-  { label: 'Part 1', posts: part1 },
-  { label: 'Part 2', posts: part2 },
-  { label: 'Part 3', posts: part3 },
-];
 ---
 
 <BaseLayout title={`${frontmatter.title} — ${frontmatter.series}`} activePage="blog">
   <Fragment slot="head">
-    <style is:global>
-      /* === LAYOUT === */
-      .post-shell{max-width:1180px;margin:0 auto;padding:7.25rem 1.5rem 4.5rem;display:grid;grid-template-columns:minmax(240px,280px) minmax(0,1fr);gap:2.5rem;align-items:start;}
-
-      /* === SIDEBAR TOC === */
-      .toc-card{
-        position:sticky;top:6.25rem;
-        background:var(--bg-card);border:1px solid var(--card-border);border-radius:28px;box-shadow:var(--glass-shadow);
-        padding:1.35rem;
-        max-height:calc(100vh - 7.5rem);
-        overflow-y:auto;overflow-x:hidden;
-        scrollbar-width:thin;scrollbar-color:var(--divider) transparent;
-      }
-      .toc-card::-webkit-scrollbar{width:4px}
-      .toc-card::-webkit-scrollbar-track{background:transparent}
-      .toc-card::-webkit-scrollbar-thumb{background:var(--divider);border-radius:4px}
-      .toc-card::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
-      .toc-head{padding-bottom:1rem;border-bottom:1px solid var(--divider);margin-bottom:1rem}
-      .toc-title{font-size:1.08rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
-      .toc-subtitle{font-size:.8rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
-      .toc-group-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:1.1rem 0 .55rem}
-      .toc-link{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem .8rem;border-radius:16px;text-decoration:none;transition:all .22s ease;color:var(--text-dim)}
-      .toc-link:hover{background:var(--card-hover-bg);color:var(--text)}
-      .toc-link.current{background:rgba(255,112,67,.08);color:var(--accent)}
-      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;color:var(--accent);line-height:1.65;flex-shrink:0}
-      .toc-link.current .toc-num{color:var(--accent)}
-      .toc-copy{display:flex;flex-direction:column;gap:.1rem;min-width:0}
-      .toc-copy strong{font-size:.9rem;color:var(--text);font-weight:700;word-break:keep-all}
-      .toc-link.current .toc-copy strong{color:var(--accent)}
-      .toc-copy span{font-size:.78rem;color:var(--text-muted);line-height:1.55;word-break:keep-all}
-
-      /* === ARTICLE (longblack 스타일) === */
-      .blog-article{min-width:0;padding:0 0 5rem;}
-      .blog-article h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.2;word-break:keep-all;margin-bottom:.8rem;}
-      .blog-article h2{font-size:1.72rem;font-weight:800;letter-spacing:-.03em;margin:5.5rem 0 1.6rem;color:var(--text);word-break:keep-all;line-height:1.4;padding-top:1.5rem;border-top:1px solid var(--divider);}
-      .blog-article h3{font-size:1.28rem;font-weight:700;letter-spacing:-.02em;margin:3.5rem 0 1rem;color:var(--text);line-height:1.5;}
-      .blog-article p{font-size:1.18rem;color:var(--text);line-height:2.15;word-break:keep-all;margin-bottom:2rem;letter-spacing:-.01em;}
+    <style>
+      .blog-article{max-width:720px;margin:0 auto;padding:7rem 1.5rem 5rem;}
+      .blog-article h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.15;word-break:keep-all;margin-bottom:.6rem;}
+      .blog-article h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin:2.5rem 0 1rem;color:var(--text);word-break:keep-all;}
+      .blog-article h3{font-size:1.15rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+      .blog-article p{font-size:1.02rem;color:var(--text-dim);line-height:1.85;word-break:keep-all;margin-bottom:1.2rem;}
       .blog-article strong{color:var(--text);font-weight:700;}
-      .blog-article blockquote{border-left:3px solid var(--accent);padding:1.6rem 2rem;margin:3rem 0;background:rgba(255,112,67,.03);border-radius:0 16px 16px 0;}
-      .blog-article blockquote p{color:var(--text);font-style:italic;margin-bottom:0;line-height:2.0;font-size:1.12rem;}
-      .blog-article ul,.blog-article ol{padding-left:1.8rem;margin-bottom:2rem;}
-      .blog-article li{font-size:1.12rem;color:var(--text);line-height:2.1;margin-bottom:.65rem;}
-      .blog-article hr{border:none;height:1px;background:var(--divider);margin:3.5rem 0;}
-      .blog-article img{width:100%;border-radius:12px;margin:2.5rem 0;}
+      .blog-article blockquote{border-left:3px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:var(--badge-brain-bg);border-radius:0 10px 10px 0;}
+      .blog-article blockquote p{color:var(--text);font-style:italic;margin-bottom:0;}
+      .blog-article ul,.blog-article ol{padding-left:1.5rem;margin-bottom:1.2rem;}
+      .blog-article li{font-size:1rem;color:var(--text-dim);line-height:1.8;margin-bottom:.4rem;}
+      .blog-article hr{border:none;height:1px;background:var(--divider);margin:2.5rem 0;}
       .blog-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:2rem;font-size:.85rem;color:var(--text-muted);}
       .blog-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--divider);}
       .blog-nav a{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;}
-
-      /* reading progress bar */
-      #reading-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-secondary));z-index:50;width:0;transition:width .1s linear}
-
-      @media(max-width:960px){
-        .post-shell{grid-template-columns:1fr;padding-top:6.75rem}
-        .toc-card{position:static;max-height:none}
-      }
-      @media(max-width:640px){
-        .post-shell{padding-left:1rem;padding-right:1rem}
-      }
     </style>
   </Fragment>
 
-  <div id="reading-bar"></div>
-
-  <div class="post-shell">
-    <!-- SIDEBAR -->
-    <aside class="toc-card">
-      <div class="toc-head">
-        <p class="toc-title">
-          <iconify-icon icon="solar:library-bold-duotone" style="font-size:1.15rem;color:var(--accent);vertical-align:-.15em;margin-right:.3rem;"></iconify-icon>
-          서재
-        </p>
-        <p class="toc-subtitle">연재 흐름을 따라가거나, 관심 있는 장부터 바로 읽을 수 있습니다.</p>
-      </div>
-
-      <div class="toc-group-label">시리즈</div>
-      <a class="toc-link" href={`${base}blog/`}>
-        <span class="toc-num">ALL</span>
-        <span class="toc-copy">
-          <strong>{posts[0]?.series ?? '생각이 사라지기 전에'}</strong>
-          <span>{posts.length}편 · 3파트 · AI 시대를 건너는 에세이</span>
+  <article class="blog-article">
+    <!-- Series badge -->
+    <div class="reveal" style="margin-bottom:1.5rem;">
+      <a href={`${base}blog/`} style="text-decoration:none;">
+        <span class="badge badge-mind" style="display:inline-flex;">
+          <iconify-icon icon="solar:book-2-linear" style="font-size:.85rem;"></iconify-icon>
+          {frontmatter.series}
         </span>
       </a>
+    </div>
 
-      {prologue && (
-        <Fragment>
-          <div class="toc-group-label">프롤로그</div>
-          <a class={`toc-link${frontmatter.series_chapter === 0 ? ' current' : ''}`} href={prologue.href}>
-            <span class="toc-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
-            <span class="toc-copy">
-              <strong>{prologue.title}</strong>
-              <span>{prologue.subtitle ?? prologue.teaser}</span>
-            </span>
-          </a>
-        </Fragment>
-      )}
+    <!-- Chapter label -->
+    <p class="reveal d1" style="font-size:.82rem;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:.6rem;">
+      {chapterLabel}
+    </p>
 
-      {sections.map(section => (
-        <Fragment>
-          <div class="toc-group-label">{section.label}</div>
-          {section.posts.map(post => (
-            <a class={`toc-link${frontmatter.series_chapter === post.series_chapter ? ' current' : ''}`} href={post.href}>
-              <span class="toc-num">{String(post.series_chapter).padStart(2, '0')}</span>
-              <span class="toc-copy">
-                <strong>{post.title}</strong>
-                <span>{post.subtitle ?? post.teaser}</span>
-              </span>
-            </a>
-          ))}
-        </Fragment>
-      ))}
+    <!-- Title -->
+    <h1 class="reveal d1">{frontmatter.title}</h1>
 
-      {epilogue && (
-        <Fragment>
-          <div class="toc-group-label">에필로그</div>
-          <a class={`toc-link${frontmatter.series_chapter === 13 ? ' current' : ''}`} href={epilogue.href}>
-            <span class="toc-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
-            <span class="toc-copy">
-              <strong>{epilogue.title}</strong>
-              <span>{epilogue.subtitle ?? epilogue.teaser}</span>
-            </span>
-          </a>
-        </Fragment>
-      )}
-    </aside>
-
-    <!-- ARTICLE -->
-    <article class="blog-article">
-      <!-- Series badge -->
-      <div class="reveal" style="margin-bottom:1.5rem;">
-        <a href={`${base}blog/`} style="text-decoration:none;">
-          <span class="badge badge-mind" style="display:inline-flex;">
-            <iconify-icon icon="solar:book-2-linear" style="font-size:.85rem;"></iconify-icon>
-            {frontmatter.series}
-          </span>
-        </a>
-      </div>
-
-      <!-- Chapter label -->
-      <p class="reveal d1" style="font-size:.82rem;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:.6rem;">
-        {chapterLabel}
+    <!-- Subtitle -->
+    {frontmatter.subtitle && (
+      <p class="reveal d2" style="font-size:1.15rem;color:var(--text-muted);margin-bottom:1.5rem;word-break:keep-all;">
+        {frontmatter.subtitle}
       </p>
+    )}
 
-      <!-- Title -->
-      <h1 class="reveal d1">{frontmatter.title}</h1>
-
-      <!-- Subtitle -->
-      {frontmatter.subtitle && (
-        <p class="reveal d2" style="font-size:1.15rem;color:var(--text-muted);margin-bottom:1.5rem;word-break:keep-all;">
-          {frontmatter.subtitle}
-        </p>
+    <!-- Meta -->
+    <div class="blog-meta reveal d2">
+      <span>{frontmatter.reading_time}</span>
+      <span style="opacity:.4;">·</span>
+      <span>{frontmatter.created}</span>
+      {frontmatter.status === 'published' && (
+        <>
+          <span style="opacity:.4;">·</span>
+          <span style="color:#66BB6A;font-weight:600;">공개</span>
+        </>
       )}
+    </div>
 
-      <!-- Meta -->
-      <div class="blog-meta reveal d2">
-        <span>{frontmatter.reading_time}</span>
-        <span style="opacity:.4;">·</span>
-        <span>{fmtDate(frontmatter.created)}</span>
-        {frontmatter.status === 'published' && (
-          <>
-            <span style="opacity:.4;">·</span>
-            <span style="color:#66BB6A;font-weight:600;">공개</span>
-          </>
-        )}
-      </div>
+    <hr class="reveal d3" />
 
-      <hr class="reveal d3" />
+    <!-- Content -->
+    <div class="reveal d3">
+      <slot />
+    </div>
 
-      <!-- Content -->
-      <div class="reveal d3">
-        <slot />
-      </div>
-
-      <!-- Navigation -->
-      <div class="blog-nav">
-        {frontmatter.series_chapter > 0 ? (
-          <a href={`${base}blog/post-${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
-            <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
-          </a>
-        ) : <span></span>}
-        {frontmatter.series_chapter < 13 ? (
-          <a href={`${base}blog/post-${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
-            다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
-          </a>
-        ) : <span></span>}
-      </div>
-    </article>
-  </div>
-
-  <script>
-    // Reading progress bar
-    const bar = document.getElementById('reading-bar');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      if (bar) bar.style.width = pct + '%';
-    }, { passive: true });
-  </script>
+    <!-- Navigation -->
+    <div class="blog-nav">
+      {frontmatter.series_chapter > 0 ? (
+        <a href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
+          <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
+        </a>
+      ) : <span></span>}
+      {frontmatter.series_chapter < 13 ? (
+        <a href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
+          다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+        </a>
+      ) : <span></span>}
+    </div>
+  </article>
 </BaseLayout>

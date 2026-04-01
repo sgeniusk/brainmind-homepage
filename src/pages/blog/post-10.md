@@ -9,11 +9,11 @@ subtitle: "틀릴 자유를 되찾는 일"
 category: essay
 reading_time: "7분"
 teaser: "고르는 사람만이 틀릴 수 있고, 틀릴 수 있는 사람만이 자유롭다."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 고르기
 
 스포티파이의 추천 재생을 껐다.
 

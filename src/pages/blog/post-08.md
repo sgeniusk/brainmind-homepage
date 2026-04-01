@@ -9,11 +9,11 @@ subtitle: "알고리즘 위에 놓인 민주주의"
 category: essay
 reading_time: "8분"
 teaser: "민주주의는 시민이 정보에 접근할 수 있다는 전제 위에 세워졌다. 그 전제가 흔들리고 있다."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 설계된 여론
 
 민주주의는 하나의 전제 위에 세워졌다.
 

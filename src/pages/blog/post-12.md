@@ -9,11 +9,11 @@ subtitle: "불편한 관계를 다시 선택하는 일"
 category: essay
 reading_time: "7분"
 teaser: "사람은 버그가 아니라 기능이다. 비효율적이고 예측 불가능한, 그래서 진짜인 관계."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 만나기
 
 오랜만에 친구를 만났다. 카페에서. 화면이 아니라 테이블을 사이에 두고.
 

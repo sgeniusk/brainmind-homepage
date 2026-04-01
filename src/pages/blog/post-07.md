@@ -9,11 +9,11 @@ subtitle: "생산성은 올랐다, 임금은 아니다"
 category: essay
 reading_time: "7분"
 teaser: "격차는 기술이 만드는 것이 아니라 제도가 허용하는 것이다."
-status: draft
+status: published
 created: 2026-03-24
-published:
+published: 2026-04-01
 ---
-
+# 격차
 
 1760년대 영국에서 방적기가 돌아가기 시작했을 때, 생산성은 폭발했다.
 
