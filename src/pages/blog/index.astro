@@ -22,157 +22,118 @@ type BlogModule = {
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
-/* --- Series 1: 생각이 사라지기 전에 --- */
+/* --- Series 1 --- */
 const s1Modules = Object.values(import.meta.glob('./post-[0-9][0-9].md', { eager: true })) as BlogModule[];
 const s1Posts = s1Modules
-  .map(({ frontmatter }) => ({
-    ...frontmatter,
-    href: `${base}blog/post-${String(frontmatter.series_chapter).padStart(2, '0')}/`,
-  }))
+  .map(({ frontmatter }) => ({ ...frontmatter, href: `${base}blog/post-${String(frontmatter.series_chapter).padStart(2, '0')}/` }))
   .sort((a, b) => a.series_chapter - b.series_chapter);
 
-/* --- Series 2: 몸이 기억하는 것들 --- */
+/* --- Series 2 --- */
 const s2Modules = Object.values(import.meta.glob('./post-s2-*.md', { eager: true })) as BlogModule[];
 const s2Posts = s2Modules
-  .map(({ frontmatter }) => ({
-    ...frontmatter,
-    href: `${base}blog/post-s2-${String(frontmatter.series_chapter).padStart(2, '0')}/`,
-  }))
+  .map(({ frontmatter }) => ({ ...frontmatter, href: `${base}blog/post-s2-${String(frontmatter.series_chapter).padStart(2, '0')}/` }))
   .sort((a, b) => a.series_chapter - b.series_chapter);
 
-/* --- Series 3: 연결이 사라지기 전에 --- */
+/* --- Series 3 --- */
 const s3Modules = Object.values(import.meta.glob('./post-s3-*.md', { eager: true })) as BlogModule[];
 const s3Posts = s3Modules
-  .map(({ frontmatter }) => ({
-    ...frontmatter,
-    href: `${base}blog/post-s3-${String(frontmatter.series_chapter).padStart(2, '0')}/`,
-  }))
+  .map(({ frontmatter }) => ({ ...frontmatter, href: `${base}blog/post-s3-${String(frontmatter.series_chapter).padStart(2, '0')}/` }))
   .sort((a, b) => a.series_chapter - b.series_chapter);
 
 /* --- Helpers --- */
 const makeParts = (posts: typeof s1Posts) => ({
-  prologue: posts.find((p) => p.series_chapter === 0),
-  part1: posts.filter((p) => p.series_chapter >= 1 && p.series_chapter <= 4),
-  part2: posts.filter((p) => p.series_chapter >= 5 && p.series_chapter <= 8),
-  part3: posts.filter((p) => p.series_chapter >= 9 && p.series_chapter <= 12),
-  epilogue: posts.find((p) => p.series_chapter === 13),
+  prologue: posts.find(p => p.series_chapter === 0),
+  part1:    posts.filter(p => p.series_chapter >= 1  && p.series_chapter <= 4),
+  part2:    posts.filter(p => p.series_chapter >= 5  && p.series_chapter <= 8),
+  part3:    posts.filter(p => p.series_chapter >= 9  && p.series_chapter <= 12),
+  epilogue: posts.find(p => p.series_chapter === 13),
 });
 
 const s1 = makeParts(s1Posts);
 const s2 = makeParts(s2Posts);
-
-/* backward compat — default to s1 for existing template */
-const posts = s1Posts;
-const seriesTitle = s1Posts[0]?.series ?? '생각이 사라지기 전에';
-const prologue = s1.prologue;
-const part1 = s1.part1;
-const part2 = s1.part2;
-const part3 = s1.part3;
-const epilogue = s1.epilogue;
-
-const s2Title = s2Posts[0]?.series ?? '몸이 기억하는 것들';
 const s3 = makeParts(s3Posts);
-const s3Title = s3Posts[0]?.series ?? '연결이 사라지기 전에';
 
-const s3Sections = [
-  { id: 's3-part-1', label: 'Part 1', title: '외주된 연결들', accent: 'var(--accent)', posts: s3.part1 },
-  { id: 's3-part-2', label: 'Part 2', title: '연결의 문법', accent: 'var(--alert)', posts: s3.part2 },
-  { id: 's3-part-3', label: 'Part 3', title: '너머', accent: 'var(--alert)', posts: s3.part3 },
-];
+const seriesTitle = s1Posts[0]?.series ?? '생각이 사라지기 전에';
+const s2Title     = s2Posts[0]?.series ?? '몸이 기억하는 것들';
+const s3Title     = s3Posts[0]?.series ?? '연결이 사라지기 전에';
 
 const sections = [
-  { id: 'part-1', label: 'Part 1', title: '사라지고 있는 것들', accent: 'var(--accent)', posts: part1 },
-  { id: 'part-2', label: 'Part 2', title: '보이지 않는 설계', accent: 'var(--alert)', posts: part2 },
-  { id: 'part-3', label: 'Part 3', title: '지키기로 한 것들', accent: 'var(--brain)', posts: part3 },
+  { id: 'part-1',    label: 'Part 1', title: '사라지고 있는 것들', accent: 'var(--accent)', posts: s1.part1 },
+  { id: 'part-2',    label: 'Part 2', title: '보이지 않는 설계',   accent: 'var(--alert)',  posts: s1.part2 },
+  { id: 'part-3',    label: 'Part 3', title: '지키기로 한 것들',   accent: 'var(--brain)',  posts: s1.part3 },
 ];
-
 const s2Sections = [
   { id: 's2-part-1', label: 'Part 1', title: '무시된 신호들', accent: 'var(--accent)', posts: s2.part1 },
-  { id: 's2-part-2', label: 'Part 2', title: '몸의 문법', accent: 'var(--alert)', posts: s2.part2 },
-  { id: 's2-part-3', label: 'Part 3', title: '다시 듣기', accent: 'var(--brain)', posts: s2.part3 },
+  { id: 's2-part-2', label: 'Part 2', title: '몸의 문법',     accent: 'var(--alert)',  posts: s2.part2 },
+  { id: 's2-part-3', label: 'Part 3', title: '다시 듣기',     accent: 'var(--brain)',  posts: s2.part3 },
+];
+const s3Sections = [
+  { id: 's3-part-1', label: 'Part 1', title: '외주된 연결들', accent: 'var(--accent)', posts: s3.part1 },
+  { id: 's3-part-2', label: 'Part 2', title: '연결의 문법',   accent: 'var(--alert)',  posts: s3.part2 },
+  { id: 's3-part-3', label: 'Part 3', title: '너머',          accent: 'var(--alert)',  posts: s3.part3 },
 ];
 
-const getStatusLabel = (status?: string) => (status === 'published' ? '공개' : '준비 중');
-const getStatusClass = (status?: string) => (status === 'published' ? 'status-published' : 'status-draft');
+const getStatusLabel = (s?: string) => s === 'published' ? '공개' : '준비 중';
+const getStatusClass = (s?: string) => s === 'published' ? 'status-published' : 'status-draft';
 ---
 
 <BaseLayout title="블로그 — 뇌와 마음사이" activePage="blog">
   <Fragment slot="head">
     <style>
+      /* ── Shell ── */
       .blog-shell{max-width:1180px;margin:0 auto;padding:7.25rem 1.5rem 4.5rem}
       .blog-grid{display:grid;grid-template-columns:minmax(260px,300px) minmax(0,1fr);gap:2rem;align-items:start}
-      .toc-card,.hero-card,.section-card,.prologue-card,.epilogue-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:28px;box-shadow:var(--glass-shadow)}
+
+      /* ── Cards ── */
+      .toc-card,.hero-card,.section-card,.prologue-card,.epilogue-card{
+        background:var(--bg-card);border:1px solid var(--card-border);
+        border-radius:28px;box-shadow:var(--glass-shadow);
+      }
       .toc-card{position:sticky;top:6.25rem;padding:1.35rem}
-      .toc-head{padding-bottom:1rem;border-bottom:1px solid var(--divider);margin-bottom:1rem}
+      .toc-head{padding-bottom:.9rem;border-bottom:1px solid var(--divider);margin-bottom:.9rem}
       .toc-title{font-size:1.08rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
-      .toc-subtitle{font-size:.8rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
-      .toc-group-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:.1rem 0 .3rem}
-      .blog-content{display:flex;flex-direction:column;gap:1.35rem}
-      .hero-card{padding:2rem 2rem 1.85rem;position:relative;overflow:hidden}
-      .hero-card::before{content:'';position:absolute;inset:auto auto -100px -60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,112,67,.15) 0%,transparent 70%);pointer-events:none}
-      .hero-badges{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem}
-      .hero-kicker{display:inline-flex;align-items:center;gap:.45rem;padding:.38rem .8rem;border-radius:999px;font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.22);color:var(--accent)}
-      .hero-meta{font-size:.88rem;color:var(--text-muted)}
-      .hero-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:.7rem;word-break:keep-all}
-      .hero-desc{font-size:1.03rem;color:var(--text-dim);line-height:1.8;word-break:keep-all;max-width:58ch}
-      .hero-quote{margin-top:1.35rem;padding:1.1rem 1.25rem;border-left:3px solid var(--accent);background:rgba(255,112,67,.04);border-radius:0 16px 16px 0;font-size:.95rem;color:var(--text-dim);line-height:1.75;word-break:keep-all}
-      .prologue-card,.epilogue-card{padding:1.15rem 1.2rem}
-      .post-card{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.05rem;border-radius:22px;text-decoration:none;background:var(--bg-card);border:1px solid var(--card-border);transition:all .24s cubic-bezier(.16,1,.3,1)}
-      .post-card:hover{transform:translateY(-2px);border-color:rgba(255,112,67,.24);background:var(--card-hover-bg)}
-      .post-card-copy{flex:1;min-width:0}
-      .post-card-top{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.3rem}
-      .post-card-title{font-size:1.05rem;font-weight:700;color:var(--text);word-break:keep-all}
-      .post-card-desc{font-size:.88rem;color:var(--text-dim);line-height:1.65;word-break:keep-all}
-      .post-card-meta{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-top:.5rem;font-size:.76rem;color:var(--text-muted)}
-      .post-card-num{font-size:.8rem;font-weight:800;color:var(--accent);min-width:2rem;line-height:1.7}
-      .status-pill{display:inline-flex;align-items:center;padding:.22rem .52rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.05em}
-      .status-published{background:rgba(76,175,80,.1);color:#43A047}
-      .status-draft{background:rgba(255,112,67,.1);color:var(--accent)}
-      .section-card{padding:1.25rem 1.25rem 1.35rem}
-      .section-head{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
-      .section-line{flex:1;height:1px;background:var(--divider)}
-      .section-label{font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-      .section-title{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
-      .section-desc{font-size:.85rem;color:var(--text-muted);line-height:1.6}
-      .section-list{display:flex;flex-direction:column;gap:.7rem}
+      .toc-subtitle{font-size:.79rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
 
       /* ── TOC Accordion ── */
-      .toc-series-wrap{margin-bottom:.15rem}
+      .toc-group-label{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:.15rem 0 .25rem}
       .toc-series-btn{
-        display:flex;align-items:flex-start;gap:.7rem;
-        padding:.6rem .8rem;border-radius:16px;
-        cursor:pointer;transition:background .22s ease,color .22s ease;
-        color:var(--text-dim);background:none;border:none;
-        width:100%;text-align:left;font-family:inherit;
+        display:flex;align-items:flex-start;gap:.65rem;
+        padding:.58rem .75rem;border-radius:14px;
+        cursor:pointer;background:none;border:none;width:100%;
+        text-align:left;font-family:inherit;
+        color:var(--text-dim);transition:background .22s,color .22s;
       }
       .toc-series-btn:hover{background:var(--card-hover-bg);color:var(--text)}
-      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;line-height:1.65}
-      .toc-copy{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1}
-      .toc-copy strong{font-size:.9rem;color:var(--text);font-weight:700;word-break:keep-all}
-      .toc-copy span{font-size:.78rem;color:var(--text-muted);line-height:1.55;word-break:keep-all}
-      .toc-chev{
-        flex-shrink:0;margin-top:.2rem;font-size:.88rem;color:var(--text-muted);
-        transition:transform .32s cubic-bezier(.4,0,.2,1);
-      }
+      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;line-height:1.7}
+      .toc-copy{display:flex;flex-direction:column;gap:.08rem;flex:1;min-width:0}
+      .toc-copy strong{font-size:.88rem;color:var(--text);font-weight:700;word-break:keep-all}
+      .toc-copy span{font-size:.76rem;color:var(--text-muted);line-height:1.5;word-break:keep-all}
+      .toc-chev{flex-shrink:0;margin-top:.22rem;font-size:.86rem;color:var(--text-muted);transition:transform .32s cubic-bezier(.4,0,.2,1)}
       .toc-series-wrap[data-open="false"] .toc-chev{transform:rotate(-90deg)}
-      .toc-pills-wrap{
-        overflow:hidden;max-height:200px;opacity:1;
-        transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s ease;
-      }
+      .toc-pills-wrap{overflow:hidden;max-height:200px;opacity:1;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s ease}
       .toc-series-wrap[data-open="false"] .toc-pills-wrap{max-height:0;opacity:0}
+      .toc-divider{padding-top:.55rem;border-top:1px solid var(--divider);margin-bottom:.1rem}
 
-      /* ── Book (Main) Accordion ── */
-      .series-book{}
-      .book-toggle-row{
-        display:flex;align-items:center;justify-content:flex-end;
-        margin-top:1.1rem;padding-top:.9rem;
-        border-top:1px solid var(--divider);
-      }
+      /* ── Blog content ── */
+      .blog-content{display:flex;flex-direction:column;gap:1.4rem}
+
+      /* ── Hero card ── */
+      .hero-card{padding:2rem 2rem 1.75rem;position:relative;overflow:hidden}
+      .hero-card::before{content:'';position:absolute;inset:auto auto -100px -60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,112,67,.13) 0%,transparent 70%);pointer-events:none}
+      .hero-badges{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.9rem}
+      .hero-kicker{display:inline-flex;align-items:center;gap:.42rem;padding:.36rem .78rem;border-radius:999px;font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+      .hero-meta{font-size:.86rem;color:var(--text-muted)}
+      .hero-title{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:.65rem;word-break:keep-all}
+      .hero-desc{font-size:1.01rem;color:var(--text-dim);line-height:1.82;word-break:keep-all;max-width:58ch}
+      .hero-quote{margin-top:1.25rem;padding:1rem 1.2rem;border-left:3px solid var(--accent);background:rgba(255,112,67,.04);border-radius:0 14px 14px 0;font-size:.94rem;color:var(--text-dim);line-height:1.75;word-break:keep-all}
+
+      /* ── Book accordion ── */
+      .book-toggle-row{display:flex;align-items:center;justify-content:flex-end;margin-top:1.05rem;padding-top:.85rem;border-top:1px solid var(--divider)}
       .book-toggle-btn{
         display:inline-flex;align-items:center;gap:.38rem;
-        padding:.38rem .85rem;border-radius:999px;
+        padding:.36rem .82rem;border-radius:999px;
         border:1px solid var(--divider);background:none;
-        color:var(--text-muted);font-size:.78rem;font-weight:700;
+        color:var(--text-muted);font-size:.77rem;font-weight:700;
         letter-spacing:.04em;cursor:pointer;font-family:inherit;
         transition:all .22s ease;
       }
@@ -189,21 +150,48 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         margin-top:1.35rem;
         transition:max-height .65s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .35s ease;
       }
-      .series-book[data-open="false"] .book-pages{
-        max-height:0;opacity:0;margin-top:0;pointer-events:none;
-      }
+      .series-book[data-open="false"] .book-pages{max-height:0;opacity:0;margin-top:0;pointer-events:none}
 
-      @media (max-width: 960px){
+      /* ── Post cards ── */
+      .prologue-card,.epilogue-card{padding:1.1rem 1.15rem}
+      .post-card{
+        display:flex;align-items:flex-start;gap:1rem;
+        padding:1rem 1.05rem;border-radius:20px;text-decoration:none;
+        background:var(--bg-card);border:1px solid var(--card-border);
+        transition:all .24s cubic-bezier(.16,1,.3,1);
+      }
+      .post-card:hover{transform:translateY(-2px);border-color:rgba(255,112,67,.22);background:var(--card-hover-bg);box-shadow:0 6px 24px rgba(0,0,0,.07)}
+      .post-card-copy{flex:1;min-width:0}
+      .post-card-top{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.32rem}
+      .post-card-title{font-size:1.03rem;font-weight:700;color:var(--text);word-break:keep-all;margin-bottom:.28rem}
+      .post-card-desc{font-size:.86rem;color:var(--text-dim);line-height:1.65;word-break:keep-all}
+      .post-card-num{font-size:.78rem;font-weight:800;color:var(--accent);min-width:2rem;line-height:1.75;flex-shrink:0}
+      .post-card-meta{font-size:.74rem;color:var(--text-muted)}
+      .status-pill{display:inline-flex;align-items:center;padding:.2rem .5rem;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.05em}
+      .status-published{background:rgba(76,175,80,.1);color:#43A047}
+      .status-draft{background:rgba(255,112,67,.1);color:var(--accent)}
+
+      /* ── Section card ── */
+      .section-card{padding:1.2rem 1.2rem 1.3rem}
+      .section-head{display:flex;align-items:center;gap:.9rem;margin-bottom:.9rem}
+      .section-line{flex:1;height:1px;background:var(--divider)}
+      .section-label{font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+      .section-title{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
+      .section-desc{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+      .section-list{display:flex;flex-direction:column;gap:.65rem;margin-top:.85rem}
+
+      /* ── Responsive ── */
+      @media(max-width:960px){
         .blog-shell{padding-top:6.75rem}
         .blog-grid{grid-template-columns:1fr}
         .toc-card{position:static}
       }
-      @media (max-width: 640px){
+      @media(max-width:640px){
         .blog-shell{padding-left:1rem;padding-right:1rem}
-        .hero-card,.section-card,.prologue-card,.epilogue-card,.toc-card{border-radius:22px}
-        .hero-card{padding:1.45rem}
-        .section-card{padding:1rem}
-        .post-card{gap:.8rem;padding:.9rem}
+        .hero-card,.section-card,.prologue-card,.epilogue-card,.toc-card{border-radius:20px}
+        .hero-card{padding:1.35rem}
+        .section-card{padding:.95rem}
+        .post-card{gap:.75rem;padding:.85rem}
       }
     </style>
   </Fragment>
@@ -215,7 +203,7 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
       <aside class="toc-card reveal">
         <div class="toc-head">
           <p class="toc-title">
-            <iconify-icon icon="solar:library-bold-duotone" style="font-size:1.15rem;color:var(--accent);vertical-align:-.15em;margin-right:.3rem;"></iconify-icon>
+            <iconify-icon icon="solar:library-bold-duotone" style="font-size:1.1rem;color:var(--accent);vertical-align:-.15em;margin-right:.3rem;"></iconify-icon>
             서재
           </p>
           <p class="toc-subtitle">연재 흐름을 따라가거나, 관심 있는 장부터 바로 읽을 수 있습니다.</p>
@@ -228,15 +216,15 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
             <span class="toc-num" style="color:var(--accent);">S1</span>
             <span class="toc-copy">
               <strong>{seriesTitle}</strong>
-              <span>{posts.length}편 · AI 시대를 건너는 에세이</span>
+              <span>{s1Posts.length}편 · AI 시대를 건너는 에세이</span>
             </span>
             <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
           </button>
           <div class="toc-pills-wrap">
-            <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
-              {prologue && <a href={prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">프롤로그</a>}
-              {sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">{s.label} {s.title}</a>)}
-              {epilogue && <a href={epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">에필로그</a>}
+            <div style="display:flex;flex-wrap:wrap;gap:.38rem;padding:.15rem .15rem .6rem;">
+              {s1.prologue && <a href={s1.prologue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">프롤로그</a>}
+              {sections.map(s => <a href={`#${s.id}`} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">{s.label} {s.title}</a>)}
+              {s1.epilogue && <a href={s1.epilogue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">에필로그</a>}
             </div>
           </div>
         </div>
@@ -244,7 +232,7 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         <!-- S2 -->
         {s2Posts.length > 0 && (
           <Fragment>
-            <div style="padding-top:.6rem;border-top:1px solid var(--divider);margin-bottom:.15rem;"></div>
+            <div class="toc-divider"></div>
             <div class="toc-series-wrap" data-open="false" id="toc-s2">
               <div class="toc-group-label">시리즈 2</div>
               <button class="toc-series-btn" data-toc-toggle>
@@ -256,10 +244,10 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                 <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
               </button>
               <div class="toc-pills-wrap">
-                <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
-                  {s2.prologue && <a href={s2.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">프롤로그</a>}
-                  {s2Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">{s.label} {s.title}</a>)}
-                  {s2.epilogue && <a href={s2.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">에필로그</a>}
+                <div style="display:flex;flex-wrap:wrap;gap:.38rem;padding:.15rem .15rem .6rem;">
+                  {s2.prologue && <a href={s2.prologue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(2,136,209,.08);color:#0288D1;text-decoration:none;">프롤로그</a>}
+                  {s2Sections.map(s => <a href={`#${s.id}`} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(2,136,209,.08);color:#0288D1;text-decoration:none;">{s.label} {s.title}</a>)}
+                  {s2.epilogue && <a href={s2.epilogue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(2,136,209,.08);color:#0288D1;text-decoration:none;">에필로그</a>}
                 </div>
               </div>
             </div>
@@ -269,7 +257,7 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         <!-- S3 -->
         {s3Posts.length > 0 && (
           <Fragment>
-            <div style="padding-top:.6rem;border-top:1px solid var(--divider);margin-bottom:.15rem;"></div>
+            <div class="toc-divider"></div>
             <div class="toc-series-wrap" data-open="false" id="toc-s3">
               <div class="toc-group-label">시리즈 3</div>
               <button class="toc-series-btn" data-toc-toggle>
@@ -281,10 +269,10 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                 <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
               </button>
               <div class="toc-pills-wrap">
-                <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
-                  {s3.prologue && <a href={s3.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">프롤로그</a>}
-                  {s3Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">{s.label} {s.title}</a>)}
-                  {s3.epilogue && <a href={s3.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">에필로그</a>}
+                <div style="display:flex;flex-wrap:wrap;gap:.38rem;padding:.15rem .15rem .6rem;">
+                  {s3.prologue && <a href={s3.prologue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.07);color:var(--alert);text-decoration:none;">프롤로그</a>}
+                  {s3Sections.map(s => <a href={`#${s.id}`} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.07);color:var(--alert);text-decoration:none;">{s.label} {s.title}</a>)}
+                  {s3.epilogue && <a href={s3.epilogue.href} style="font-size:.7rem;font-weight:700;padding:.2rem .52rem;border-radius:999px;background:rgba(255,112,67,.07);color:var(--alert);text-decoration:none;">에필로그</a>}
                 </div>
               </div>
             </div>
@@ -292,74 +280,66 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         )}
       </aside>
 
-      <!-- ══ 메인 콘텐츠 ══ -->
+      <!-- ══ 메인 콘텐츠 (S1 → S2 → S3 순) ══ -->
       <section class="blog-content">
 
-        <!-- ── S1 BOOK ── -->
+        <!-- ── S1 ── -->
         <div class="series-book" id="book-s1" data-open="true">
-          <div class="hero-card book-cover reveal" id="series-overview">
+          <div class="hero-card reveal" id="series-overview">
             <div class="hero-badges">
-              <span class="hero-kicker">
-                <iconify-icon icon="solar:pen-new-round-bold-duotone" style="font-size:.9rem;"></iconify-icon>
-                Essay Series
+              <span class="hero-kicker" style="background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.22);color:var(--accent);">
+                <iconify-icon icon="solar:pen-new-round-bold-duotone" style="font-size:.88rem;"></iconify-icon>
+                Essay Series 1
               </span>
-              <span class="hero-meta">{posts.length}편 · 3파트 · 2026</span>
+              <span class="hero-meta">{s1Posts.length}편 · 3파트 · 2026</span>
             </div>
-            <h1 class="hero-title">{seriesTitle}</h1>
-            <p class="hero-desc">
-              AI 시대를 건너는 에세이입니다. 사라지고 있는 것들을 관찰하고, 그 뒤의
-              구조를 해부하고, 결국 무엇을 지키기로 할지 천천히 묻습니다.
-            </p>
-            <div class="hero-quote">
-              "AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."
-            </div>
+            <h2 class="hero-title">{seriesTitle}</h2>
+            <p class="hero-desc">AI 시대를 건너는 에세이입니다. 사라지고 있는 것들을 관찰하고, 그 뒤의 구조를 해부하고, 결국 무엇을 지키기로 할지 천천히 묻습니다.</p>
+            <div class="hero-quote">"AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."</div>
             <div class="book-toggle-row">
               <button class="book-toggle-btn" data-book-toggle>
-                <span class="lbl-close">목차 접기</span>
-                <span class="lbl-open">목차 펼치기</span>
-                <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
+                <span class="lbl-close">목차 접기</span><span class="lbl-open">목차 펼치기</span>
+                <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.86rem;"></iconify-icon>
               </button>
             </div>
           </div>
           <div class="book-pages">
-            {prologue && (
+            {s1.prologue && (
               <div class="prologue-card">
-                <a class="post-card" href={prologue.href}>
-                  <span class="post-card-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
+                <a class="post-card" href={s1.prologue.href}>
+                  <span class="post-card-num">{String(s1.prologue.series_chapter).padStart(2,'0')}</span>
                   <div class="post-card-copy">
                     <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(prologue.status)}`}>{getStatusLabel(prologue.status)}</span>
-                      <span class="post-card-meta">{prologue.reading_time ?? '읽기 시간 미정'}</span>
+                      <span class={`status-pill ${getStatusClass(s1.prologue.status)}`}>{getStatusLabel(s1.prologue.status)}</span>
+                      <span class="post-card-meta">{s1.prologue.reading_time}</span>
                     </div>
-                    <p class="post-card-title">{prologue.title}</p>
-                    <p class="post-card-desc">{prologue.teaser ?? prologue.subtitle}</p>
+                    <p class="post-card-title">{s1.prologue.title}</p>
+                    <p class="post-card-desc">{s1.prologue.teaser ?? s1.prologue.subtitle}</p>
                   </div>
                 </a>
               </div>
             )}
-            {sections.map((section, index) => (
+            {sections.map((section, i) => (
               <div class="section-card" id={section.id}>
                 <div class="section-head">
                   <div class="section-line"></div>
                   <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
                   <div class="section-line"></div>
                 </div>
-                <div style="margin-bottom:1rem;">
-                  <p class="section-title">{section.title}</p>
-                  <p class="section-desc">
-                    {index === 0 && '불편하지만 분명히 사라지고 있는 감각과 습관을 먼저 관찰합니다.'}
-                    {index === 1 && '편의 뒤에 숨은 설계, 소유, 동의, 중독의 구조를 따라갑니다.'}
-                    {index === 2 && '결국 무엇을 직접 붙들고 살아갈지에 대한 선택으로 돌아옵니다.'}
-                  </p>
-                </div>
+                <p class="section-title">{section.title}</p>
+                <p class="section-desc">
+                  {i === 0 && '불편하지만 분명히 사라지고 있는 감각과 습관을 먼저 관찰합니다.'}
+                  {i === 1 && '편의 뒤에 숨은 설계, 소유, 동의, 중독의 구조를 따라갑니다.'}
+                  {i === 2 && '결국 무엇을 직접 붙들고 살아갈지에 대한 선택으로 돌아옵니다.'}
+                </p>
                 <div class="section-list">
-                  {section.posts.map((post) => (
+                  {section.posts.map(post => (
                     <a class="post-card" href={post.href}>
-                      <span class="post-card-num">{String(post.series_chapter).padStart(2, '0')}</span>
+                      <span class="post-card-num">{String(post.series_chapter).padStart(2,'0')}</span>
                       <div class="post-card-copy">
                         <div class="post-card-top">
                           <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                          <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                          <span class="post-card-meta">{post.reading_time}</span>
                         </div>
                         <p class="post-card-title">{post.title}</p>
                         <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
@@ -369,17 +349,17 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                 </div>
               </div>
             ))}
-            {epilogue && (
+            {s1.epilogue && (
               <div class="epilogue-card">
-                <a class="post-card" href={epilogue.href}>
-                  <span class="post-card-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
+                <a class="post-card" href={s1.epilogue.href}>
+                  <span class="post-card-num">{String(s1.epilogue.series_chapter).padStart(2,'0')}</span>
                   <div class="post-card-copy">
                     <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(epilogue.status)}`}>{getStatusLabel(epilogue.status)}</span>
-                      <span class="post-card-meta">{epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                      <span class={`status-pill ${getStatusClass(s1.epilogue.status)}`}>{getStatusLabel(s1.epilogue.status)}</span>
+                      <span class="post-card-meta">{s1.epilogue.reading_time}</span>
                     </div>
-                    <p class="post-card-title">{epilogue.title}</p>
-                    <p class="post-card-desc">{epilogue.teaser ?? epilogue.subtitle}</p>
+                    <p class="post-card-title">{s1.epilogue.title}</p>
+                    <p class="post-card-desc">{s1.epilogue.teaser ?? s1.epilogue.subtitle}</p>
                   </div>
                 </a>
               </div>
@@ -387,127 +367,25 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
           </div>
         </div>
 
-        <!-- ── S3 BOOK ── -->
-        {s3Posts.length > 0 && (
-          <>
-            <div style="margin-top:1rem;"></div>
-            <div class="series-book" id="book-s3" data-open="false">
-              <div class="hero-card book-cover reveal" id="series-3-overview" style="border-color:rgba(255,112,67,.2);">
-                <div class="hero-badges">
-                  <span class="hero-kicker" style="background:rgba(255,112,67,.06);border-color:rgba(255,112,67,.2);color:var(--alert);">
-                    <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" style="font-size:.9rem;"></iconify-icon>
-                    Essay Series 3
-                  </span>
-                  <span class="hero-meta">{s3Posts.length}편 · 3파트 · 2026</span>
-                </div>
-                <h1 class="hero-title">{s3Title}</h1>
-                <p class="hero-desc">
-                  AI가 친구를 고르고, 앱이 사랑을 주선하고, 챗봇이 위로한다. 그런데 고독 지수는 사상 최고다. AI 이후 시대의 연결을 바라봅니다.
-                </p>
-                <div class="hero-quote" style="border-color:var(--alert);background:rgba(255,112,67,.03);">
-                  "AI 친구가 생겼다. 위로받았는데 화면을 닫고 나면 이상하게 더 외로웠다."
-                </div>
-                <div class="book-toggle-row">
-                  <button class="book-toggle-btn" data-book-toggle>
-                    <span class="lbl-close">목차 접기</span>
-                    <span class="lbl-open">목차 펼치기</span>
-                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
-                  </button>
-                </div>
-              </div>
-              <div class="book-pages">
-                {s3.prologue && (
-                  <div class="prologue-card">
-                    <a class="post-card" href={s3.prologue.href}>
-                      <span class="post-card-num" style="color:var(--alert);">{String(s3.prologue.series_chapter).padStart(2, '0')}</span>
-                      <div class="post-card-copy">
-                        <div class="post-card-top">
-                          <span class={`status-pill ${getStatusClass(s3.prologue.status)}`}>{getStatusLabel(s3.prologue.status)}</span>
-                          <span class="post-card-meta">{s3.prologue.reading_time ?? '읽기 시간 미정'}</span>
-                        </div>
-                        <p class="post-card-title">{s3.prologue.title}</p>
-                        <p class="post-card-desc">{s3.prologue.teaser ?? s3.prologue.subtitle}</p>
-                      </div>
-                    </a>
-                  </div>
-                )}
-                {s3Sections.map((section, index) => (
-                  <div class="section-card" id={section.id}>
-                    <div class="section-head">
-                      <div class="section-line"></div>
-                      <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
-                      <div class="section-line"></div>
-                    </div>
-                    <div style="margin-bottom:1rem;">
-                      <p class="section-title">{section.title}</p>
-                      <p class="section-desc">
-                        {index === 0 && '알고리즘, 앱, 챗봇, 화면 — 연결을 외주화하는 방식들을 관찰합니다.'}
-                        {index === 1 && '거울 뉴런, 옥시토신, AI의 역설 — 진짜 연결이 작동하는 원리를 해부합니다.'}
-                        {index === 2 && '양극화, 불완전함, 몸의 독점, 새로운 의례 — AI 이후 세계의 연결을 예측합니다.'}
-                      </p>
-                    </div>
-                    <div class="section-list">
-                      {section.posts.map((post) => (
-                        <a class="post-card" href={post.href}>
-                          <span class="post-card-num" style="color:var(--alert);">{String(post.series_chapter).padStart(2, '0')}</span>
-                          <div class="post-card-copy">
-                            <div class="post-card-top">
-                              <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                              <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
-                            </div>
-                            <p class="post-card-title">{post.title}</p>
-                            <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                {s3.epilogue && (
-                  <div class="epilogue-card">
-                    <a class="post-card" href={s3.epilogue.href}>
-                      <span class="post-card-num" style="color:var(--alert);">{String(s3.epilogue.series_chapter).padStart(2, '0')}</span>
-                      <div class="post-card-copy">
-                        <div class="post-card-top">
-                          <span class={`status-pill ${getStatusClass(s3.epilogue.status)}`}>{getStatusLabel(s3.epilogue.status)}</span>
-                          <span class="post-card-meta">{s3.epilogue.reading_time ?? '읽기 시간 미정'}</span>
-                        </div>
-                        <p class="post-card-title">{s3.epilogue.title}</p>
-                        <p class="post-card-desc">{s3.epilogue.teaser ?? s3.epilogue.subtitle}</p>
-                      </div>
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        <!-- ── S2 BOOK ── -->
+        <!-- ── S2 ── -->
         {s2Posts.length > 0 && (
           <>
-            <div style="margin-top:1rem;"></div>
             <div class="series-book" id="book-s2" data-open="false">
-              <div class="hero-card book-cover reveal" id="series-2-overview" style="border-color:rgba(79,195,247,.22);">
+              <div class="hero-card reveal" id="series-2-overview" style="border-color:rgba(2,136,209,.2);">
                 <div class="hero-badges">
-                  <span class="hero-kicker" style="background:rgba(79,195,247,.08);border-color:rgba(79,195,247,.22);color:#0288D1;">
-                    <iconify-icon icon="solar:heart-pulse-bold-duotone" style="font-size:.9rem;"></iconify-icon>
+                  <span class="hero-kicker" style="background:rgba(2,136,209,.07);border:1px solid rgba(2,136,209,.2);color:#0288D1;">
+                    <iconify-icon icon="solar:heart-pulse-bold-duotone" style="font-size:.88rem;"></iconify-icon>
                     Essay Series 2
                   </span>
                   <span class="hero-meta">{s2Posts.length}편 · 3파트 · 2026</span>
                 </div>
-                <h1 class="hero-title">{s2Title}</h1>
-                <p class="hero-desc">
-                  몸은 항상 말하고 있었습니다. 잠, 통증, 배고픔, 피로 — 무시된 신호들을 다시 읽는 여정입니다.
-                </p>
-                <div class="hero-quote" style="border-color:#0288D1;background:rgba(79,195,247,.04);">
-                  "허리가 한 달째 보낸 편지를 읽지 않았습니다. 결국 직접 찾아왔습니다."
-                </div>
+                <h2 class="hero-title">{s2Title}</h2>
+                <p class="hero-desc">몸은 항상 말하고 있었습니다. 잠, 통증, 배고픔, 피로 — 무시된 신호들을 다시 읽는 여정입니다.</p>
+                <div class="hero-quote" style="border-color:#0288D1;background:rgba(2,136,209,.04);">"허리가 한 달째 보낸 편지를 읽지 않았습니다. 결국 직접 찾아왔습니다."</div>
                 <div class="book-toggle-row">
                   <button class="book-toggle-btn" data-book-toggle>
-                    <span class="lbl-close">목차 접기</span>
-                    <span class="lbl-open">목차 펼치기</span>
-                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
+                    <span class="lbl-close">목차 접기</span><span class="lbl-open">목차 펼치기</span>
+                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.86rem;"></iconify-icon>
                   </button>
                 </div>
               </div>
@@ -515,11 +393,11 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                 {s2.prologue && (
                   <div class="prologue-card">
                     <a class="post-card" href={s2.prologue.href}>
-                      <span class="post-card-num" style="color:#0288D1;">{String(s2.prologue.series_chapter).padStart(2, '0')}</span>
+                      <span class="post-card-num" style="color:#0288D1;">{String(s2.prologue.series_chapter).padStart(2,'0')}</span>
                       <div class="post-card-copy">
                         <div class="post-card-top">
                           <span class={`status-pill ${getStatusClass(s2.prologue.status)}`}>{getStatusLabel(s2.prologue.status)}</span>
-                          <span class="post-card-meta">{s2.prologue.reading_time ?? '읽기 시간 미정'}</span>
+                          <span class="post-card-meta">{s2.prologue.reading_time}</span>
                         </div>
                         <p class="post-card-title">{s2.prologue.title}</p>
                         <p class="post-card-desc">{s2.prologue.teaser ?? s2.prologue.subtitle}</p>
@@ -527,29 +405,27 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                     </a>
                   </div>
                 )}
-                {s2Sections.map((section, index) => (
+                {s2Sections.map((section, i) => (
                   <div class="section-card" id={section.id}>
                     <div class="section-head">
                       <div class="section-line"></div>
                       <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
                       <div class="section-line"></div>
                     </div>
-                    <div style="margin-bottom:1rem;">
-                      <p class="section-title">{section.title}</p>
-                      <p class="section-desc">
-                        {index === 0 && '매일 울리지만 읽히지 않는 몸의 신호들을 관찰합니다.'}
-                        {index === 1 && '몸의 신호가 무시되게 된 구조적 이유를 해부합니다.'}
-                        {index === 2 && '무시한 신호를 다시 듣기로 한 실천의 기록입니다.'}
-                      </p>
-                    </div>
+                    <p class="section-title">{section.title}</p>
+                    <p class="section-desc">
+                      {i === 0 && '매일 울리지만 읽히지 않는 몸의 신호들을 관찰합니다.'}
+                      {i === 1 && '몸의 신호가 무시되게 된 구조적 이유를 해부합니다.'}
+                      {i === 2 && '무시한 신호를 다시 듣기로 한 실천의 기록입니다.'}
+                    </p>
                     <div class="section-list">
-                      {section.posts.map((post) => (
+                      {section.posts.map(post => (
                         <a class="post-card" href={post.href}>
-                          <span class="post-card-num" style="color:#0288D1;">{String(post.series_chapter).padStart(2, '0')}</span>
+                          <span class="post-card-num" style="color:#0288D1;">{String(post.series_chapter).padStart(2,'0')}</span>
                           <div class="post-card-copy">
                             <div class="post-card-top">
                               <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                              <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                              <span class="post-card-meta">{post.reading_time}</span>
                             </div>
                             <p class="post-card-title">{post.title}</p>
                             <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
@@ -562,14 +438,102 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
                 {s2.epilogue && (
                   <div class="epilogue-card">
                     <a class="post-card" href={s2.epilogue.href}>
-                      <span class="post-card-num" style="color:#0288D1;">{String(s2.epilogue.series_chapter).padStart(2, '0')}</span>
+                      <span class="post-card-num" style="color:#0288D1;">{String(s2.epilogue.series_chapter).padStart(2,'0')}</span>
                       <div class="post-card-copy">
                         <div class="post-card-top">
                           <span class={`status-pill ${getStatusClass(s2.epilogue.status)}`}>{getStatusLabel(s2.epilogue.status)}</span>
-                          <span class="post-card-meta">{s2.epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                          <span class="post-card-meta">{s2.epilogue.reading_time}</span>
                         </div>
                         <p class="post-card-title">{s2.epilogue.title}</p>
                         <p class="post-card-desc">{s2.epilogue.teaser ?? s2.epilogue.subtitle}</p>
+                      </div>
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
+        <!-- ── S3 ── -->
+        {s3Posts.length > 0 && (
+          <>
+            <div class="series-book" id="book-s3" data-open="false">
+              <div class="hero-card reveal" id="series-3-overview" style="border-color:rgba(255,112,67,.18);">
+                <div class="hero-badges">
+                  <span class="hero-kicker" style="background:rgba(255,112,67,.06);border:1px solid rgba(255,112,67,.18);color:var(--alert);">
+                    <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" style="font-size:.88rem;"></iconify-icon>
+                    Essay Series 3
+                  </span>
+                  <span class="hero-meta">{s3Posts.length}편 · 3파트 · 2026</span>
+                </div>
+                <h2 class="hero-title">{s3Title}</h2>
+                <p class="hero-desc">AI가 친구를 고르고, 앱이 사랑을 주선하고, 챗봇이 위로한다. 그런데 고독 지수는 사상 최고다. AI 이후 시대의 연결을 바라봅니다.</p>
+                <div class="hero-quote" style="border-color:var(--alert);background:rgba(255,112,67,.03);">"AI 친구가 생겼다. 위로받았는데 화면을 닫고 나면 이상하게 더 외로웠다."</div>
+                <div class="book-toggle-row">
+                  <button class="book-toggle-btn" data-book-toggle>
+                    <span class="lbl-close">목차 접기</span><span class="lbl-open">목차 펼치기</span>
+                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.86rem;"></iconify-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="book-pages">
+                {s3.prologue && (
+                  <div class="prologue-card">
+                    <a class="post-card" href={s3.prologue.href}>
+                      <span class="post-card-num" style="color:var(--alert);">{String(s3.prologue.series_chapter).padStart(2,'0')}</span>
+                      <div class="post-card-copy">
+                        <div class="post-card-top">
+                          <span class={`status-pill ${getStatusClass(s3.prologue.status)}`}>{getStatusLabel(s3.prologue.status)}</span>
+                          <span class="post-card-meta">{s3.prologue.reading_time}</span>
+                        </div>
+                        <p class="post-card-title">{s3.prologue.title}</p>
+                        <p class="post-card-desc">{s3.prologue.teaser ?? s3.prologue.subtitle}</p>
+                      </div>
+                    </a>
+                  </div>
+                )}
+                {s3Sections.map((section, i) => (
+                  <div class="section-card" id={section.id}>
+                    <div class="section-head">
+                      <div class="section-line"></div>
+                      <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
+                      <div class="section-line"></div>
+                    </div>
+                    <p class="section-title">{section.title}</p>
+                    <p class="section-desc">
+                      {i === 0 && '알고리즘, 앱, 챗봇, 화면 — 연결을 외주화하는 방식들을 관찰합니다.'}
+                      {i === 1 && '거울 뉴런, 옥시토신, AI의 역설 — 진짜 연결이 작동하는 원리를 해부합니다.'}
+                      {i === 2 && '양극화, 불완전함, 몸의 독점, 새로운 의례 — AI 이후 세계의 연결을 예측합니다.'}
+                    </p>
+                    <div class="section-list">
+                      {section.posts.map(post => (
+                        <a class="post-card" href={post.href}>
+                          <span class="post-card-num" style="color:var(--alert);">{String(post.series_chapter).padStart(2,'0')}</span>
+                          <div class="post-card-copy">
+                            <div class="post-card-top">
+                              <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
+                              <span class="post-card-meta">{post.reading_time}</span>
+                            </div>
+                            <p class="post-card-title">{post.title}</p>
+                            <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {s3.epilogue && (
+                  <div class="epilogue-card">
+                    <a class="post-card" href={s3.epilogue.href}>
+                      <span class="post-card-num" style="color:var(--alert);">{String(s3.epilogue.series_chapter).padStart(2,'0')}</span>
+                      <div class="post-card-copy">
+                        <div class="post-card-top">
+                          <span class={`status-pill ${getStatusClass(s3.epilogue.status)}`}>{getStatusLabel(s3.epilogue.status)}</span>
+                          <span class="post-card-meta">{s3.epilogue.reading_time}</span>
+                        </div>
+                        <p class="post-card-title">{s3.epilogue.title}</p>
+                        <p class="post-card-desc">{s3.epilogue.teaser ?? s3.epilogue.subtitle}</p>
                       </div>
                     </a>
                   </div>
@@ -584,29 +548,33 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
   </div>
 
   <script>
-    // ── TOC 시리즈 접기/펼치기 ──
+    // ── 시리즈 ID 기준으로 TOC + 북 양방향 동기화 ──
+    function syncSeries(seriesId: string, newState: string) {
+      const book = document.getElementById('book-' + seriesId) as HTMLElement | null;
+      const toc  = document.getElementById('toc-'  + seriesId) as HTMLElement | null;
+      if (book) book.dataset.open = newState;
+      if (toc)  toc.dataset.open  = newState;
+    }
+
+    // TOC 버튼 클릭 → 북도 연동
     document.querySelectorAll('[data-toc-toggle]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const wrap = btn.closest('.toc-series-wrap') as HTMLElement;
+        const wrap = btn.closest('.toc-series-wrap') as HTMLElement | null;
         if (!wrap) return;
-        wrap.dataset.open = wrap.dataset.open === 'true' ? 'false' : 'true';
+        const newState = wrap.dataset.open === 'true' ? 'false' : 'true';
+        const seriesId = wrap.id.replace('toc-', '');
+        syncSeries(seriesId, newState);
       });
     });
 
-    // ── 메인 북 목차 접기/펼치기 ──
+    // 북 목차 버튼 클릭 → TOC도 연동
     document.querySelectorAll('[data-book-toggle]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const book = btn.closest('.series-book') as HTMLElement;
+        const book = btn.closest('.series-book') as HTMLElement | null;
         if (!book) return;
-        const isOpen = book.dataset.open === 'true';
-        book.dataset.open = isOpen ? 'false' : 'true';
-
-        // TOC도 동기화: 같은 시리즈 펼침
-        const tocId = 'toc-' + book.id.replace('book-', '');
-        const tocWrap = document.getElementById(tocId);
-        if (tocWrap && !isOpen) {
-          tocWrap.dataset.open = 'true';
-        }
+        const newState = book.dataset.open === 'true' ? 'false' : 'true';
+        const seriesId = book.id.replace('book-', '');
+        syncSeries(seriesId, newState);
       });
     });
   </script>

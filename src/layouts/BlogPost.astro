@@ -5,89 +5,229 @@ const { frontmatter } = Astro.props;
 const isS2 = frontmatter.blog_id?.startsWith('BLOG_S2');
 const isS3 = frontmatter.blog_id?.startsWith('BLOG_S3');
 const postPrefix = isS3 ? 'post-s3-' : isS2 ? 'post-s2-' : 'post-';
-const chapterLabel = frontmatter.series_chapter === 0
-  ? (frontmatter.series_chapter === 0 && frontmatter.blog_id?.endsWith('00') ? '프롤로그' : '에필로그')
-  : `Chapter ${frontmatter.series_chapter}`;
+
+const accentColor  = isS3 ? 'var(--alert)' : isS2 ? '#0288D1' : 'var(--accent)';
+const accentRgba   = isS3 ? '255,112,67' : isS2 ? '2,136,209' : '255,112,67';
+const seriesLabel  = isS3 ? 'Series 3' : isS2 ? 'Series 2' : 'Series 1';
+
+const chapterLabel =
+  frontmatter.series_chapter === 0  ? '프롤로그' :
+  frontmatter.series_chapter === 13 ? '에필로그' :
+  `Chapter ${frontmatter.series_chapter}`;
 ---
 
 <BaseLayout title={`${frontmatter.title} — ${frontmatter.series}`} activePage="blog">
   <Fragment slot="head">
     <style>
-      .blog-article{max-width:720px;margin:0 auto;padding:7rem 1.5rem 5rem;}
-      .blog-article h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.15;word-break:keep-all;margin-bottom:.6rem;}
-      .blog-article h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin:2.5rem 0 1rem;color:var(--text);word-break:keep-all;}
-      .blog-article h3{font-size:1.15rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
-      .blog-article p{font-size:1.02rem;color:var(--text-dim);line-height:1.85;word-break:keep-all;margin-bottom:1.2rem;}
-      .blog-article strong{color:var(--text);font-weight:700;}
-      .blog-article blockquote{border-left:3px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:var(--badge-brain-bg);border-radius:0 10px 10px 0;}
-      .blog-article blockquote p{color:var(--text);font-style:italic;margin-bottom:0;}
-      .blog-article ul,.blog-article ol{padding-left:1.5rem;margin-bottom:1.2rem;}
-      .blog-article li{font-size:1rem;color:var(--text-dim);line-height:1.8;margin-bottom:.4rem;}
-      .blog-article hr{border:none;height:1px;background:var(--divider);margin:2.5rem 0;}
-      .blog-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:2rem;font-size:.85rem;color:var(--text-muted);}
-      .blog-nav{display:flex;justify-content:space-between;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--divider);}
-      .blog-nav a{font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;}
+      /* ── 레이아웃 뼈대 (scoped OK) ── */
+      .blog-wrap{max-width:740px;margin:0 auto;padding:7.5rem 1.5rem 6rem}
+      .blog-series-tag{display:inline-flex;align-items:center;gap:.38rem;padding:.3rem .75rem;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;margin-bottom:1.2rem}
+      .blog-chapter-label{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+      .blog-title{font-size:clamp(2.1rem,5vw,3.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.12;word-break:keep-all;margin-bottom:.6rem;color:var(--text)}
+      .blog-subtitle{font-size:1.16rem;color:var(--text-muted);margin-bottom:1.4rem;word-break:keep-all;line-height:1.65}
+      .blog-meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;font-size:.84rem;color:var(--text-muted);margin-bottom:2rem}
+      .blog-meta-dot{opacity:.3}
+      .blog-status-pub{color:#43A047;font-weight:700}
+      .blog-divider{border:none;height:1px;background:var(--divider);margin:0 0 2.75rem}
+      .blog-nav{display:flex;justify-content:space-between;align-items:center;margin-top:4rem;padding-top:1.75rem;border-top:1px solid var(--divider)}
+      .blog-nav-btn{font-size:.88rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1.05rem;border-radius:999px;border:1px solid var(--divider);color:var(--text-dim);transition:all .22s ease}
+      .blog-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+      @media(max-width:640px){
+        .blog-wrap{padding:6rem 1.1rem 4rem}
+      }
+
+      /* ══════════════════════════════════════════
+         본문 타이포그래피 — slot 내부에 도달하려면
+         반드시 :global() 필요 (Astro scoping 제한)
+         ══════════════════════════════════════════ */
+
+      :global(.blog-body){
+        font-size:1.03rem;
+        color:var(--text-dim);
+        line-height:1.92;
+        word-break:keep-all;
+      }
+
+      /* 첫 번째 h1은 MD 파일 제목과 중복 → 숨김 */
+      :global(.blog-body > h1:first-child){ display:none }
+      :global(.blog-body h1){
+        font-size:1.65rem;font-weight:800;letter-spacing:-.03em;
+        color:var(--text);margin:3rem 0 1rem;word-break:keep-all;
+      }
+
+      :global(.blog-body h2){
+        font-size:1.35rem;font-weight:800;letter-spacing:-.025em;
+        color:var(--text);margin:3rem 0 1rem;word-break:keep-all;
+        padding-bottom:.55rem;
+        border-bottom:1.5px solid var(--divider);
+      }
+      :global(.blog-body h3){
+        font-size:1.1rem;font-weight:700;color:var(--text);
+        margin:2.25rem 0 .75rem;word-break:keep-all;
+      }
+      :global(.blog-body h4){
+        font-size:1rem;font-weight:700;color:var(--text);
+        margin:1.75rem 0 .5rem;
+      }
+
+      :global(.blog-body p){
+        margin-bottom:1.5rem;
+      }
+      :global(.blog-body > p:first-of-type){
+        font-size:1.06rem;
+        color:var(--text);
+      }
+
+      :global(.blog-body strong){ color:var(--text);font-weight:700 }
+      :global(.blog-body em){ font-style:italic;color:var(--text-dim) }
+
+      :global(.blog-body blockquote){
+        border-left:3px solid var(--accent);
+        padding:1rem 1.4rem;
+        margin:2rem 0;
+        background:rgba(255,112,67,.04);
+        border-radius:0 14px 14px 0;
+      }
+      :global(.blog-body blockquote p){
+        color:var(--text);
+        font-style:italic;
+        margin-bottom:0;
+        font-size:1rem;
+        line-height:1.8;
+      }
+
+      :global(.blog-body ul),:global(.blog-body ol){
+        padding-left:1.6rem;
+        margin-bottom:1.5rem;
+      }
+      :global(.blog-body li){
+        font-size:1.01rem;
+        color:var(--text-dim);
+        line-height:1.85;
+        margin-bottom:.5rem;
+      }
+      :global(.blog-body li strong){ color:var(--text) }
+      :global(.blog-body li p){ margin-bottom:.4rem }
+
+      :global(.blog-body hr){
+        border:none;
+        height:1px;
+        background:var(--divider);
+        margin:2.75rem 0;
+      }
+
+      :global(.blog-body a){
+        color:var(--accent);
+        text-decoration:underline;
+        text-decoration-color:rgba(255,112,67,.3);
+        transition:text-decoration-color .2s;
+      }
+      :global(.blog-body a:hover){
+        text-decoration-color:var(--accent);
+      }
+
+      :global(.blog-body img){
+        width:100%;border-radius:16px;
+        margin:2rem 0;display:block;
+        box-shadow:0 4px 28px rgba(0,0,0,.09);
+      }
+      :global(.blog-body figure){ margin:2rem 0 }
+      :global(.blog-body figcaption){
+        font-size:.8rem;color:var(--text-muted);
+        text-align:center;margin-top:.55rem;line-height:1.55;
+      }
+
+      :global(.blog-body code){
+        background:var(--badge-brain-bg);border-radius:5px;
+        padding:.15em .4em;font-size:.88em;color:var(--accent);
+        font-family:monospace;
+      }
+      :global(.blog-body pre){
+        background:var(--badge-brain-bg);border-radius:12px;
+        padding:1.1rem 1.4rem;overflow-x:auto;margin:1.75rem 0;
+      }
+      :global(.blog-body pre code){
+        background:none;padding:0;font-size:.9rem;color:var(--text);
+      }
+
+      :global(.blog-body table){
+        width:100%;border-collapse:collapse;
+        margin:1.75rem 0;font-size:.92rem;
+      }
+      :global(.blog-body th){
+        padding:.6rem .9rem;background:var(--badge-brain-bg);
+        border-bottom:2px solid var(--divider);
+        text-align:left;font-weight:700;color:var(--text);
+      }
+      :global(.blog-body td){
+        padding:.6rem .9rem;
+        border-bottom:1px solid var(--divider);
+        color:var(--text-dim);
+      }
+      :global(.blog-body tr:last-child td){ border-bottom:none }
     </style>
   </Fragment>
 
-  <article class="blog-article">
-    <!-- Series badge -->
-    <div class="reveal" style="margin-bottom:1.5rem;">
-      <a href={`${base}blog/`} style="text-decoration:none;">
-        <span class="badge badge-mind" style="display:inline-flex;">
-          <iconify-icon icon="solar:book-2-linear" style="font-size:.85rem;"></iconify-icon>
-          {frontmatter.series}
-        </span>
+  <div class="blog-wrap">
+
+    <!-- 시리즈 뱃지 -->
+    <div class="reveal">
+      <a href={`${base}blog/`}
+        class="blog-series-tag"
+        style={`background:rgba(${accentRgba},.07);border:1px solid rgba(${accentRgba},.22);color:${accentColor};`}>
+        <iconify-icon icon="solar:book-2-linear" style="font-size:.82rem;"></iconify-icon>
+        {frontmatter.series} · {seriesLabel}
       </a>
     </div>
 
-    <!-- Chapter label -->
-    <p class="reveal d1" style="font-size:.82rem;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:.6rem;">
-      {chapterLabel}
-    </p>
+    <!-- 챕터 레이블 -->
+    <p class="blog-chapter-label reveal d1" style={`color:${accentColor};`}>{chapterLabel}</p>
 
-    <!-- Title -->
-    <h1 class="reveal d1">{frontmatter.title}</h1>
+    <!-- 제목 -->
+    <h1 class="blog-title reveal d1">{frontmatter.title}</h1>
 
-    <!-- Subtitle -->
+    <!-- 부제 -->
     {frontmatter.subtitle && (
-      <p class="reveal d2" style="font-size:1.15rem;color:var(--text-muted);margin-bottom:1.5rem;word-break:keep-all;">
-        {frontmatter.subtitle}
-      </p>
+      <p class="blog-subtitle reveal d2">{frontmatter.subtitle}</p>
     )}
 
-    <!-- Meta -->
-    <div class="blog-meta reveal d2">
-      <span>{frontmatter.reading_time}</span>
-      <span style="opacity:.4;">·</span>
-      <span>{frontmatter.created}</span>
+    <!-- 메타 -->
+    <div class="blog-meta-row reveal d2">
+      {frontmatter.reading_time && <span>{frontmatter.reading_time}</span>}
+      {frontmatter.reading_time && <span class="blog-meta-dot">·</span>}
+      {frontmatter.published
+        ? <span>{String(frontmatter.published).slice(0,10)}</span>
+        : frontmatter.created
+        ? <span>{String(frontmatter.created).slice(0,10)}</span>
+        : null}
       {frontmatter.status === 'published' && (
         <>
-          <span style="opacity:.4;">·</span>
-          <span style="color:#66BB6A;font-weight:600;">공개</span>
+          <span class="blog-meta-dot">·</span>
+          <span class="blog-status-pub">공개</span>
         </>
       )}
     </div>
 
-    <hr class="reveal d3" />
+    <hr class="blog-divider reveal d3" />
 
-    <!-- Content -->
-    <div class="reveal d3">
+    <!-- 본문 (slot) -->
+    <div class="blog-body reveal d3">
       <slot />
     </div>
 
-    <!-- Navigation -->
-    <div class="blog-nav">
-      {frontmatter.series_chapter > 0 ? (
-        <a href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
-          <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
-        </a>
-      ) : <span></span>}
-      {frontmatter.series_chapter < 13 ? (
-        <a href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
-          다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
-        </a>
-      ) : <span></span>}
-    </div>
-  </article>
+    <!-- 전후 네비게이션 -->
+    <nav class="blog-nav">
+      {frontmatter.series_chapter > 0
+        ? <a class="blog-nav-btn" href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
+            <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
+          </a>
+        : <span></span>}
+      {frontmatter.series_chapter < 13
+        ? <a class="blog-nav-btn" href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter + 1).padStart(2, '0')}/`}>
+            다음 글 <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+          </a>
+        : <span></span>}
+    </nav>
+
+  </div>
 </BaseLayout>
