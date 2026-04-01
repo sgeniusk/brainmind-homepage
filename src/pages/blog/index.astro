@@ -77,7 +77,7 @@ const s3Title = s3Posts[0]?.series ?? '연결이 사라지기 전에';
 const s3Sections = [
   { id: 's3-part-1', label: 'Part 1', title: '외주된 연결들', accent: 'var(--accent)', posts: s3.part1 },
   { id: 's3-part-2', label: 'Part 2', title: '연결의 문법', accent: 'var(--alert)', posts: s3.part2 },
-  { id: 's3-part-3', label: 'Part 3', title: '너머', accent: 'var(--mind)', posts: s3.part3 },
+  { id: 's3-part-3', label: 'Part 3', title: '너머', accent: 'var(--alert)', posts: s3.part3 },
 ];
 
 const sections = [
@@ -106,13 +106,7 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
       .toc-head{padding-bottom:1rem;border-bottom:1px solid var(--divider);margin-bottom:1rem}
       .toc-title{font-size:1.08rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
       .toc-subtitle{font-size:.8rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
-      .toc-group-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:1.1rem 0 .55rem}
-      .toc-link{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem .8rem;border-radius:16px;text-decoration:none;transition:all .22s ease;color:var(--text-dim)}
-      .toc-link:hover{background:var(--card-hover-bg);color:var(--text)}
-      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;color:var(--accent);line-height:1.65}
-      .toc-copy{display:flex;flex-direction:column;gap:.1rem;min-width:0}
-      .toc-copy strong{font-size:.9rem;color:var(--text);font-weight:700;word-break:keep-all}
-      .toc-copy span{font-size:.78rem;color:var(--text-muted);line-height:1.55;word-break:keep-all}
+      .toc-group-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:.1rem 0 .3rem}
       .blog-content{display:flex;flex-direction:column;gap:1.35rem}
       .hero-card{padding:2rem 2rem 1.85rem;position:relative;overflow:hidden}
       .hero-card::before{content:'';position:absolute;inset:auto auto -100px -60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,112,67,.15) 0%,transparent 70%);pointer-events:none}
@@ -141,6 +135,64 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
       .section-title{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
       .section-desc{font-size:.85rem;color:var(--text-muted);line-height:1.6}
       .section-list{display:flex;flex-direction:column;gap:.7rem}
+
+      /* ── TOC Accordion ── */
+      .toc-series-wrap{margin-bottom:.15rem}
+      .toc-series-btn{
+        display:flex;align-items:flex-start;gap:.7rem;
+        padding:.6rem .8rem;border-radius:16px;
+        cursor:pointer;transition:background .22s ease,color .22s ease;
+        color:var(--text-dim);background:none;border:none;
+        width:100%;text-align:left;font-family:inherit;
+      }
+      .toc-series-btn:hover{background:var(--card-hover-bg);color:var(--text)}
+      .toc-num{font-size:.72rem;font-weight:800;min-width:1.8rem;line-height:1.65}
+      .toc-copy{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1}
+      .toc-copy strong{font-size:.9rem;color:var(--text);font-weight:700;word-break:keep-all}
+      .toc-copy span{font-size:.78rem;color:var(--text-muted);line-height:1.55;word-break:keep-all}
+      .toc-chev{
+        flex-shrink:0;margin-top:.2rem;font-size:.88rem;color:var(--text-muted);
+        transition:transform .32s cubic-bezier(.4,0,.2,1);
+      }
+      .toc-series-wrap[data-open="false"] .toc-chev{transform:rotate(-90deg)}
+      .toc-pills-wrap{
+        overflow:hidden;max-height:200px;opacity:1;
+        transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s ease;
+      }
+      .toc-series-wrap[data-open="false"] .toc-pills-wrap{max-height:0;opacity:0}
+
+      /* ── Book (Main) Accordion ── */
+      .series-book{}
+      .book-toggle-row{
+        display:flex;align-items:center;justify-content:flex-end;
+        margin-top:1.1rem;padding-top:.9rem;
+        border-top:1px solid var(--divider);
+      }
+      .book-toggle-btn{
+        display:inline-flex;align-items:center;gap:.38rem;
+        padding:.38rem .85rem;border-radius:999px;
+        border:1px solid var(--divider);background:none;
+        color:var(--text-muted);font-size:.78rem;font-weight:700;
+        letter-spacing:.04em;cursor:pointer;font-family:inherit;
+        transition:all .22s ease;
+      }
+      .book-toggle-btn:hover{border-color:var(--accent);color:var(--accent)}
+      .book-chev{transition:transform .35s cubic-bezier(.4,0,.2,1)}
+      .series-book[data-open="false"] .book-chev{transform:rotate(180deg)}
+      .book-toggle-btn .lbl-open{display:none}
+      .book-toggle-btn .lbl-close{display:inline}
+      .series-book[data-open="false"] .book-toggle-btn .lbl-open{display:inline}
+      .series-book[data-open="false"] .book-toggle-btn .lbl-close{display:none}
+      .book-pages{
+        display:flex;flex-direction:column;gap:1.35rem;
+        overflow:hidden;max-height:5000px;opacity:1;
+        margin-top:1.35rem;
+        transition:max-height .65s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .35s ease;
+      }
+      .series-book[data-open="false"] .book-pages{
+        max-height:0;opacity:0;margin-top:0;pointer-events:none;
+      }
+
       @media (max-width: 960px){
         .blog-shell{padding-top:6.75rem}
         .blog-grid{grid-template-columns:1fr}
@@ -158,6 +210,8 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
 
   <div class="blog-shell">
     <div class="blog-grid">
+
+      <!-- ══ 서재 사이드바 ══ -->
       <aside class="toc-card reveal">
         <div class="toc-head">
           <p class="toc-title">
@@ -168,36 +222,46 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         </div>
 
         <!-- S1 -->
-        <div class="toc-group-label">시리즈 1</div>
-        <a class="toc-link" href="#series-overview">
-          <span class="toc-num" style="color:var(--accent);">S1</span>
-          <span class="toc-copy">
-            <strong>{seriesTitle}</strong>
-            <span>{posts.length}편 · AI 시대를 건너는 에세이</span>
-          </span>
-        </a>
-        <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .6rem;">
-          {prologue && <a href={prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">프롤로그</a>}
-          {sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">{s.label} {s.title}</a>)}
-          {epilogue && <a href={epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">에필로그</a>}
+        <div class="toc-series-wrap" data-open="true" id="toc-s1">
+          <div class="toc-group-label">시리즈 1</div>
+          <button class="toc-series-btn" data-toc-toggle>
+            <span class="toc-num" style="color:var(--accent);">S1</span>
+            <span class="toc-copy">
+              <strong>{seriesTitle}</strong>
+              <span>{posts.length}편 · AI 시대를 건너는 에세이</span>
+            </span>
+            <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
+          </button>
+          <div class="toc-pills-wrap">
+            <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
+              {prologue && <a href={prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">프롤로그</a>}
+              {sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">{s.label} {s.title}</a>)}
+              {epilogue && <a href={epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.08);color:var(--accent);text-decoration:none;">에필로그</a>}
+            </div>
+          </div>
         </div>
 
         <!-- S2 -->
         {s2Posts.length > 0 && (
           <Fragment>
-            <div style="padding-top:.8rem;border-top:1px solid var(--divider);margin-bottom:.4rem;"></div>
-            <div class="toc-group-label">시리즈 2</div>
-            <a class="toc-link" href="#series-2-overview">
-              <span class="toc-num" style="color:var(--brain);">S2</span>
-              <span class="toc-copy">
-                <strong>{s2Title}</strong>
-                <span>{s2Posts.length}편 · 뇌와 몸 사이에서</span>
-              </span>
-            </a>
-            <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .6rem;">
-              {s2.prologue && <a href={s2.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:var(--brain);text-decoration:none;">프롤로그</a>}
-              {s2Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:var(--brain);text-decoration:none;">{s.label} {s.title}</a>)}
-              {s2.epilogue && <a href={s2.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:var(--brain);text-decoration:none;">에필로그</a>}
+            <div style="padding-top:.6rem;border-top:1px solid var(--divider);margin-bottom:.15rem;"></div>
+            <div class="toc-series-wrap" data-open="false" id="toc-s2">
+              <div class="toc-group-label">시리즈 2</div>
+              <button class="toc-series-btn" data-toc-toggle>
+                <span class="toc-num" style="color:#0288D1;">S2</span>
+                <span class="toc-copy">
+                  <strong>{s2Title}</strong>
+                  <span>{s2Posts.length}편 · 뇌와 몸 사이에서</span>
+                </span>
+                <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
+              </button>
+              <div class="toc-pills-wrap">
+                <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
+                  {s2.prologue && <a href={s2.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">프롤로그</a>}
+                  {s2Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">{s.label} {s.title}</a>)}
+                  {s2.epilogue && <a href={s2.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(79,195,247,.08);color:#0288D1;text-decoration:none;">에필로그</a>}
+                </div>
+              </div>
             </div>
           </Fragment>
         )}
@@ -205,285 +269,345 @@ const getStatusClass = (status?: string) => (status === 'published' ? 'status-pu
         <!-- S3 -->
         {s3Posts.length > 0 && (
           <Fragment>
-            <div style="padding-top:.8rem;border-top:1px solid var(--divider);margin-bottom:.4rem;"></div>
-            <div class="toc-group-label">시리즈 3</div>
-            <a class="toc-link" href="#series-3-overview">
-              <span class="toc-num" style="color:var(--mind);">S3</span>
-              <span class="toc-copy">
-                <strong>{s3Title}</strong>
-                <span>{s3Posts.length}편 · AI 이후 시대의 관계</span>
-              </span>
-            </a>
-            <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .6rem;">
-              {s3.prologue && <a href={s3.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(149,117,205,.08);color:var(--mind);text-decoration:none;">프롤로그</a>}
-              {s3Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(149,117,205,.08);color:var(--mind);text-decoration:none;">{s.label} {s.title}</a>)}
-              {s3.epilogue && <a href={s3.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(149,117,205,.08);color:var(--mind);text-decoration:none;">에필로그</a>}
+            <div style="padding-top:.6rem;border-top:1px solid var(--divider);margin-bottom:.15rem;"></div>
+            <div class="toc-series-wrap" data-open="false" id="toc-s3">
+              <div class="toc-group-label">시리즈 3</div>
+              <button class="toc-series-btn" data-toc-toggle>
+                <span class="toc-num" style="color:var(--alert);">S3</span>
+                <span class="toc-copy">
+                  <strong>{s3Title}</strong>
+                  <span>{s3Posts.length}편 · AI 이후 시대의 관계</span>
+                </span>
+                <iconify-icon icon="solar:alt-arrow-down-linear" class="toc-chev"></iconify-icon>
+              </button>
+              <div class="toc-pills-wrap">
+                <div style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem .2rem .65rem .2rem;">
+                  {s3.prologue && <a href={s3.prologue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">프롤로그</a>}
+                  {s3Sections.map(s => <a href={`#${s.id}`} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">{s.label} {s.title}</a>)}
+                  {s3.epilogue && <a href={s3.epilogue.href} style="font-size:.72rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;background:rgba(255,112,67,.06);color:var(--alert);text-decoration:none;">에필로그</a>}
+                </div>
+              </div>
             </div>
           </Fragment>
         )}
-
       </aside>
 
+      <!-- ══ 메인 콘텐츠 ══ -->
       <section class="blog-content">
-        <div class="hero-card reveal" id="series-overview">
-          <div class="hero-badges">
-            <span class="hero-kicker">
-              <iconify-icon icon="solar:pen-new-round-bold-duotone" style="font-size:.9rem;"></iconify-icon>
-              Essay Series
-            </span>
-            <span class="hero-meta">{posts.length}편 · 3파트 · 2026</span>
+
+        <!-- ── S1 BOOK ── -->
+        <div class="series-book" id="book-s1" data-open="true">
+          <div class="hero-card book-cover reveal" id="series-overview">
+            <div class="hero-badges">
+              <span class="hero-kicker">
+                <iconify-icon icon="solar:pen-new-round-bold-duotone" style="font-size:.9rem;"></iconify-icon>
+                Essay Series
+              </span>
+              <span class="hero-meta">{posts.length}편 · 3파트 · 2026</span>
+            </div>
+            <h1 class="hero-title">{seriesTitle}</h1>
+            <p class="hero-desc">
+              AI 시대를 건너는 에세이입니다. 사라지고 있는 것들을 관찰하고, 그 뒤의
+              구조를 해부하고, 결국 무엇을 지키기로 할지 천천히 묻습니다.
+            </p>
+            <div class="hero-quote">
+              "AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."
+            </div>
+            <div class="book-toggle-row">
+              <button class="book-toggle-btn" data-book-toggle>
+                <span class="lbl-close">목차 접기</span>
+                <span class="lbl-open">목차 펼치기</span>
+                <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
+              </button>
+            </div>
           </div>
-          <h1 class="hero-title">{seriesTitle}</h1>
-          <p class="hero-desc">
-            AI 시대를 건너는 에세이입니다. 사라지고 있는 것들을 관찰하고, 그 뒤의 구조를 해부하고,
-            결국 무엇을 지키기로 할지 천천히 묻습니다.
-          </p>
-          <div class="hero-quote">
-            "AI에게 글을 맡긴 날, 편리함과 불안이 동시에 왔습니다. 이건 효율인가, 포기인가. 이 질문에서 시작합니다."
+          <div class="book-pages">
+            {prologue && (
+              <div class="prologue-card">
+                <a class="post-card" href={prologue.href}>
+                  <span class="post-card-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
+                  <div class="post-card-copy">
+                    <div class="post-card-top">
+                      <span class={`status-pill ${getStatusClass(prologue.status)}`}>{getStatusLabel(prologue.status)}</span>
+                      <span class="post-card-meta">{prologue.reading_time ?? '읽기 시간 미정'}</span>
+                    </div>
+                    <p class="post-card-title">{prologue.title}</p>
+                    <p class="post-card-desc">{prologue.teaser ?? prologue.subtitle}</p>
+                  </div>
+                </a>
+              </div>
+            )}
+            {sections.map((section, index) => (
+              <div class="section-card" id={section.id}>
+                <div class="section-head">
+                  <div class="section-line"></div>
+                  <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
+                  <div class="section-line"></div>
+                </div>
+                <div style="margin-bottom:1rem;">
+                  <p class="section-title">{section.title}</p>
+                  <p class="section-desc">
+                    {index === 0 && '불편하지만 분명히 사라지고 있는 감각과 습관을 먼저 관찰합니다.'}
+                    {index === 1 && '편의 뒤에 숨은 설계, 소유, 동의, 중독의 구조를 따라갑니다.'}
+                    {index === 2 && '결국 무엇을 직접 붙들고 살아갈지에 대한 선택으로 돌아옵니다.'}
+                  </p>
+                </div>
+                <div class="section-list">
+                  {section.posts.map((post) => (
+                    <a class="post-card" href={post.href}>
+                      <span class="post-card-num">{String(post.series_chapter).padStart(2, '0')}</span>
+                      <div class="post-card-copy">
+                        <div class="post-card-top">
+                          <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
+                          <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                        </div>
+                        <p class="post-card-title">{post.title}</p>
+                        <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {epilogue && (
+              <div class="epilogue-card">
+                <a class="post-card" href={epilogue.href}>
+                  <span class="post-card-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
+                  <div class="post-card-copy">
+                    <div class="post-card-top">
+                      <span class={`status-pill ${getStatusClass(epilogue.status)}`}>{getStatusLabel(epilogue.status)}</span>
+                      <span class="post-card-meta">{epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                    </div>
+                    <p class="post-card-title">{epilogue.title}</p>
+                    <p class="post-card-desc">{epilogue.teaser ?? epilogue.subtitle}</p>
+                  </div>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
-        {prologue && (
-          <div class="prologue-card reveal d1">
-            <a class="post-card" href={prologue.href}>
-              <span class="post-card-num">{String(prologue.series_chapter).padStart(2, '0')}</span>
-              <div class="post-card-copy">
-                <div class="post-card-top">
-                  <span class={`status-pill ${getStatusClass(prologue.status)}`}>{getStatusLabel(prologue.status)}</span>
-                  <span class="post-card-meta">{prologue.reading_time ?? '읽기 시간 미정'}</span>
-                </div>
-                <p class="post-card-title">{prologue.title}</p>
-                <p class="post-card-desc">{prologue.teaser ?? prologue.subtitle}</p>
-              </div>
-            </a>
-          </div>
-        )}
-
-        {sections.map((section, index) => (
-          <div class="section-card reveal" id={section.id}>
-            <div class="section-head">
-              <div class="section-line"></div>
-              <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
-              <div class="section-line"></div>
-            </div>
-            <div style="margin-bottom:1rem;">
-              <p class="section-title">{section.title}</p>
-              <p class="section-desc">
-                {index === 0 && '불편하지만 분명히 사라지고 있는 감각과 습관을 먼저 관찰합니다.'}
-                {index === 1 && '편의 뒤에 숨은 설계, 소유, 동의, 중독의 구조를 따라갑니다.'}
-                {index === 2 && '결국 무엇을 직접 붙들고 살아갈지에 대한 선택으로 돌아옵니다.'}
-              </p>
-            </div>
-            <div class="section-list">
-              {section.posts.map((post) => (
-                <a class="post-card" href={post.href}>
-                  <span class="post-card-num">{String(post.series_chapter).padStart(2, '0')}</span>
-                  <div class="post-card-copy">
-                    <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                      <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
-                    </div>
-                    <p class="post-card-title">{post.title}</p>
-                    <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-
-        {epilogue && (
-          <div class="epilogue-card reveal d2">
-            <a class="post-card" href={epilogue.href}>
-              <span class="post-card-num">{String(epilogue.series_chapter).padStart(2, '0')}</span>
-              <div class="post-card-copy">
-                <div class="post-card-top">
-                  <span class={`status-pill ${getStatusClass(epilogue.status)}`}>{getStatusLabel(epilogue.status)}</span>
-                  <span class="post-card-meta">{epilogue.reading_time ?? '읽기 시간 미정'}</span>
-                </div>
-                <p class="post-card-title">{epilogue.title}</p>
-                <p class="post-card-desc">{epilogue.teaser ?? epilogue.subtitle}</p>
-              </div>
-            </a>
-          </div>
-        )}
-
-        {/* ── Series 3: 연결이 사라지기 전에 ── */}
+        <!-- ── S3 BOOK ── -->
         {s3Posts.length > 0 && (
           <>
-            <div style="margin-top:2.5rem;"></div>
-            <div class="hero-card reveal" id="series-3-overview" style="border-color:rgba(149,117,205,.22);">
-              <div class="hero-badges">
-                <span class="hero-kicker" style="background:rgba(149,117,205,.08);border-color:rgba(149,117,205,.22);color:var(--mind);">
-                  <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" style="font-size:.9rem;"></iconify-icon>
-                  Essay Series 3
-                </span>
-                <span class="hero-meta">{s3Posts.length}편 · 3파트 · 2026</span>
-              </div>
-              <h1 class="hero-title">{s3Title}</h1>
-              <p class="hero-desc">
-                AI가 친구를 고르고, 앱이 사랑을 주선하고, 챗봇이 위로한다. 그런데 고독 지수는 사상 최고다. AI 이후 시대의 연결을 바라봅니다.
-              </p>
-              <div class="hero-quote" style="border-color:var(--mind);background:rgba(149,117,205,.04);">
-                "AI 친구가 생겼다. 위로받았는데 화면을 닫고 나면 이상하게 더 외로웠다."
-              </div>
-            </div>
-
-            {s3.prologue && (
-              <div class="prologue-card reveal d1">
-                <a class="post-card" href={s3.prologue.href}>
-                  <span class="post-card-num" style="color:var(--mind);">{String(s3.prologue.series_chapter).padStart(2, '0')}</span>
-                  <div class="post-card-copy">
-                    <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(s3.prologue.status)}`}>{getStatusLabel(s3.prologue.status)}</span>
-                      <span class="post-card-meta">{s3.prologue.reading_time ?? '읽기 시간 미정'}</span>
-                    </div>
-                    <p class="post-card-title">{s3.prologue.title}</p>
-                    <p class="post-card-desc">{s3.prologue.teaser ?? s3.prologue.subtitle}</p>
-                  </div>
-                </a>
-              </div>
-            )}
-
-            {s3Sections.map((section, index) => (
-              <div class="section-card reveal" id={section.id}>
-                <div class="section-head">
-                  <div class="section-line"></div>
-                  <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
-                  <div class="section-line"></div>
+            <div style="margin-top:1rem;"></div>
+            <div class="series-book" id="book-s3" data-open="false">
+              <div class="hero-card book-cover reveal" id="series-3-overview" style="border-color:rgba(255,112,67,.2);">
+                <div class="hero-badges">
+                  <span class="hero-kicker" style="background:rgba(255,112,67,.06);border-color:rgba(255,112,67,.2);color:var(--alert);">
+                    <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" style="font-size:.9rem;"></iconify-icon>
+                    Essay Series 3
+                  </span>
+                  <span class="hero-meta">{s3Posts.length}편 · 3파트 · 2026</span>
                 </div>
-                <div style="margin-bottom:1rem;">
-                  <p class="section-title">{section.title}</p>
-                  <p class="section-desc">
-                    {index === 0 && '알고리즘, 앱, 챗봇, 화면 — 연결을 외주화하는 방식들을 관찰합니다.'}
-                    {index === 1 && '거울 뉴런, 옥시토신, AI의 역설 — 진짜 연결이 작동하는 원리를 해부합니다.'}
-                    {index === 2 && '양극화, 불완전함, 몸의 독점, 새로운 의례 — AI 이후 세계의 연결을 예측합니다.'}
-                  </p>
+                <h1 class="hero-title">{s3Title}</h1>
+                <p class="hero-desc">
+                  AI가 친구를 고르고, 앱이 사랑을 주선하고, 챗봇이 위로한다. 그런데 고독 지수는 사상 최고다. AI 이후 시대의 연결을 바라봅니다.
+                </p>
+                <div class="hero-quote" style="border-color:var(--alert);background:rgba(255,112,67,.03);">
+                  "AI 친구가 생겼다. 위로받았는데 화면을 닫고 나면 이상하게 더 외로웠다."
                 </div>
-                <div class="section-list">
-                  {section.posts.map((post) => (
-                    <a class="post-card" href={post.href}>
-                      <span class="post-card-num" style="color:var(--mind);">{String(post.series_chapter).padStart(2, '0')}</span>
+                <div class="book-toggle-row">
+                  <button class="book-toggle-btn" data-book-toggle>
+                    <span class="lbl-close">목차 접기</span>
+                    <span class="lbl-open">목차 펼치기</span>
+                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="book-pages">
+                {s3.prologue && (
+                  <div class="prologue-card">
+                    <a class="post-card" href={s3.prologue.href}>
+                      <span class="post-card-num" style="color:var(--alert);">{String(s3.prologue.series_chapter).padStart(2, '0')}</span>
                       <div class="post-card-copy">
                         <div class="post-card-top">
-                          <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                          <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                          <span class={`status-pill ${getStatusClass(s3.prologue.status)}`}>{getStatusLabel(s3.prologue.status)}</span>
+                          <span class="post-card-meta">{s3.prologue.reading_time ?? '읽기 시간 미정'}</span>
                         </div>
-                        <p class="post-card-title">{post.title}</p>
-                        <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                        <p class="post-card-title">{s3.prologue.title}</p>
+                        <p class="post-card-desc">{s3.prologue.teaser ?? s3.prologue.subtitle}</p>
                       </div>
                     </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            {s3.epilogue && (
-              <div class="epilogue-card reveal d2">
-                <a class="post-card" href={s3.epilogue.href}>
-                  <span class="post-card-num" style="color:var(--mind);">{String(s3.epilogue.series_chapter).padStart(2, '0')}</span>
-                  <div class="post-card-copy">
-                    <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(s3.epilogue.status)}`}>{getStatusLabel(s3.epilogue.status)}</span>
-                      <span class="post-card-meta">{s3.epilogue.reading_time ?? '읽기 시간 미정'}</span>
-                    </div>
-                    <p class="post-card-title">{s3.epilogue.title}</p>
-                    <p class="post-card-desc">{s3.epilogue.teaser ?? s3.epilogue.subtitle}</p>
                   </div>
-                </a>
+                )}
+                {s3Sections.map((section, index) => (
+                  <div class="section-card" id={section.id}>
+                    <div class="section-head">
+                      <div class="section-line"></div>
+                      <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
+                      <div class="section-line"></div>
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                      <p class="section-title">{section.title}</p>
+                      <p class="section-desc">
+                        {index === 0 && '알고리즘, 앱, 챗봇, 화면 — 연결을 외주화하는 방식들을 관찰합니다.'}
+                        {index === 1 && '거울 뉴런, 옥시토신, AI의 역설 — 진짜 연결이 작동하는 원리를 해부합니다.'}
+                        {index === 2 && '양극화, 불완전함, 몸의 독점, 새로운 의례 — AI 이후 세계의 연결을 예측합니다.'}
+                      </p>
+                    </div>
+                    <div class="section-list">
+                      {section.posts.map((post) => (
+                        <a class="post-card" href={post.href}>
+                          <span class="post-card-num" style="color:var(--alert);">{String(post.series_chapter).padStart(2, '0')}</span>
+                          <div class="post-card-copy">
+                            <div class="post-card-top">
+                              <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
+                              <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                            </div>
+                            <p class="post-card-title">{post.title}</p>
+                            <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {s3.epilogue && (
+                  <div class="epilogue-card">
+                    <a class="post-card" href={s3.epilogue.href}>
+                      <span class="post-card-num" style="color:var(--alert);">{String(s3.epilogue.series_chapter).padStart(2, '0')}</span>
+                      <div class="post-card-copy">
+                        <div class="post-card-top">
+                          <span class={`status-pill ${getStatusClass(s3.epilogue.status)}`}>{getStatusLabel(s3.epilogue.status)}</span>
+                          <span class="post-card-meta">{s3.epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                        </div>
+                        <p class="post-card-title">{s3.epilogue.title}</p>
+                        <p class="post-card-desc">{s3.epilogue.teaser ?? s3.epilogue.subtitle}</p>
+                      </div>
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </>
         )}
 
-        {/* ── Series 2: 몸이 기억하는 것들 ── */}
+        <!-- ── S2 BOOK ── -->
         {s2Posts.length > 0 && (
           <>
-            <div style="margin-top:2.5rem;"></div>
-            <div class="hero-card reveal" id="series-2-overview" style="border-color:rgba(79,195,247,.22);">
-              <div class="hero-badges">
-                <span class="hero-kicker" style="background:rgba(79,195,247,.08);border-color:rgba(79,195,247,.22);color:var(--brain);">
-                  <iconify-icon icon="solar:heart-pulse-bold-duotone" style="font-size:.9rem;"></iconify-icon>
-                  Essay Series 2
-                </span>
-                <span class="hero-meta">{s2Posts.length}편 · 3파트 · 2026</span>
-              </div>
-              <h1 class="hero-title">{s2Title}</h1>
-              <p class="hero-desc">
-                몸은 항상 말하고 있었습니다. 잠, 통증, 배고픔, 피로 — 무시된 신호들을 다시 읽는 여정입니다.
-              </p>
-              <div class="hero-quote" style="border-color:var(--brain);background:rgba(79,195,247,.04);">
-                "허리가 한 달째 보낸 편지를 읽지 않았습니다. 결국 직접 찾아왔습니다."
-              </div>
-            </div>
-
-            {s2.prologue && (
-              <div class="prologue-card reveal d1">
-                <a class="post-card" href={s2.prologue.href}>
-                  <span class="post-card-num" style="color:var(--brain);">{String(s2.prologue.series_chapter).padStart(2, '0')}</span>
-                  <div class="post-card-copy">
-                    <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(s2.prologue.status)}`}>{getStatusLabel(s2.prologue.status)}</span>
-                      <span class="post-card-meta">{s2.prologue.reading_time ?? '읽기 시간 미정'}</span>
-                    </div>
-                    <p class="post-card-title">{s2.prologue.title}</p>
-                    <p class="post-card-desc">{s2.prologue.teaser ?? s2.prologue.subtitle}</p>
-                  </div>
-                </a>
-              </div>
-            )}
-
-            {s2Sections.map((section, index) => (
-              <div class="section-card reveal" id={section.id}>
-                <div class="section-head">
-                  <div class="section-line"></div>
-                  <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
-                  <div class="section-line"></div>
+            <div style="margin-top:1rem;"></div>
+            <div class="series-book" id="book-s2" data-open="false">
+              <div class="hero-card book-cover reveal" id="series-2-overview" style="border-color:rgba(79,195,247,.22);">
+                <div class="hero-badges">
+                  <span class="hero-kicker" style="background:rgba(79,195,247,.08);border-color:rgba(79,195,247,.22);color:#0288D1;">
+                    <iconify-icon icon="solar:heart-pulse-bold-duotone" style="font-size:.9rem;"></iconify-icon>
+                    Essay Series 2
+                  </span>
+                  <span class="hero-meta">{s2Posts.length}편 · 3파트 · 2026</span>
                 </div>
-                <div style="margin-bottom:1rem;">
-                  <p class="section-title">{section.title}</p>
-                  <p class="section-desc">
-                    {index === 0 && '매일 울리지만 읽히지 않는 몸의 신호들을 관찰합니다.'}
-                    {index === 1 && '몸의 신호가 무시되게 된 구조적 이유를 해부합니다.'}
-                    {index === 2 && '무시한 신호를 다시 듣기로 한 실천의 기록입니다.'}
-                  </p>
+                <h1 class="hero-title">{s2Title}</h1>
+                <p class="hero-desc">
+                  몸은 항상 말하고 있었습니다. 잠, 통증, 배고픔, 피로 — 무시된 신호들을 다시 읽는 여정입니다.
+                </p>
+                <div class="hero-quote" style="border-color:#0288D1;background:rgba(79,195,247,.04);">
+                  "허리가 한 달째 보낸 편지를 읽지 않았습니다. 결국 직접 찾아왔습니다."
                 </div>
-                <div class="section-list">
-                  {section.posts.map((post) => (
-                    <a class="post-card" href={post.href}>
-                      <span class="post-card-num" style="color:var(--brain);">{String(post.series_chapter).padStart(2, '0')}</span>
+                <div class="book-toggle-row">
+                  <button class="book-toggle-btn" data-book-toggle>
+                    <span class="lbl-close">목차 접기</span>
+                    <span class="lbl-open">목차 펼치기</span>
+                    <iconify-icon icon="solar:alt-arrow-up-linear" class="book-chev" style="font-size:.88rem;"></iconify-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="book-pages">
+                {s2.prologue && (
+                  <div class="prologue-card">
+                    <a class="post-card" href={s2.prologue.href}>
+                      <span class="post-card-num" style="color:#0288D1;">{String(s2.prologue.series_chapter).padStart(2, '0')}</span>
                       <div class="post-card-copy">
                         <div class="post-card-top">
-                          <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
-                          <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                          <span class={`status-pill ${getStatusClass(s2.prologue.status)}`}>{getStatusLabel(s2.prologue.status)}</span>
+                          <span class="post-card-meta">{s2.prologue.reading_time ?? '읽기 시간 미정'}</span>
                         </div>
-                        <p class="post-card-title">{post.title}</p>
-                        <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                        <p class="post-card-title">{s2.prologue.title}</p>
+                        <p class="post-card-desc">{s2.prologue.teaser ?? s2.prologue.subtitle}</p>
                       </div>
                     </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            {s2.epilogue && (
-              <div class="epilogue-card reveal d2">
-                <a class="post-card" href={s2.epilogue.href}>
-                  <span class="post-card-num" style="color:var(--brain);">{String(s2.epilogue.series_chapter).padStart(2, '0')}</span>
-                  <div class="post-card-copy">
-                    <div class="post-card-top">
-                      <span class={`status-pill ${getStatusClass(s2.epilogue.status)}`}>{getStatusLabel(s2.epilogue.status)}</span>
-                      <span class="post-card-meta">{s2.epilogue.reading_time ?? '읽기 시간 미정'}</span>
-                    </div>
-                    <p class="post-card-title">{s2.epilogue.title}</p>
-                    <p class="post-card-desc">{s2.epilogue.teaser ?? s2.epilogue.subtitle}</p>
                   </div>
-                </a>
+                )}
+                {s2Sections.map((section, index) => (
+                  <div class="section-card" id={section.id}>
+                    <div class="section-head">
+                      <div class="section-line"></div>
+                      <span class="section-label" style={`color:${section.accent}`}>{section.label}</span>
+                      <div class="section-line"></div>
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                      <p class="section-title">{section.title}</p>
+                      <p class="section-desc">
+                        {index === 0 && '매일 울리지만 읽히지 않는 몸의 신호들을 관찰합니다.'}
+                        {index === 1 && '몸의 신호가 무시되게 된 구조적 이유를 해부합니다.'}
+                        {index === 2 && '무시한 신호를 다시 듣기로 한 실천의 기록입니다.'}
+                      </p>
+                    </div>
+                    <div class="section-list">
+                      {section.posts.map((post) => (
+                        <a class="post-card" href={post.href}>
+                          <span class="post-card-num" style="color:#0288D1;">{String(post.series_chapter).padStart(2, '0')}</span>
+                          <div class="post-card-copy">
+                            <div class="post-card-top">
+                              <span class={`status-pill ${getStatusClass(post.status)}`}>{getStatusLabel(post.status)}</span>
+                              <span class="post-card-meta">{post.reading_time ?? '읽기 시간 미정'}</span>
+                            </div>
+                            <p class="post-card-title">{post.title}</p>
+                            <p class="post-card-desc">{post.teaser ?? post.subtitle}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {s2.epilogue && (
+                  <div class="epilogue-card">
+                    <a class="post-card" href={s2.epilogue.href}>
+                      <span class="post-card-num" style="color:#0288D1;">{String(s2.epilogue.series_chapter).padStart(2, '0')}</span>
+                      <div class="post-card-copy">
+                        <div class="post-card-top">
+                          <span class={`status-pill ${getStatusClass(s2.epilogue.status)}`}>{getStatusLabel(s2.epilogue.status)}</span>
+                          <span class="post-card-meta">{s2.epilogue.reading_time ?? '읽기 시간 미정'}</span>
+                        </div>
+                        <p class="post-card-title">{s2.epilogue.title}</p>
+                        <p class="post-card-desc">{s2.epilogue.teaser ?? s2.epilogue.subtitle}</p>
+                      </div>
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </>
         )}
+
       </section>
     </div>
   </div>
+
+  <script>
+    // ── TOC 시리즈 접기/펼치기 ──
+    document.querySelectorAll('[data-toc-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('.toc-series-wrap') as HTMLElement;
+        if (!wrap) return;
+        wrap.dataset.open = wrap.dataset.open === 'true' ? 'false' : 'true';
+      });
+    });
+
+    // ── 메인 북 목차 접기/펼치기 ──
+    document.querySelectorAll('[data-book-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const book = btn.closest('.series-book') as HTMLElement;
+        if (!book) return;
+        const isOpen = book.dataset.open === 'true';
+        book.dataset.open = isOpen ? 'false' : 'true';
+
+        // TOC도 동기화: 같은 시리즈 펼침
+        const tocId = 'toc-' + book.id.replace('book-', '');
+        const tocWrap = document.getElementById(tocId);
+        if (tocWrap && !isOpen) {
+          tocWrap.dataset.open = 'true';
+        }
+      });
+    });
+  </script>
 </BaseLayout>
