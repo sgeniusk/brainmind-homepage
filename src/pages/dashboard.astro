@@ -1,20 +1,47 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import systems from '../data/systems.json';
+import projectStatus from '../data/project-status.json';
+import harnessContract from '../data/harness-contract.json';
 const base = import.meta.env.BASE_URL;
 
 // Build lookup by system name
 const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
+const m = projectStatus.metrics;
+const topics = projectStatus.pipeline.topics;
+const harnessCommands = harnessContract.verificationCommands;
+const gates = harnessContract.humanGates;
+const statusLabels: Record<string, string> = {
+  idea: '아이디어',
+  researching: '리서치 중',
+  sent_to_axon: 'AXON 전달',
+  article_draft: '아티클 초안',
+  article_review: '아티클 검수',
+  research_complete: '리서치 완료',
+  article_complete: '아티클 완료',
+  images_ready: '이미지 준비',
+  published: '게시 완료',
+  video_draft: '영상 초안',
+  video_review: '영상 검수',
+  video_complete: '영상 완료',
+};
+const statusClass = (status: string) => {
+  if (status === 'sent_to_axon') return 'status-axon';
+  if (status === 'research_complete') return 'status-research';
+  if (status === 'article_complete') return 'status-done';
+  if (status === 'article_draft') return 'status-draft';
+  return 'status-waiting';
+};
 ---
 <BaseLayout title="시스템 대시보드 — 뇌와 마음사이" activePage="dashboard">
   <style>
     /* Dashboard-specific styles */
-    .dash-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:16px;padding:1.5rem;transition:all .3s ease}
+    .dash-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:16px;padding:1.5rem;transition:color .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease}
     .dash-card:hover{background:var(--card-hover-bg);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
     [data-theme="science"] .dash-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.3)}
 
     /* System cycle */
-    .cycle-node{position:relative;display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:1.2rem 1rem;border-radius:16px;background:var(--bg-card);border:2px solid var(--card-border);transition:all .3s ease;cursor:default;min-width:130px}
+    .cycle-node{position:relative;display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:1.2rem 1rem;border-radius:16px;background:var(--bg-card);border:2px solid var(--card-border);transition:color .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease;cursor:default;min-width:130px}
     .cycle-node:hover{transform:translateY(-4px)}
     .cycle-node-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
     .cycle-arrow{color:var(--text-muted);font-size:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -28,13 +55,13 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
     }
 
     /* Stat counter */
-    .stat-box{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.2rem;text-align:center;transition:all .3s ease}
+    .stat-box{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.2rem;text-align:center;transition:color .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease}
     .stat-box:hover{border-color:var(--accent-glow);transform:translateY(-2px)}
     .stat-number{font-size:2.2rem;font-weight:800;line-height:1;color:var(--accent);letter-spacing:-.03em}
     .stat-label{font-size:.82rem;color:var(--text-dim);margin-top:.35rem;font-weight:500}
 
     /* Topic pipeline */
-    .topic-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:12px;padding:1rem 1.15rem;transition:all .25s ease;display:flex;flex-direction:column;gap:.5rem}
+    .topic-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:12px;padding:1rem 1.15rem;transition:color .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease;display:flex;flex-direction:column;gap:.5rem}
     .topic-card:hover{background:var(--card-hover-bg);border-color:rgba(79,195,247,.2)}
     .topic-num{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:var(--text-muted);font-variant-numeric:tabular-nums}
     .topic-title{font-size:.9rem;font-weight:600;line-height:1.35;color:var(--text)}
@@ -42,21 +69,24 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
     .status-research{background:rgba(79,195,247,.1);border:1px solid rgba(79,195,247,.2);color:#4FC3F7}
     .status-axon{background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.25);color:#FFD54F}
     .status-draft{background:rgba(255,112,67,.1);border:1px solid rgba(255,112,67,.2);color:#FF7043}
+    .status-done{background:rgba(102,187,106,.12);border:1px solid rgba(102,187,106,.28);color:#43A047}
     .status-waiting{background:rgba(107,107,128,.08);border:1px solid rgba(107,107,128,.15);color:var(--text-muted)}
     .pl-badge{font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:100px;background:rgba(107,107,128,.06);border:1px solid rgba(107,107,128,.12);color:var(--text-muted);letter-spacing:.04em}
     [data-theme="science"] .pl-badge{background:rgba(200,196,216,.06);border-color:rgba(200,196,216,.12)}
 
     /* System profile cards */
-    .sys-profile{background:var(--bg-card);border:1px solid var(--card-border);border-radius:16px;padding:1.5rem;transition:all .3s ease;display:flex;flex-direction:column;gap:1rem}
+    .sys-profile{background:var(--bg-card);border:1px solid var(--card-border);border-radius:16px;padding:1.5rem;transition:color .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease;display:flex;flex-direction:column;gap:1rem}
     .sys-profile:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
     [data-theme="science"] .sys-profile:hover{box-shadow:0 12px 40px rgba(0,0,0,.35)}
     .sys-icon-box{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
     .strength-item,.gap-item{display:flex;align-items:flex-start;gap:.45rem;font-size:.82rem;line-height:1.5}
     .strength-item{color:var(--text-dim)}
     .gap-item{color:var(--text-dim)}
+    .snapshot-list{display:flex;flex-direction:column;gap:.4rem;border-top:1px solid var(--divider);padding-top:.75rem}
+    .snapshot-item{display:flex;align-items:flex-start;gap:.45rem;font-size:.78rem;line-height:1.45;color:var(--text-dim)}
 
     /* Roadmap */
-    .roadmap-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;border-radius:12px;background:var(--bg-card);border:1px solid var(--card-border);transition:all .2s}
+    .roadmap-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;border-radius:12px;background:var(--bg-card);border:1px solid var(--card-border);transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s}
     .roadmap-item:hover{background:var(--card-hover-bg)}
     .roadmap-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--divider);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.75rem}
     .roadmap-check.done{background:rgba(102,187,106,.15);border-color:rgba(102,187,106,.5);color:#66BB6A}
@@ -64,7 +94,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
     .roadmap-check.todo{background:rgba(107,107,128,.05);border-color:var(--divider);color:transparent}
 
     /* Ontology layers */
-    .onto-layer{display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.2rem;border-radius:14px;background:var(--bg-card);border:1px solid var(--card-border);transition:all .25s ease}
+    .onto-layer{display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.2rem;border-radius:14px;background:var(--bg-card);border:1px solid var(--card-border);transition:color .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease}
     .onto-layer:hover{background:var(--card-hover-bg)}
     .onto-num{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;flex-shrink:0}
 
@@ -73,7 +103,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
     .section-sub{font-size:1rem;color:var(--text-dim);margin-bottom:2rem;line-height:1.6}
 
     /* Workflow diagram */
-    .workflow-box{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.2rem 1.5rem;transition:all .25s ease}
+    .workflow-box{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.2rem 1.5rem;transition:color .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease}
     .workflow-box:hover{background:var(--card-hover-bg)}
     .workflow-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:1.4rem;flex-shrink:0}
     @media(max-width:768px){
@@ -85,8 +115,13 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
     .pipe-step{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:8px;font-size:.72rem;font-weight:600;background:rgba(255,213,79,.08);border:1px solid rgba(255,213,79,.18);color:var(--text-dim)}
 
     /* RN pipeline list */
-    .rn-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .75rem;border-radius:10px;font-size:.82rem;color:var(--text-dim);background:var(--bg-card);border:1px solid var(--card-border);transition:all .2s}
+    .rn-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .75rem;border-radius:10px;font-size:.82rem;color:var(--text-dim);background:var(--bg-card);border:1px solid var(--card-border);transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s}
     .rn-item:hover{background:var(--card-hover-bg)}
+
+    /* Harness */
+    .harness-panel{background:linear-gradient(135deg,rgba(79,195,247,.08),rgba(255,213,79,.06));border:1px solid rgba(79,195,247,.18);border-radius:18px;padding:1.4rem}
+    .harness-command{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .65rem;border-radius:9px;background:var(--bg-card);border:1px solid var(--card-border);font-size:.72rem;font-weight:700;color:var(--text-dim)}
+    .gate-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:12px;padding:.9rem;display:flex;flex-direction:column;gap:.35rem}
 
     /* Stats grid responsive */
     @media(max-width:640px){
@@ -242,29 +277,29 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal" style="display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;" id="stats-grid">
       <div class="stat-box d1">
-        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-number" data-target={m.ideas}>0</div>
         <div class="stat-label">아이디어</div>
         <div style="font-size:.68rem;color:var(--text-muted);margin-top:.25rem;">3개 카테고리</div>
       </div>
       <div class="stat-box d2">
-        <div class="stat-number" data-target="67">0</div>
+        <div class="stat-number" data-target={m.researchSources}>0</div>
         <div class="stat-label">연구자료 (RS)</div>
-        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.25rem;">활성 67개</div>
+        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.25rem;">활성 {m.researchSources}개</div>
       </div>
       <div class="stat-box d3">
-        <div class="stat-number" data-target="22">0</div>
+        <div class="stat-number" data-target={m.researchNotes}>0</div>
         <div class="stat-label">리서치노트 (RN)</div>
       </div>
       <div class="stat-box d4">
-        <div class="stat-number" data-target="11">0</div>
+        <div class="stat-number" data-target={m.playlists}>0</div>
         <div class="stat-label">플레이리스트</div>
       </div>
       <div class="stat-box d5">
-        <div class="stat-number" data-target="4">0</div>
+        <div class="stat-number" data-target={m.systemDocs}>0</div>
         <div class="stat-label">시스템 문서</div>
       </div>
       <div class="stat-box" style="transition-delay:.6s;">
-        <div class="stat-number" data-target="14">0</div>
+        <div class="stat-number" data-target={m.roadmapTasks}>0</div>
         <div class="stat-label">개선과제</div>
       </div>
     </div>
@@ -365,7 +400,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal">
       <p class="section-title">토픽 파이프라인</p>
-      <p class="section-sub">아이디어 8개 · MUSE 연구 축적 중</p>
+      <p class="section-sub">토픽 {m.topics}개 · 아티클 소스 {m.articleSources}개 · 영상 파일 {m.videoFiles}개</p>
     </div>
 
     <div class="reveal d1" style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;">
@@ -374,25 +409,31 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <span style="font-size:.78rem;color:var(--text-dim);">AXON 전달</span>
       </div>
       <div style="display:flex;align-items:center;gap:.4rem;">
+        <span style="width:10px;height:10px;border-radius:50%;background:#43A047;"></span>
+        <span style="font-size:.78rem;color:var(--text-dim);">아티클 완료</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.4rem;">
         <span style="width:10px;height:10px;border-radius:50%;background:var(--text-muted);"></span>
-        <span style="font-size:.78rem;color:var(--text-dim);">연구 대기</span>
+        <span style="font-size:.78rem;color:var(--text-dim);">작성/검수 중</span>
       </div>
     </div>
 
-    <div class="reveal d2" style="margin-bottom:2rem;">
-      <div class="topic-card" style="border-color:rgba(255,213,79,.3);max-width:360px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <span class="topic-num">#001</span>
-          <span class="pl-badge">뇌 vs AI</span>
+    <div class="reveal d2" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin-bottom:2rem;">
+      {topics.map((topic: any) => (
+        <div class="topic-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;">
+            <span class="topic-num">#{topic.id}</span>
+            <span class="pl-badge">{topic.videoCount > 0 ? `${topic.videoCount} videos` : topic.hasImages ? 'images ready' : 'assets needed'}</span>
+          </div>
+          <p class="topic-title">{topic.title}</p>
+          <div>
+            <span class={`status-badge ${statusClass(topic.status)}`}>
+              <span style="width:6px;height:6px;border-radius:50%;background:currentColor;" class={topic.status === 'sent_to_axon' ? 'pdot' : ''}></span>
+              {statusLabels[topic.status] ?? topic.status}
+            </span>
+          </div>
         </div>
-        <p class="topic-title">사람의 뇌는 AI보다 뛰어난 걸까</p>
-        <div>
-          <span class="status-badge status-axon">
-            <span style="width:6px;height:6px;border-radius:50%;background:currentColor;" class="pdot"></span>
-            AXON 전달
-          </span>
-        </div>
-      </div>
+      ))}
     </div>
 
     <div class="reveal d3" style="background:var(--badge-brain-bg);border:1px solid var(--badge-brain-border);border-radius:14px;padding:1.2rem 1.5rem;margin-bottom:2rem;max-width:600px;">
@@ -401,7 +442,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <div>
           <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.3rem;">토픽 생성 방식이 변경되었습니다</p>
           <p style="font-size:.82rem;color:var(--text-dim);line-height:1.6;">
-            TOPIC_001·003 연구 완료 → NOVA에서 ART_01·02 초안 완성. RS 77개, RN 3개 활성. 다음 단계: 아티클 리뷰 후 퍼블리싱, 동시에 AXON EP001 진행 중.
+            {projectStatus.generatedAt} 기준 자동 스캔 결과입니다. RS {m.researchSources}개, RN {m.researchNotes}개, 아티클 소스 {m.articleSources}개, 홈페이지 공개 아티클 {m.siteArticles}개를 확인했습니다.
           </p>
         </div>
       </div>
@@ -415,18 +456,18 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;">
         <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
           <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">MUSE</p>
-          <p style="font-size:.88rem;color:var(--text-dim);">아이디어 3개 폴더 운영 중</p>
-          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">RN 1개 · RS 72개 축적</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">아이디어 {m.ideas}개 · RS {m.researchSources}개</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">RN {m.researchNotes}개 활성</p>
         </div>
         <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
           <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">NOVA</p>
-          <p style="font-size:.88rem;color:var(--text-dim);">ART_01·02 초안 완료</p>
-          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">플레이리스트 11개 정의됨</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">사이트 아티클 {m.siteArticles}개 · 블로그 {m.blogPosts}개</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">플레이리스트 {m.playlists}개 정의됨</p>
         </div>
         <div style="padding:1rem;border-radius:12px;border:1px solid var(--card-border);background:var(--bg-card);">
           <p style="font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;">AXON</p>
-          <p style="font-size:.88rem;color:var(--text-dim);">EP001 스토리보드 진행 중</p>
-          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">기존 에피소드 museum 아카이브</p>
+          <p style="font-size:.88rem;color:var(--text-dim);">영상 파일 {m.videoFiles}개 확인</p>
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">이미지 에셋 {m.imageAssets}개 연결 가능</p>
         </div>
       </div>
     </div>
@@ -434,7 +475,75 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
 </section>
 
 
-<!-- 6. SYSTEM PROFILES -->
+<!-- 6. HARNESS CONTRACT -->
+<section style="padding:3rem 0 4rem;">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="reveal">
+      <p class="section-title">하네스 운영 계약</p>
+      <p class="section-sub">{harnessContract.framework} 기반 · {harnessContract.agents.length}개 에이전트 · {gates.length}개 사람 승인 게이트</p>
+    </div>
+
+    <div class="harness-panel reveal d1">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:1.2rem;align-items:start;">
+        <div>
+          <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.85rem;">
+            <iconify-icon icon="solar:verified-check-bold" style="font-size:1.2rem;color:var(--brain);"></iconify-icon>
+            <p style="font-size:.95rem;font-weight:800;">자가 검증 루프</p>
+          </div>
+          <p style="font-size:.84rem;color:var(--text-dim);line-height:1.65;margin-bottom:1rem;">
+            발행 전 <code style="font-size:.78rem;font-weight:700;">npm run verify</code> 하나로 상태 동기화, 빌드, 블로그 무결성, 프로젝트 데이터, 접근성, 하네스 계약을 순서대로 확인합니다.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+            {harnessCommands.map((command: string) => (
+              <span class="harness-command">
+                <iconify-icon icon="solar:play-circle-bold" style="font-size:.85rem;color:var(--brain);"></iconify-icon>
+                {command}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;">
+          <div class="gate-card">
+            <span style="font-size:.66rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">FILESYSTEM</span>
+            <span style="font-size:.9rem;font-weight:700;">{harnessContract.filesystem.backend}</span>
+            <span style="font-size:.72rem;color:var(--text-muted);">쓰기 경계 {Object.keys(harnessContract.filesystem.writeBoundaries).length}개</span>
+          </div>
+          <div class="gate-card">
+            <span style="font-size:.66rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">MEMORY</span>
+            <span style="font-size:.9rem;font-weight:700;">{harnessContract.memory.backend}</span>
+            <span style="font-size:.72rem;color:var(--text-muted);">{harnessContract.memory.persistentPaths.join(', ')}</span>
+          </div>
+          <div class="gate-card">
+            <span style="font-size:.66rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">STATUS</span>
+            <span style="font-size:.9rem;font-weight:700;">{harnessContract.statuses.length} states</span>
+            <span style="font-size:.72rem;color:var(--text-muted);">토픽 상태 계약 검증</span>
+          </div>
+          <div class="gate-card">
+            <span style="font-size:.66rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">SITE</span>
+            <span style="font-size:.9rem;font-weight:700;">{harnessContract.canonicalSite}</span>
+            <span style="font-size:.72rem;color:var(--text-muted);">canonical homepage</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.65rem;margin-top:1rem;">
+        {gates.map((gate: any) => (
+          <div class="gate-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <span style="font-size:.78rem;font-weight:800;color:var(--brain);">{gate.id}</span>
+              <span style="font-size:.66rem;color:var(--text-muted);">{gate.owner}</span>
+            </div>
+            <p style="font-size:.78rem;font-weight:650;line-height:1.35;">{gate.name}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 7. SYSTEM PROFILES -->
 <section style="padding:3rem 0 4rem;">
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal">
@@ -463,6 +572,12 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <div style="display:flex;flex-direction:column;gap:.45rem;">
           <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>아이디어 소싱 루틴 부재</span></div>
         </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.MUSE?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
+        </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
           <p style="font-size:.85rem;font-weight:600;color:var(--text);">RS 운영 습관 정착</p>
@@ -488,6 +603,12 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <div style="display:flex;flex-direction:column;gap:.45rem;">
           <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>인포그래픽 자동화 미구현</span></div>
         </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.LEO?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
+        </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROLE</p>
           <p style="font-size:.85rem;font-weight:600;color:var(--text);">NOVA/AXON에 이미지 에셋 제공</p>
@@ -510,7 +631,13 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
           <div class="strength-item"><iconify-icon icon="solar:check-circle-bold" style="color:#66BB6A;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>디자인 시스템</span></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:.45rem;">
-          <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>아티클 2개 (초안)</span></div>
+          <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>홈페이지 공개 아티클 {m.siteArticles}개, 소스 아티클 {m.articleSources}개</span></div>
+        </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.NOVA?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
         </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
@@ -555,6 +682,12 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <div style="display:flex;flex-direction:column;gap:.45rem;">
           <div class="gap-item"><iconify-icon icon="solar:info-circle-bold" style="color:var(--brain);font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>02_episodes/ 비움, 기존 에피소드 museum 아카이브</span></div>
         </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.AXON?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
+        </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
           <p style="font-size:.85rem;font-weight:600;color:var(--text);">영상 품질 7.5+</p>
@@ -577,6 +710,12 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         </div>
         <div style="display:flex;flex-direction:column;gap:.45rem;">
           <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>연구/아티클 평가 부재</span></div>
+        </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.QUALITAS?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
         </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
@@ -601,6 +740,12 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <div style="display:flex;flex-direction:column;gap:.45rem;">
           <div class="gap-item"><iconify-icon icon="solar:danger-triangle-bold" style="color:#FF7043;font-size:1rem;flex-shrink:0;margin-top:1px;"></iconify-icon><span>체계적 기록 없음</span></div>
         </div>
+        <div class="snapshot-list">
+          <p style="font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--text-muted);">AUTO SNAPSHOT</p>
+          {sysMap.PULSE?.snapshot?.map((item: string) => (
+            <div class="snapshot-item"><iconify-icon icon="solar:radar-bold" style="font-size:.9rem;color:var(--brain);flex-shrink:0;margin-top:1px;"></iconify-icon><span>{item}</span></div>
+          ))}
+        </div>
         <div style="border-top:1px solid var(--divider);padding-top:.75rem;margin-top:.25rem;">
           <p style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem;">ROADMAP GOAL</p>
           <p style="font-size:.85rem;font-weight:600;color:var(--text);">성과 추적 + 피드백 루프</p>
@@ -617,7 +762,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal">
       <p class="section-title">Q2 2026 로드맵</p>
-      <p class="section-sub">시스템별 분기 목표 · STATUS.json 자동 반영 · 최종 업데이트: {systems.map((s:any)=>s.updated).sort().pop()}</p>
+      <p class="section-sub">시스템별 분기 목표 · STATUS.json 자동 반영 · 최종 업데이트: {systems.map((s:any)=>s.updated).sort().pop()} · 프로젝트 스캔: {projectStatus.generatedAt}</p>
     </div>
 
     <div class="reveal d1" style="display:flex;flex-direction:column;gap:.65rem;">
@@ -626,7 +771,7 @@ const sysMap = Object.fromEntries(systems.map((s: any) => [s.system, s]));
         <p style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#FF7043;margin-bottom:.5rem;">MUSE <span style="font-size:.65rem;color:var(--text-muted);font-weight:500;text-transform:none;">B- (14/25)</span></p>
         <div style="display:flex;flex-direction:column;gap:.5rem;">
           <div class="roadmap-item"><div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">5가지 질문 프레임워크 확립</p><p style="font-size:.75rem;color:var(--text-muted);">완료</p></div></div>
-          <div class="roadmap-item"><div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">RN 22개 + RS 67개 구조 확립</p><p style="font-size:.75rem;color:var(--text-muted);">완료 · ART_01·02 초안</p></div></div>
+          <div class="roadmap-item"><div class="roadmap-check done"><iconify-icon icon="solar:check-read-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">RN {m.researchNotes}개 + RS {m.researchSources}개 인벤토리 확인</p><p style="font-size:.75rem;color:var(--text-muted);">아티클 소스 {m.articleSources}개 · 공개 아티클 {m.siteArticles}개</p></div></div>
           <div class="roadmap-item"><div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">RS-first 운영 습관 정착</p><p style="font-size:.75rem;color:var(--text-muted);">진행 중 · 주간 아이디어 소싱 시작</p></div></div>
           <div class="roadmap-item"><div class="roadmap-check progress"><iconify-icon icon="solar:clock-circle-bold" style="font-size:.8rem;"></iconify-icon></div><div><p style="font-size:.88rem;font-weight:600;">NOVA에 첫 아티클 핸드오프</p><p style="font-size:.75rem;color:var(--text-muted);">Week 1 목표</p></div></div>
         </div>

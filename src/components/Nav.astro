@@ -17,8 +17,8 @@ const links = [
 <nav id="nav">
   <!-- Desktop -->
   <div class="nav-pill hidden md:flex items-center gap-1">
-    <a href="/brainmind-homepage/" onclick="toggleTheme(); return false;" class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
-      <img src="/brainmind-homepage/logo.png" alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
+    <a href={b} class="flex items-center gap-2.5 mr-3 group flex-shrink-0">
+      <img src={`${b}logo.png`} alt="뇌와 마음사이 로고" class="nav-logo-img w-9 h-9 object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110">
       <span style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">뇌와 마음사이</span>
     </a>
     <div style="width:1px;height:1.2rem;background:var(--glass-border);margin:0 .3rem;"></div>
@@ -29,17 +29,23 @@ const links = [
     <button onclick="toggleSearch()" class="nav-search-btn" aria-label="검색">
       <iconify-icon icon="solar:magnifer-linear" style="font-size:1.05rem;"></iconify-icon>
     </button>
-    <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub ml-1">
+    <button onclick="toggleTheme()" class="nav-search-btn" aria-label="테마 전환" data-theme-toggle>
+      <iconify-icon icon="solar:atom-linear" style="font-size:1.05rem;"></iconify-icon>
+    </button>
+    <a href="https://youtube.com/@뇌와마음사이" target="_blank" rel="noopener noreferrer" class="btn-sub ml-1">
       <iconify-icon icon="solar:play-bold" style="font-size:.9rem;"></iconify-icon>구독하기
     </a>
   </div>
 
   <!-- Mobile -->
   <div class="nav-pill flex md:hidden items-center gap-2 px-4 py-2.5">
-    <a href="/brainmind-homepage/" onclick="toggleTheme(); return false;" class="flex items-center gap-2 flex-1">
-      <img src="/brainmind-homepage/logo.png" alt="로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
+    <a href={b} class="flex items-center gap-2 flex-1">
+      <img src={`${b}logo.png`} alt="뇌와 마음사이 로고" class="nav-logo-img w-8 h-8 object-contain rounded-xl">
       <span style="font-size:.95rem;font-weight:700;color:var(--text);">뇌와 마음사이</span>
     </a>
+    <button onclick="toggleTheme()" class="p-1" style="color:var(--text-dim);" aria-label="테마 전환" data-theme-toggle>
+      <iconify-icon icon="solar:atom-linear" style="font-size:1.25rem;"></iconify-icon>
+    </button>
     <button id="ham" class="p-1" style="color:var(--text-dim);" aria-label="메뉴">
       <iconify-icon icon="solar:hamburger-menu-linear" style="font-size:1.3rem;"></iconify-icon>
     </button>
@@ -49,7 +55,7 @@ const links = [
       {links.map(l => (
         <a href={l.href} class="py-2.5 px-3 text-sm rounded-xl" style={activePage === l.key ? 'color:var(--accent);font-weight:600;' : 'color:var(--text-dim);'}>{l.label}</a>
       ))}
-      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" rel="noopener noreferrer" class="mt-1 py-2.5 text-center text-sm font-bold rounded-xl" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);color:#fff;">구독하기</a>
     </div>
   </div>
 </nav>

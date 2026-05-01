@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-05-01",
+  "sourceRoot": "/Users/taewookkim/Library/Mobile Documents/iCloud~md~obsidian/Documents/brain use",
+  "canonicalSite": "nova/homepage",
+  "archivedSiteCandidate": "nova/homepage-astro",
+  "metrics": {
+    "ideas": 8,
+    "researchSources": 77,
+    "researchNotes": 3,
+    "playlists": 11,
+    "topics": 6,
+    "articleSources": 5,
+    "siteArticles": 3,
+    "blogPosts": 42,
+    "videoFiles": 22,
+    "imageAssets": 63,
+    "systemDocs": 6,
+    "roadmapTasks": 14
+  },
+  "pipeline": {
+    "statuses": {
+      "idea": 1,
+      "sent_to_axon": 1,
+      "article_draft": 1,
+      "research_complete": 1,
+      "article_complete": 2
+    },
+    "topics": [
+      {
+        "id": "000",
+        "title": "AI에게 글을 맡긴 날",
+        "status": "idea",
+        "topicFile": null,
+        "articleFile": null,
+        "hasImages": false,
+        "videoCount": 0
+      },
+      {
+        "id": "001",
+        "title": "사람의 뇌는 AI보다 뛰어난 걸까",
+        "status": "sent_to_axon",
+        "topicFile": "뇌와마음사이/001_사람의_뇌는_AI보다_뛰어난_걸까/TOPIC_001.md",
+        "articleFile": "뇌와마음사이/001_사람의_뇌는_AI보다_뛰어난_걸까/04_article/ART_01_뇌세포가_둠을_배웠다.md",
+        "hasImages": true,
+        "videoCount": 6
+      },
+      {
+        "id": "002",
+        "title": "유료 강좌가 당신 뇌를 속이는 5가지 방법",
+        "status": "article_draft",
+        "topicFile": "뇌와마음사이/002_유료강좌가_당신_뇌를_속이는_방법/TOPIC_002.md",
+        "articleFile": "뇌와마음사이/002_유료강좌가_당신_뇌를_속이는_방법/04_article/ART_02_유료강좌_팔이.md",
+        "hasImages": false,
+        "videoCount": 3
+      },
+      {
+        "id": "003",
+        "title": "공부했다고 착각하는 뇌 — 메타인지의 함정",
+        "status": "research_complete",
+        "topicFile": "뇌와마음사이/003_메타인지의_함정/TOPIC_003.md",
+        "articleFile": "뇌와마음사이/003_메타인지의_함정/04_article/ART_03_메타인지_함정.md",
+        "hasImages": true,
+        "videoCount": 9
+      },
+      {
+        "id": "004",
+        "title": "왜 쇼츠를 끄지 못할까 — 중독되게 설계된 세상",
+        "status": "article_complete",
+        "topicFile": null,
+        "articleFile": "뇌와마음사이/004_중독되게_설계된_세상/04_article/ART_04_중독되게_설계된_세상.md",
+        "hasImages": false,
+        "videoCount": 4
+      },
+      {
+        "id": "005",
+        "title": "24가지 잼 앞에서 아무것도 고르지 못한 사람들",
+        "status": "article_complete",
+        "topicFile": null,
+        "articleFile": "뇌와마음사이/005_선택의_역설/04_article/ART_05_선택의_역설.md",
+        "hasImages": false,
+        "videoCount": 0
+      }
+    ]
+  },
+  "verification": {
+    "baselinePages": 51,
+    "canonicalBranch": "chore/refresh-ux-harness"
+  }
+}

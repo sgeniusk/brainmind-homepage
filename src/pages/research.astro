@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import projectStatus from '../data/project-status.json';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const m = projectStatus.metrics;
 ---
 <BaseLayout title="연구 노트 — 뇌와 마음사이" activePage="research">
   <style>
@@ -26,13 +28,15 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     @media(max-width:768px){.research-card.featured{grid-column:span 1}.research-card.featured .research-card-img{aspect-ratio:16/9}}
 
     /* Filter pills */
-    .filter-pill{padding:.4rem .95rem;border-radius:100px;border:1px solid var(--divider);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;background:var(--bg-card);color:var(--text-dim);white-space:nowrap}
+    .filter-pill{padding:.4rem .95rem;border-radius:100px;border:1px solid var(--divider);font-size:.82rem;font-weight:500;cursor:pointer;transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s;background:var(--bg-card);color:var(--text-dim);white-space:nowrap}
     .filter-pill:hover{border-color:rgba(79,195,247,.3);color:var(--text)}
     .filter-pill.active{background:var(--badge-brain-bg);border-color:var(--accent-glow);color:var(--accent);font-weight:700}
     /* Search */
-    .search-bar{width:100%;padding:.8rem 1.2rem .8rem 3rem;border-radius:100px;background:var(--bg-card);border:1px solid var(--divider);color:var(--text);font-family:'Pretendard',sans-serif;font-size:.95rem;outline:none;transition:all .2s}
+    .search-bar{width:100%;padding:.8rem 1.2rem .8rem 3rem;border-radius:100px;background:var(--bg-card);border:1px solid var(--divider);color:var(--text);font-family:'Pretendard',sans-serif;font-size:.95rem;outline:none;transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s}
     .search-bar:focus{border-color:rgba(79,195,247,.35);background:var(--card-hover-bg)}
+    .search-bar:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
     .search-bar::placeholder{color:var(--text-dim)}
+    .empty-state{display:none;padding:2rem;border:1px dashed var(--divider);border-radius:16px;text-align:center;color:var(--text-dim);background:var(--bg-card)}
   </style>
 
 <!-- 1. MINI HERO -->
@@ -48,10 +52,10 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       피어리뷰 논문 기반. 추측 없이.
     </p>
     <div class="reveal d2" style="display:flex;align-items:center;gap:.65rem;margin-bottom:1.6rem;flex-wrap:wrap;">
-      <span style="font-size:2.4rem;font-weight:800;color:var(--accent);line-height:1;">22</span>
-      <span style="font-size:1.05rem;color:var(--text-dim);font-weight:500;">개 연구 노트</span>
+      <span style="font-size:2.4rem;font-weight:800;color:var(--accent);line-height:1;">{m.siteArticles}</span>
+      <span style="font-size:1.05rem;color:var(--text-dim);font-weight:500;">개 공개 아티클</span>
       <span style="width:1px;height:1.2rem;background:var(--divider);"></span>
-      <span style="font-size:.9rem;color:var(--text-dim);">3개 이상 논문 인용</span>
+      <span style="font-size:.9rem;color:var(--text-dim);">RS {m.researchSources}개 · RN {m.researchNotes}개 확인</span>
     </div>
     <div class="reveal d3" style="border-left:2px solid var(--accent);padding-left:1rem;">
       <p style="font-size:.92rem;font-style:italic;color:var(--text-dim);">"자, 데이터 보겠습니다."</p>
@@ -65,7 +69,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <!-- Search bar -->
     <div style="position:relative;">
       <iconify-icon icon="solar:magnifer-linear" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--text-dim);pointer-events:none;"></iconify-icon>
-      <input type="text" class="search-bar" placeholder="연구 노트 검색...">
+      <label for="research-search" class="sr-only">연구 아티클 검색</label>
+      <input id="research-search" name="research-search" type="search" class="search-bar" placeholder="연구 아티클 검색">
     </div>
     <!-- Filter row -->
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-top:.85rem;flex-wrap:wrap;">
@@ -83,9 +88,9 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <button class="filter-pill" data-filter="위대한 실험들">🔬 위대한 실험들</button>
       </div>
       <div style="display:flex;align-items:center;gap:.3rem;flex-shrink:0;">
-        <button id="sort-recent" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid var(--accent-glow);background:var(--badge-brain-bg);color:var(--accent);transition:all .2s;">최신순</button>
+        <button id="sort-recent" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid var(--accent-glow);background:var(--badge-brain-bg);color:var(--accent);transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s;">최신순</button>
         <span style="font-size:.8rem;color:var(--text-muted);">|</span>
-        <button id="sort-playlist" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:500;cursor:pointer;border:1px solid var(--divider);background:transparent;color:var(--text-dim);transition:all .2s;">플레이리스트순</button>
+        <button id="sort-playlist" style="padding:.3rem .75rem;border-radius:100px;font-size:.8rem;font-weight:500;cursor:pointer;border:1px solid var(--divider);background:transparent;color:var(--text-dim);transition:color .2s, background .2s, border-color .2s, box-shadow .2s, transform .2s;">플레이리스트순</button>
       </div>
     </div>
   </div>
@@ -112,7 +117,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       </a>
 
       <!-- Card 02 -->
-      <a href={`${base}articles/article-02/`} class="research-card reveal d2" data-category="뇌가 속는 방법">
+      <a href={`${base}articles/article-02/`} class="research-card reveal d2" data-category="뇌의 착각">
         <div class="research-card-img">
           <img src={`${base}images/art02/hero.png`} alt="유료 강좌가 당신 뇌를 속이는 5가지 방법" loading="lazy">
         </div>
@@ -142,6 +147,9 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       </a>
 
     </div>
+    <div id="empty-state" class="empty-state" aria-live="polite">
+      조건에 맞는 연구 아티클이 없습니다.
+    </div>
   </div>
 </section>
 
@@ -149,6 +157,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     // Category filter
     const filterBtns=document.querySelectorAll('.filter-pill');
     const cards=document.querySelectorAll('.research-card');
+    const emptyState=document.getElementById('empty-state');
+    function updateEmptyState(){
+      const visible=[...cards].some(card=>card.style.display!=='none');
+      if(emptyState)emptyState.style.display=visible?'none':'block';
+    }
     filterBtns.forEach(btn=>{
       btn.addEventListener('click',()=>{
         filterBtns.forEach(b=>b.classList.remove('active'));
@@ -157,6 +170,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         cards.forEach(card=>{
           card.style.display=(cat==='전체'||card.dataset.category===cat)?'':'none';
         });
+        updateEmptyState();
       });
     });
 
@@ -164,12 +178,13 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     const searchInput=document.querySelector('.search-bar');
     searchInput?.addEventListener('input',e=>{
       const q=e.target.value.toLowerCase();
-      if(!q){cards.forEach(c=>c.style.display='');return;}
+      if(!q){cards.forEach(c=>c.style.display='');updateEmptyState();return;}
       cards.forEach(card=>{
         const title=card.querySelector('h3').textContent.toLowerCase();
         const teaser=card.querySelector('p')?.textContent.toLowerCase()||'';
         card.style.display=(title.includes(q)||teaser.includes(q))?'':'none';
       });
+      updateEmptyState();
     });
 
     // Sort toggle
