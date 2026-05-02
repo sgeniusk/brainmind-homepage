@@ -8,6 +8,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "sync:status": "node scripts/sync-project-state.mjs",
+    "check:project": "node scripts/check-project-state.mjs",
+    "check:a11y": "node scripts/check-accessibility-contracts.mjs",
+    "check:harness": "node scripts/check-harness-contracts.mjs",
+    "check:ux": "node scripts/check-homepage-ux.mjs",
+    "verify": "npm run sync:status && npm run build && node scripts/check-blog-integrity.mjs && npm run check:project && npm run check:a11y && npm run check:harness && npm run check:ux",
     "preview": "astro preview",
     "astro": "astro"
   },

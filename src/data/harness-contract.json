@@ -1,0 +1,138 @@
+{
+  "version": "2026-04-29",
+  "framework": "Deep Agents",
+  "canonicalSite": "nova/homepage",
+  "archivedSiteCandidate": "nova/homepage-astro",
+  "purpose": "뇌와 마음사이 콘텐츠 생산 시스템을 파일 기반 파이프라인, 사람 승인 게이트, 자동 검증 명령으로 운영한다.",
+  "agents": [
+    {
+      "name": "MUSE",
+      "tier": "production",
+      "role": "아이디어 발굴, 근거 수집, 리서치 노트, 아티클 정제",
+      "workspace": "cortex/",
+      "writes": ["cortex/", "뇌와마음사이/*/02_research/", "뇌와마음사이/*/04_article/"],
+      "handoff": ["LEO", "NOVA"]
+    },
+    {
+      "name": "LEO",
+      "tier": "production",
+      "role": "이미지 생성, 인포그래픽, 썸네일, 에셋 매니페스트",
+      "workspace": "leo/",
+      "writes": ["leo/", "뇌와마음사이/*/03_image/"],
+      "handoff": ["NOVA", "AXON"]
+    },
+    {
+      "name": "NOVA",
+      "tier": "production",
+      "role": "홈페이지 발행, 정보 구조, 디자인 시스템, 배포 검증",
+      "workspace": "nova/",
+      "writes": ["nova/", "nova/homepage/"],
+      "handoff": ["AXON", "PULSE"]
+    },
+    {
+      "name": "AXON",
+      "tier": "production",
+      "role": "대본 변환, TTS, Remotion 렌더링, 영상 패키징",
+      "workspace": "axon/",
+      "writes": ["axon/", "뇌와마음사이/*/05_audio/", "뇌와마음사이/*/06_video/", "뇌와마음사이/*/07_shorts/"],
+      "handoff": ["QUALITAS", "PULSE"]
+    },
+    {
+      "name": "QUALITAS",
+      "tier": "meta",
+      "role": "리서치, 글, 이미지, 영상 품질 평가와 개선 태스크 생성",
+      "workspace": "qualitas/",
+      "writes": ["qualitas/", "docs/qualitas/", "docs/roadmap/tasks/"],
+      "handoff": ["MUSE", "LEO", "NOVA", "AXON", "PULSE"]
+    },
+    {
+      "name": "PULSE",
+      "tier": "meta",
+      "role": "파이프라인 상태, 성과, 병목, 로드맵 추적",
+      "workspace": "pulse/",
+      "writes": ["pulse/", "docs/pulse/", "docs/roadmap/"],
+      "handoff": ["QUALITAS"]
+    }
+  ],
+  "statuses": [
+    "idea",
+    "researching",
+    "research_complete",
+    "article_draft",
+    "article_review",
+    "article_complete",
+    "images_ready",
+    "published",
+    "sent_to_axon",
+    "video_draft",
+    "video_review",
+    "video_complete"
+  ],
+  "humanGates": [
+    {
+      "id": "G1",
+      "name": "Idea to research note",
+      "owner": "MUSE",
+      "requires": ["5개 통과 질문 충족", "주제 폴더 또는 RN 후보 생성"]
+    },
+    {
+      "id": "G2",
+      "name": "Research note to article",
+      "owner": "MUSE",
+      "requires": ["피어리뷰 논문 2편 이상", "일관성 체크리스트 통과"]
+    },
+    {
+      "id": "G3",
+      "name": "Article to publish queue",
+      "owner": "NOVA",
+      "requires": ["글쓰기 원칙 준수", "이미지 슬롯 정의", "발행 메타데이터 확인"]
+    },
+    {
+      "id": "G4",
+      "name": "Publish to production",
+      "owner": "NOVA",
+      "requires": ["npm run verify 통과", "브라우저 스모크 테스트", "GitHub Pages 배포 전 확인"]
+    },
+    {
+      "id": "G5",
+      "name": "Video upload",
+      "owner": "AXON",
+      "requires": ["영상 검수 승인", "썸네일/제목/설명 확인", "QUALITAS 평가 기록"]
+    }
+  ],
+  "filesystem": {
+    "root": ".",
+    "backend": "FilesystemBackend",
+    "virtualMode": true,
+    "writeBoundaries": {
+      "MUSE": ["cortex/", "뇌와마음사이/*/02_research/", "뇌와마음사이/*/04_article/"],
+      "LEO": ["leo/", "뇌와마음사이/*/03_image/"],
+      "NOVA": ["nova/", "nova/homepage/"],
+      "AXON": ["axon/", "뇌와마음사이/*/05_audio/", "뇌와마음사이/*/06_video/", "뇌와마음사이/*/07_shorts/"],
+      "QUALITAS": ["qualitas/", "docs/qualitas/", "docs/roadmap/tasks/"],
+      "PULSE": ["pulse/", "docs/pulse/", "docs/roadmap/"]
+    }
+  },
+  "memory": {
+    "backend": "CompositeBackend",
+    "ephemeralPaths": ["/drafts/", "/scratch/"],
+    "persistentPaths": ["/memories/"],
+    "records": ["channel_voice", "design_decisions", "quality_findings", "publishing_history"]
+  },
+  "verificationCommands": [
+    "sync:status",
+    "build",
+    "check-blog-integrity",
+    "check:project",
+    "check:a11y",
+    "check:harness"
+  ],
+  "selfImprovementLoop": [
+    "sync-project-state",
+    "render-dashboard",
+    "check-contracts",
+    "record-quality-findings",
+    "open-roadmap-task",
+    "reverify"
+  ]
+}

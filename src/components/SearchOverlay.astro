@@ -1,12 +1,21 @@
 ---
 ---
+<style>
+  #search-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+</style>
 
-<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;" onclick="if(event.target===this)closeSearch()">
+<div id="search-overlay" role="dialog" aria-modal="true" aria-labelledby="search-title" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;" onclick="if(event.target===this)closeSearch()">
   <div style="position:absolute;top:5rem;left:50%;transform:translateX(-50%);width:90%;max-width:560px;">
     <div style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:.5rem;box-shadow:var(--glass-shadow);display:flex;align-items:center;gap:.5rem;">
+      <span id="search-title" class="sr-only">사이트 검색</span>
+      <label for="search-input" class="sr-only">검색어</label>
       <iconify-icon icon="solar:magnifer-linear" style="font-size:1.2rem;color:var(--accent);margin-left:.75rem;flex-shrink:0;"></iconify-icon>
-      <input id="search-input" type="text" placeholder="검색어를 입력하세요..." style="flex:1;background:none;border:none;outline:none;font-size:1.05rem;color:var(--text);font-family:inherit;padding:.75rem .5rem;" autocomplete="off">
-      <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text-muted);font-size:1.2rem;">
+      <input id="search-input" name="q" type="search" placeholder="검색어를 입력하세요" style="flex:1;background:none;border:none;outline:none;font-size:1.05rem;color:var(--text);font-family:inherit;padding:.75rem .5rem;" autocomplete="off">
+      <button onclick="closeSearch()" aria-label="검색 닫기" style="background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text-muted);font-size:1.2rem;">
         <iconify-icon icon="solar:close-circle-linear"></iconify-icon>
       </button>
     </div>

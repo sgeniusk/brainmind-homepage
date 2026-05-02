@@ -19,7 +19,7 @@ const base = import.meta.env.BASE_URL;
     .timeline-dot.brain{background:var(--badge-brain-bg);border-color:rgba(79,195,247,.4)}
     .timeline-dot.mind{background:var(--badge-mind-bg);border-color:rgba(255,213,79,.4)}
     /* Lab cards */
-    .lab-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.25rem;transition:all .25s ease}
+    .lab-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:14px;padding:1.25rem;transition:color .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease}
     .lab-card:hover{background:var(--card-hover-bg);transform:translateY(-2px)}
     /* Trait cards */
     .trait-card{background:var(--bg-card);border:1px solid var(--card-border);border-radius:13px;padding:1.2rem;transition:background .35s ease,border-color .35s ease}
@@ -319,7 +319,7 @@ const base = import.meta.env.BASE_URL;
     </div>
     <p class="reveal d2" style="font-size:1rem;color:var(--text-dim);margin-bottom:2.5rem;word-break:keep-all;">오늘도 코르의 연구소에 와주셔서 감사합니다.</p>
     <div class="reveal d3">
-      <a href="https://youtube.com/@뇌와마음사이" target="_blank" class="btn-sub" style="font-size:1rem;padding:.75rem 1.8rem;">
+      <a href="https://youtube.com/@뇌와마음사이" target="_blank" rel="noopener noreferrer" class="btn-sub" style="font-size:1rem;padding:.75rem 1.8rem;">
         <iconify-icon icon="solar:youtube-linear" style="font-size:1.15rem;"></iconify-icon>
         유튜브 채널 보기
       </a>
