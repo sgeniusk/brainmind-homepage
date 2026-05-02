@@ -86,6 +86,22 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <span id="time-remaining" class="progress-meta">약 15분</span>
 </div>
 
+<aside class="article-left-toc" aria-label="아티클 목차">
+  <p class="article-left-toc-title">목차</p>
+  <ol>
+    <li><a href="#s-ch1"><span class="toc-num">01</span><span>유창함의 함정</span></a></li>
+    <li><a href="#s-ch2"><span class="toc-num">02</span><span>착각의 얼굴들</span></a></li>
+    <li><a href="#s-ch3"><span class="toc-num">03</span><span>해마</span></a></li>
+    <li><a href="#s-ch4"><span class="toc-num">04</span><span>인출의 힘</span></a></li>
+    <li><a href="#s-ch5"><span class="toc-num">05</span><span>고통과 성장</span></a></li>
+    <li><a href="#s-ch6"><span class="toc-num">06</span><span>AI 메타인지</span></a></li>
+    <li><a href="#s-ch7"><span class="toc-num">07</span><span>수면과 휴식</span></a></li>
+    <li><a href="#s-ch8"><span class="toc-num">08</span><span>테스트법</span></a></li>
+    <li><a href="#s-kor-note"><span class="toc-num">09</span><span>코르의 노트</span></a></li>
+  </ol>
+  <div class="toc-note">논문 5편 · 학습 착각 · 실천법</div>
+</aside>
+
 <!-- BANNER IMAGE SLOT -->
 <div class="reveal-scale" style="width:100%;margin-top:4.5rem;overflow:hidden;">
   <img src={`${base}images/art03/hero.png`} alt="메타인지의 함정 — 공부했다고 착각하는 뇌" style="width:100%;height:auto;display:block;">
@@ -96,7 +112,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <div class="max-w-3xl mx-auto px-6">
 
     <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
-      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
+      <a href={`${base}research/`} style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
       <span style="margin:0 .4rem;opacity:.5;">›</span>
       <span>🧠 뇌가 속는 방법</span>
     </p>

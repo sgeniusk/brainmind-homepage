@@ -86,6 +86,22 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <span id="time-remaining" class="progress-meta">약 14분</span>
 </div>
 
+<aside class="article-left-toc" aria-label="아티클 목차">
+  <p class="article-left-toc-title">목차</p>
+  <ol>
+    <li><a href="#s-ch1"><span class="toc-num">01</span><span>퍼널 설계도</span></a></li>
+    <li><a href="#s-ch2"><span class="toc-num">02</span><span>가용성 편향</span></a></li>
+    <li><a href="#s-ch3"><span class="toc-num">03</span><span>던닝-크루거</span></a></li>
+    <li><a href="#s-ch4"><span class="toc-num">04</span><span>정보 격차</span></a></li>
+    <li><a href="#s-ch5"><span class="toc-num">05</span><span>권위 편향</span></a></li>
+    <li><a href="#s-ch6"><span class="toc-num">06</span><span>매몰 비용</span></a></li>
+    <li><a href="#s-ch7"><span class="toc-num">07</span><span>구조적 문제</span></a></li>
+    <li><a href="#s-ch8"><span class="toc-num">08</span><span>방어법</span></a></li>
+    <li><a href="#s-ch9"><span class="toc-num">09</span><span>파는 쪽의 뇌</span></a></li>
+  </ol>
+  <div class="toc-note">논문 5편 · 편향 5개 · 방어법</div>
+</aside>
+
 <!-- BANNER IMAGE -->
 <div style="width:100%;max-height:420px;overflow:hidden;margin-top:4.5rem;">
   <img src={`${base}images/art02/banner.png`} alt="유료 강좌와 인지 편향" style="width:100%;height:auto;object-fit:cover;display:block;">
@@ -96,7 +112,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <div class="max-w-3xl mx-auto px-6">
 
     <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
-      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
+      <a href={`${base}research/`} style="color:var(--text-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
       <span style="margin:0 .4rem;opacity:.5;">›</span>
       <span>🧠 뇌가 속는 방법</span>
     </p>
@@ -493,7 +509,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <!-- Related -->
     <div class="reveal" style="margin-top:3rem;">
       <h3 style="font-size:1rem;font-weight:700;color:var(--text-dim);margin-bottom:1rem;">다른 연구 아티클</h3>
-      <a href="article_01.html" class="related-card">
+      <a href={`${base}articles/article-01/`} class="related-card">
         <span class="badge badge-brain" style="margin-bottom:.5rem;">🤖 뇌, AI랑 다를까요?</span>
         <p style="font-weight:700;font-size:1.05rem;margin:.4rem 0 .25rem;color:var(--text);">사람의 뇌는 AI보다 뛰어난 걸까?</p>
         <p style="font-size:.85rem;color:var(--text-dim);margin:0;">접시 위 뉴런 20만 개가 둠을 플레이한 날, 떠오른 질문</p>

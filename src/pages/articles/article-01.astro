@@ -107,6 +107,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   <span id="time-remaining" class="progress-meta">약 12분</span>
 </div>
 
+<aside class="article-left-toc" aria-label="아티클 목차">
+  <p class="article-left-toc-title">목차</p>
+  <ol>
+    <li><a href="#s-ch1"><span class="toc-num">01</span><span>접시 위 뉴런</span></a></li>
+    <li><a href="#s-ch2"><span class="toc-num">02</span><span>둠을 플레이하다</span></a></li>
+    <li><a href="#s-ch3"><span class="toc-num">03</span><span>AI는 어떻게 생각할까</span></a></li>
+    <li><a href="#s-ch4"><span class="toc-num">04</span><span>뇌는 뭐가 다를까</span></a></li>
+    <li><a href="#s-ch5"><span class="toc-num">05</span><span>20W vs 700W</span></a></li>
+    <li><a href="#s-ch6"><span class="toc-num">06</span><span>우리에게 남기는 것</span></a></li>
+  </ol>
+  <div class="toc-note">논문 3편 · 코르의 노트 · 핵심 요약</div>
+</aside>
+
 <!-- BANNER IMAGE -->
 <div style="width:100%;max-height:420px;overflow:hidden;margin-top:4.5rem;">
   <img src={`${base}images/art01/banner.png`} alt="접시 위 뇌세포" style="width:100%;height:auto;object-fit:cover;display:block;">
@@ -118,7 +131,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
     <!-- Breadcrumb -->
     <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1.25rem;">
-      <a href="research.html" style="color:var(--text-dim);text-decoration:none;transition:color .2s;"
+      <a href={`${base}research/`} style="color:var(--text-dim);text-decoration:none;transition:color .2s;"
          onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">연구</a>
       <span style="margin:0 .4rem;opacity:.5;">›</span>
       <span>🤖 뇌, AI랑 다를까요?</span>
@@ -493,11 +506,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 <!-- PREV / NEXT NAV -->
 <div style="border-top:1px solid var(--divider);padding:2.5rem 0;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;" class="max-w-3xl mx-auto px-6">
-  <a href="research.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+  <a href={`${base}research/`} style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
      onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
     <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>연구 노트 목록으로
   </a>
-  <a href="article_02.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
+  <a href={`${base}articles/article-02/`} style="display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--text-dim);text-decoration:none;transition:color .2s;"
      onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
     다음 노트<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
   </a>
@@ -507,7 +520,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 <section style="margin-bottom:5rem;" class="max-w-3xl mx-auto px-6">
   <p style="font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.25rem;margin-top:3rem;">관련 연구 노트</p>
   <div style="display:flex;flex-direction:column;gap:.85rem;">
-    <a href="article_02.html" class="related-card">
+    <a href={`${base}articles/article-02/`} class="related-card">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
         <div style="flex:1;min-width:0;">
           <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">ART_02</p>
@@ -516,7 +529,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <span class="badge badge-mind" style="flex-shrink:0;margin-top:.15rem;">🧠 뇌가 속는 방법</span>
       </div>
     </a>
-    <a href="research.html" class="related-card">
+    <a href={`${base}research/`} class="related-card">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
         <div style="flex:1;min-width:0;">
           <p style="font-size:.75rem;color:var(--text-dim);margin-bottom:.35rem;font-weight:600;letter-spacing:.04em;">연구</p>

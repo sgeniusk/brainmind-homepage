@@ -16,7 +16,7 @@
       "NOVA에 첫 아티클 핸드오프"
     ],
     "roadmap_goal": "RS 운영 습관 정착 + 주간 아이디어 소싱",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "아이디어 8개, RS 77개, RN 3개 스캔",
@@ -40,7 +40,7 @@
       "에셋 네이밍 + 폴더 구조 정리"
     ],
     "roadmap_goal": "NOVA Article #1 비주얼 지원 (3-5장)",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "이미지 에셋 63개 확인",
@@ -64,7 +64,7 @@
       "첫 아티클 퍼블리싱 (Week 3 목표)"
     ],
     "roadmap_goal": "첫 아티클 퍼블리싱 — 핵심 블로커",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "홈페이지 공개 아티클 3개, 블로그 42개",
@@ -89,7 +89,7 @@
       "영상 품질 7.5+ 달성"
     ],
     "roadmap_goal": "고우선 과제 완료 + 품질 7.5+",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "영상 파일 22개 확인",
@@ -109,7 +109,7 @@
     ],
     "in_progress": [],
     "roadmap_goal": "QualityReview 2건 실행 (AXON 대상)",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "평가 기준 문서 3개 확인",
@@ -130,12 +130,12 @@
     ],
     "in_progress": [],
     "roadmap_goal": "PerformanceRecord 1건 + InsightNote 1건",
-    "updated": "2026-05-01",
+    "updated": "2026-05-02",
     "sourceUpdated": "2026-03-25",
     "snapshot": [
       "시스템 문서 6개, 로드맵 태스크 14개 확인",
       "파이프라인 상태 5종 관측",
-      "자동 스냅샷 생성일 2026-05-01"
+      "자동 스냅샷 생성일 2026-05-02"
     ]
   }
 ]

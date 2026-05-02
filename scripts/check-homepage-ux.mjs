@@ -10,18 +10,17 @@ function requireMatch(pattern, message) {
   if (!pattern.test(source)) errors.push(message);
 }
 
-requireMatch(/<video class="hero-video"[\s\S]*?<source src=\{`\$\{base\}hero\.mp4`\}/, 'homepage hero must keep the real video asset as the first-viewport visual');
 requireMatch(/\.home-hero\{[^}]*min-height:8[0-9]dvh/, 'homepage hero must leave a hint of the next section in the first viewport');
-requireMatch(/\.home-hero\{[^}]*--hero-title:#0[fF]172[aA]/, 'homepage hero must define local dark title color for media contrast');
-requireMatch(/\.home-hero\{[^}]*--hero-body:#1[eE]293[bB]/, 'homepage hero must define local dark body color for media contrast');
-requireMatch(/\[data-theme="science"\] \.home-hero\{[^}]*--hero-title:#0[fF]172[aA]/, 'homepage science theme must keep hero title readable on the bright media treatment');
+requireMatch(/class="constellation-map"/, 'homepage hero must implement the constellation topic map from the design handoff');
+requireMatch(/class="constellation-line"/, 'homepage constellation must include topic connection lines');
+requireMatch(/class="constellation-node-core"/, 'homepage constellation must include animated topic nodes');
+requireMatch(/hero-mode-copy-day/, 'homepage must include day-mode mind copy');
+requireMatch(/hero-mode-copy-night/, 'homepage must include night-mode brain copy');
 requireMatch(/\.hero-title\{[^}]*text-shadow:/, 'homepage hero title must include a text-shadow contrast treatment');
-requireMatch(/\.hero-title\{[^}]*color:var\(--hero-title\)/, 'homepage hero title must use the local hero contrast color');
-requireMatch(/\.hero-lead\{[^}]*color:var\(--hero-body\)/, 'homepage hero lead must use the local hero contrast color over media');
+requireMatch(/\.hero-title\{[^}]*color:var\(--text\)/, 'homepage hero title must use theme text color');
+requireMatch(/\.hero-lead\{[^}]*color:var\(--text-dim\)/, 'homepage hero lead must use readable theme body color');
 requireMatch(/\.hero-copy::before\{/, 'homepage hero copy must include a non-card local readability veil');
 requireMatch(/\.hero-copy\{[^}]*isolation:isolate/, 'homepage hero copy must isolate its readability veil below the text');
-requireMatch(/\.hero-scrim\{[^}]*rgba\(248,247,244,\.(9|95)/, 'light hero scrim must be strong enough for readable body copy');
-requireMatch(/\[data-theme="science"\] \.hero-scrim\{[^}]*rgba\(248,247,244,\.(9|95)/, 'science hero scrim must keep the first viewport in the readable bright hero treatment');
 requireMatch(/class="hero-title hero-auto-up-1"/, 'homepage must keep the brand as the hero H1');
 
 if (/glass-card[^>]*hero-copy|hero-copy[^>]*glass-card/.test(source)) {
@@ -29,8 +28,8 @@ if (/glass-card[^>]*hero-copy|hero-copy[^>]*glass-card/.test(source)) {
 }
 
 const heroLeadMarkup = source.match(/<p class="hero-lead[\s\S]*?<\/p>/)?.[0] ?? '';
-if (/var\(--text\)/.test(heroLeadMarkup)) {
-  errors.push('homepage hero lead markup must not use global theme text color inside emphasized copy');
+if (/glass-card/.test(heroLeadMarkup)) {
+  errors.push('homepage hero lead markup must not place reading copy in a card');
 }
 
 const globalCss = fs.readFileSync(path.join(siteRoot, 'src/styles/global.css'), 'utf8');

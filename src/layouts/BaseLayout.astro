@@ -35,7 +35,7 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
             'bg-deep':'var(--bg-deep)','bg-mid':'var(--bg-mid)','bg-card':'var(--bg-card)',
             'txt':'var(--text)','txt-dim':'var(--text-dim)','txt-muted':'var(--text-muted)',
           },
-          fontFamily: { sans: ['Noto Sans KR','Paperlogy','system-ui','sans-serif'] },
+          fontFamily: { sans: ['Pretendard Variable','Pretendard','Noto Sans KR','Paperlogy','system-ui','sans-serif'] },
         },
       },
     }
@@ -47,6 +47,7 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
   <slot name="head" />
 </head>
 <body>
+  <canvas id="bm-atmosphere" aria-hidden="true"></canvas>
   <div class="noise-layer" aria-hidden="true"></div>
   <Nav activePage={activePage} />
 
@@ -95,6 +96,97 @@ const { title, description = '뇌과학과 심리학을 하나의 언어로. 뇌
       setTimeout(()=>{o.style.display='none'},250);
     }
     document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch()});
+
+    // Day = mind windflow, night = brain neuron constellation.
+    (function(){
+      const canvas=document.getElementById('bm-atmosphere');
+      if(!canvas)return;
+      const ctx=canvas.getContext('2d');
+      let width=0,height=0,dpr=1,particles=[],mode='',raf=0;
+      const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function currentMode(){return document.documentElement.getAttribute('data-theme')==='science'?'night':'day'}
+      function resize(){
+        dpr=Math.min(window.devicePixelRatio||1,2);
+        width=window.innerWidth;height=window.innerHeight;
+        canvas.width=width*dpr;canvas.height=height*dpr;
+        canvas.style.width=width+'px';canvas.style.height=height+'px';
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        seed();
+      }
+      function seed(){
+        mode=currentMode();
+        const count=mode==='night'?34:46;
+        particles=Array.from({length:count},()=>({
+          x:Math.random()*width,
+          y:Math.random()*height,
+          vx:mode==='night'?(Math.random()-.5)*.08:.05+Math.random()*.16,
+          vy:mode==='night'?(Math.random()-.5)*.08:.12+Math.random()*.34,
+          r:mode==='night'?.8+Math.random()*1.5:.7+Math.random()*1.8,
+          a:Math.random()*Math.PI*2
+        }));
+      }
+      function draw(t){
+        if(currentMode()!==mode)seed();
+        ctx.clearRect(0,0,width,height);
+        if(mode==='night'){
+          particles.forEach(p=>{
+            p.x+=p.vx;p.y+=p.vy;
+            if(p.x<0||p.x>width)p.vx*=-1;
+            if(p.y<0||p.y>height)p.vy*=-1;
+          });
+          for(let i=0;i<particles.length;i++){
+            for(let j=i+1;j<particles.length;j++){
+              const a=particles[i],b=particles[j],dist=Math.hypot(a.x-b.x,a.y-b.y);
+              if(dist<150){
+                const o=(1-dist/150)*(.16+.18*Math.sin(t*.0007+a.a+b.a));
+                ctx.strokeStyle=`rgba(122,166,255,${o})`;
+                ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+              }
+            }
+          }
+          particles.forEach(p=>{
+            const o=.45+.42*Math.sin(p.a+t*.001);
+            ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(216,225,244,${o})`;ctx.fill();
+          });
+        }else{
+          particles.forEach(p=>{
+            p.x+=p.vx+Math.sin(t*.0006+p.a)*.22;p.y+=p.vy;
+            if(p.y>height+10){p.y=-10;p.x=Math.random()*width}
+            if(p.x>width+10)p.x=-10;
+            const o=.08+.12*Math.sin(p.a+t*.001);
+            ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(201,106,79,${o+.12})`;ctx.fill();
+          });
+          ctx.globalAlpha=.04;
+          for(let i=0;i<7;i++){
+            const x=((t*.018+i*width/7)%(width+90))-45;
+            ctx.fillStyle='rgba(201,106,79,1)';
+            ctx.fillRect(x,0,.7,height);
+          }
+          ctx.globalAlpha=1;
+        }
+        if(!prefersReduced)raf=requestAnimationFrame(draw);
+      }
+      resize();window.addEventListener('resize',resize,{passive:true});
+      if(prefersReduced)draw(0);else raf=requestAnimationFrame(draw);
+      new MutationObserver(()=>seed()).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+      window.addEventListener('pagehide',()=>cancelAnimationFrame(raf));
+    })();
+
+    // Shared article left TOC active state.
+    (function(){
+      const links=[...document.querySelectorAll('.article-left-toc a[href^="#"]')];
+      if(!links.length)return;
+      const targets=links.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
+      function updateArticleToc(){
+        let active=0;
+        targets.forEach((target,index)=>{if(window.scrollY>=target.getBoundingClientRect().top+window.scrollY-180)active=index});
+        links.forEach((link,index)=>link.classList.toggle('active',index===active));
+      }
+      window.addEventListener('scroll',updateArticleToc,{passive:true});
+      updateArticleToc();
+    })();
   </script>
   <slot name="scripts" />
 </body>

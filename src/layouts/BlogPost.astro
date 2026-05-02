@@ -168,15 +168,29 @@ const chapterLabel =
     </style>
   </Fragment>
 
-  <div class="blog-wrap">
+  <div class="blog-note-shell">
+    <aside class="blog-note-aside" aria-label="노트 메타">
+      <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.72rem;letter-spacing:.1em;color:var(--accent);font-weight:800;margin-bottom:.85rem;">NOTE · {String(frontmatter.series_chapter).padStart(2, '0')}</div>
+      <strong>{frontmatter.published ? String(frontmatter.published).slice(0,10) : frontmatter.created ? String(frontmatter.created).slice(0,10) : '작성일 미정'}</strong>
+      <div style="margin-bottom:1.2rem;">{seriesLabel} · {chapterLabel}</div>
+      <div style="padding-top:1rem;border-top:1px solid var(--divider);margin-bottom:1.2rem;">
+        <div style="font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-weight:800;margin-bottom:.45rem;">오늘의 결</div>
+        <div style="color:var(--text);font-style:italic;white-space:pre-line;">생각이 머문 자리,&#10;조용히 적어둔 문장.</div>
+      </div>
+      <div style="font-size:.74rem;line-height:1.7;color:var(--text-muted);font-style:italic;">
+        이 글은 조사 아티클이 아니라 코르의 개인 노트입니다.
+      </div>
+    </aside>
+
+    <article>
 
     <!-- 시리즈 뱃지 -->
     <div class="reveal">
       <a href={`${base}blog/`}
-        class="blog-series-tag"
-        style={`background:rgba(${accentRgba},.07);border:1px solid rgba(${accentRgba},.22);color:${accentColor};`}>
+        class="blog-note-tag"
+        style={`background:rgba(${accentRgba},.07);border-color:rgba(${accentRgba},.42);color:${accentColor};`}>
         <iconify-icon icon="solar:book-2-linear" style="font-size:.82rem;"></iconify-icon>
-        {frontmatter.series} · {seriesLabel}
+        NOTE · 사적인 노트
       </a>
     </div>
 
@@ -184,15 +198,15 @@ const chapterLabel =
     <p class="blog-chapter-label reveal d1" style={`color:${accentColor};`}>{chapterLabel}</p>
 
     <!-- 제목 -->
-    <h1 class="blog-title reveal d1">{frontmatter.title}</h1>
+    <h1 class="blog-note-title reveal d1">{frontmatter.title}</h1>
 
     <!-- 부제 -->
     {frontmatter.subtitle && (
-      <p class="blog-subtitle reveal d2">{frontmatter.subtitle}</p>
+      <p class="blog-note-subtitle reveal d2">{frontmatter.subtitle}</p>
     )}
 
     <!-- 메타 -->
-    <div class="blog-meta-row reveal d2">
+    <div class="blog-note-meta reveal d2">
       {frontmatter.reading_time && <span>{frontmatter.reading_time}</span>}
       {frontmatter.reading_time && <span class="blog-meta-dot">·</span>}
       {frontmatter.published
@@ -211,12 +225,12 @@ const chapterLabel =
     <hr class="blog-divider reveal d3" />
 
     <!-- 본문 (slot) -->
-    <div class="blog-body reveal d3">
+    <div class="blog-note-body reveal d3">
       <slot />
     </div>
 
     <!-- 전후 네비게이션 -->
-    <nav class="blog-nav">
+    <nav class="blog-note-nav">
       {frontmatter.series_chapter > 0
         ? <a class="blog-nav-btn" href={`${base}blog/${postPrefix}${String(frontmatter.series_chapter - 1).padStart(2, '0')}/`}>
             <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> 이전 글
@@ -228,6 +242,6 @@ const chapterLabel =
           </a>
         : <span></span>}
     </nav>
-
+    </article>
   </div>
 </BaseLayout>
